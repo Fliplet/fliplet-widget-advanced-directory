@@ -1,0 +1,97 @@
+<div class="container-fluid" data-directory data-mode="default" data-directory-id="{{id}}">
+  <div class="row">
+    <div class="directory-wrapper">
+      <div class="directory-list">
+        <div class="directory-loading">
+          <div class="directory-loading-screen"></div>
+          <div class="directory-loading-body">
+            <div class="loader-wrapper">
+              <div class="loader"></div>
+            </div>
+            <p class="loading-text"></p>
+          </div>
+        </div>
+        <form class="directory-search">
+          <span class="fa fa-search"></span>
+          <input class="search" type="search" placeholder="Search or Filter" />
+          <a href="#" class="btn btn-link search-cancel">Cancel</a>
+        </form>
+        <div class="directory-filters">
+          <div class="filters">
+            <label>Type to search or select a filter</label>
+            <h3>Filter by <span class="filter-selected"></span></h3>
+            <div class="list-default filter-list"></div>
+            <div class="list-default filter-value-list"></div>
+          </div>
+        </div>
+        <div class="list-default directory-entries circular"></div>
+        <div class="list-index"></div>
+        <div class="list-default search-result circular"></div>
+      </div>
+      <div class="directory-details">
+        <div class="directory-loading">
+          <div class="directory-loading-screen"></div>
+          <div class="directory-loading-body">
+            <div class="loader-wrapper">
+              <div class="loader"></div>
+            </div>
+            <p class="loading-text"></p>
+          </div>
+            </div>
+        <div class="directory-details-content"></div>
+      </div>
+      <div class="directory-screen"></div>
+    </div>
+
+  <div class="overlay hasFooter hasNavbar overlay-date-range">
+    <div class="overlayPanelScreen"></div>
+    <div class="overlayPanel">
+      <div class="overlayNavbar">
+        <div class="closeButton" style="display: block;"><i class="fa fa-close"></i></div>
+        <div class="overlayTitle">Custom date range</div>
+      </div>
+      <div class="overlayPanelContent">
+        <p>Select a start and end date to filter your directory to only show the entries with dates in between.</p>
+        <form class="form-horizontal">
+          <div class="form-group">
+            <div class="col-sm-12 control-label">
+              <label for="start_date">Starting from:</label>
+            </div>
+            <div class="col-sm-12 input-group">
+
+              <div class="input-group-addon">
+                <i class="fa fa-calendar"></i>
+              </div>
+
+              <!-- this is where the magic happens -->
+              <input type="text" class="date-picker form-control start_date" data-date-start-view="decade" data-date-format="mm/dd/yy" placeholder="MM/DD/YY" />
+
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-12 control-label">
+              <label for="finish_date">Ending at:</label>
+            </div>
+            <div class="col-sm-12 input-group">
+
+              <div class="input-group-addon">
+                <i class="fa fa-calendar"></i>
+              </div>
+
+              <!-- this is where the magic happens -->
+              <input type="text" class="date-picker form-control finish_date" data-date-start-view="decade" data-date-format="mm/dd/yy" placeholder="MM/DD/YY" />
+
+            </div>
+          </div>
+        </form>
+
+      </div>
+      <div class="overlayFooter">
+        <div class="btn btn-primary date_go">Go</div>
+        <div class="btn btn-default date_cancel">Cancel</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>

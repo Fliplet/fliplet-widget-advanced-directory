@@ -1,0 +1,56 @@
+{
+  "name": "agenda",
+  "package": "com.fliplet.agenda",
+  "version": "1.0.0",
+  "icon": "img/icon.png",
+  "tags": ["category:data"],
+  "provider_only": false,
+  "html_tag": "span",
+  "interface": {
+    "dependencies": [
+      "fliplet-core",
+      "fliplet-media",
+      "fliplet-datasources",
+      "fliplet-studio-ui",
+      "jquery",
+      "jquery-ui",
+      "handlebars",
+      "bootstrap",
+      "lodash"
+    ],
+    "assets": [
+      "js/interface-templates.js",
+      "js/interface-agenda.js",
+      "js/interface.js",
+      "css/interface.css"
+    ]
+  },
+  "build": {
+    "dependencies": [
+      "fliplet-core",
+      "fliplet-media",
+      "bootstrap-css",
+      "jquery",
+      "handlebars",
+      "fliplet-datasources",
+      "bootstrap",
+      "font-awesome",
+      "animate-css",
+      "moment"
+    ],
+    "assets": [
+      "vendor/overlay.js",
+      "vendor/jsonselect.js",
+      "vendor/bootstrap-datepicker3.css",
+      "vendor/bootstrap-datepicker.min.js",
+      "vendor/bootstrap-datepicker-mobile.js",
+      "js/build-templates.js",
+      "js/build-splitview.js",
+      "js/build.js",
+      "css/build.css",
+      "vendor/overlay.css",
+      "img/thumb-placeholder.png"
+    ]
+  },
+  "references": ["source:dataSource"]
+}
