@@ -1,6 +1,6 @@
 {
   "name": "Advanced Directory",
-  "package": "com.fliplet.directory.advanced",
+  "package": "com.fliplet.advanceddirectory",
   "version": "1.0.0",
   "icon": "img/icon.png",
   "tags": ["category:data"],
