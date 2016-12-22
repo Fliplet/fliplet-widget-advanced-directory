@@ -3,11 +3,11 @@
   <li class="linked data-linked" data-type="entry" data-index="{{@index}}" data-source-entry-id="{{dataSourceEntryId}}">
     <span class="icon fa fa-angle-right"></span>
     <div class="list-desc">
-      <p class="list-title">{{plaintext "entry_title" this}}</p>
-      <p class="list-subtitle">{{plaintext "entry_subtitle" this}}</p>
+      <p class="list-title">{{plaintext "Title" this}}</p>
+      <p class="list-subtitle">{{moment "Session start" "HH:mm" this}}&ndash;{{moment "Session end" "HH:mm" this}} &bull; {{Location}}<br>{{plaintext "Description" this}}</p>
     </div>
     <div class="list-tags">
-      {{entry_tags this}}
+      {{tag_filters "Tags" this}}
     </div>
     <span class="buttonControl"></span>
   </li>

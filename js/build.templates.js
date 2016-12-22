@@ -119,11 +119,17 @@ this["Fliplet"]["Widget"]["Templates"]["build.listView"] = Handlebars.template({
     + "\" data-source-entry-id=\""
     + alias4(((helper = (helper = helpers.dataSourceEntryId || (depth0 != null ? depth0.dataSourceEntryId : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"dataSourceEntryId","hash":{},"data":data}) : helper)))
     + "\">\n    <span class=\"icon fa fa-angle-right\"></span>\n    <div class=\"list-desc\">\n      <p class=\"list-title\">"
-    + alias4((helpers.plaintext || (depth0 && depth0.plaintext) || alias2).call(alias1,"entry_title",depth0,{"name":"plaintext","hash":{},"data":data}))
+    + alias4((helpers.plaintext || (depth0 && depth0.plaintext) || alias2).call(alias1,"Title",depth0,{"name":"plaintext","hash":{},"data":data}))
     + "</p>\n      <p class=\"list-subtitle\">"
-    + alias4((helpers.plaintext || (depth0 && depth0.plaintext) || alias2).call(alias1,"entry_subtitle",depth0,{"name":"plaintext","hash":{},"data":data}))
+    + alias4((helpers.moment || (depth0 && depth0.moment) || alias2).call(alias1,"Session start","HH:mm",depth0,{"name":"moment","hash":{},"data":data}))
+    + "&ndash;"
+    + alias4((helpers.moment || (depth0 && depth0.moment) || alias2).call(alias1,"Session end","HH:mm",depth0,{"name":"moment","hash":{},"data":data}))
+    + " &bull; "
+    + alias4(((helper = (helper = helpers.Location || (depth0 != null ? depth0.Location : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"Location","hash":{},"data":data}) : helper)))
+    + "<br>"
+    + alias4((helpers.plaintext || (depth0 && depth0.plaintext) || alias2).call(alias1,"Description",depth0,{"name":"plaintext","hash":{},"data":data}))
     + "</p>\n    </div>\n    <div class=\"list-tags\">\n      "
-    + alias4((helpers.entry_tags || (depth0 && depth0.entry_tags) || alias2).call(alias1,depth0,{"name":"entry_tags","hash":{},"data":data}))
+    + alias4((helpers.tag_filters || (depth0 && depth0.tag_filters) || alias2).call(alias1,"Tags",depth0,{"name":"tag_filters","hash":{},"data":data}))
     + "\n    </div>\n    <span class=\"buttonControl\"></span>\n  </li>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
@@ -187,42 +193,12 @@ this["Fliplet"]["Widget"]["Templates"]["build.splitViewFilterValues"] = Handleba
     + "</ul>\n";
 },"useData":true,"useDepths":true});
 
-this["Fliplet"]["Widget"]["Templates"]["build.splitViewSearchResult"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data,blockParams,depths) {
-    var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
-
-  return "\n  <li class=\"linked data-linked "
-    + ((stack1 = helpers["if"].call(alias1,(depths[1] != null ? depths[1].has_thumbnail : depths[1]),{"name":"if","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "\" data-type=\"search-result-entry\" data-index=\""
-    + alias4(((helper = (helper = helpers.index || (data && data.index)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"index","hash":{},"data":data}) : helper)))
-    + "\" data-source-entry-id=\""
-    + alias4(((helper = (helper = helpers.dataSourceEntryId || (depth0 != null ? depth0.dataSourceEntryId : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"dataSourceEntryId","hash":{},"data":data}) : helper)))
-    + "\">\n    <span class=\"icon fa fa-angle-right\"></span>\n    "
-    + ((stack1 = helpers["if"].call(alias1,(depths[1] != null ? depths[1].has_thumbnail : depths[1]),{"name":"if","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "\n    <div class=\"list-desc\">\n      <p class=\"list-title\">"
-    + ((stack1 = container.invokePartial(partials.entry_title,depth0,{"name":"entry_title","data":data,"helpers":helpers,"partials":partials,"decorators":container.decorators})) != null ? stack1 : "")
-    + "</p>\n"
-    + ((stack1 = helpers["if"].call(alias1,(depths[1] != null ? depths[1].show_subtitle : depths[1]),{"name":"if","hash":{},"fn":container.program(6, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "    </div>\n    <div class=\"list-tags\">\n      "
-    + alias4((helpers.entry_tags || (depth0 && depth0.entry_tags) || alias2).call(alias1,depth0,{"name":"entry_tags","hash":{},"data":data}))
-    + "\n    </div>\n    <span class=\"buttonControl\"></span>\n  </li>\n";
-},"2":function(container,depth0,helpers,partials,data) {
-    return "has-thumbs";
-},"4":function(container,depth0,helpers,partials,data) {
-    return "<div class=\"list-image\"></div>";
-},"6":function(container,depth0,helpers,partials,data) {
-    var stack1;
-
-  return "        <p class=\"list-subtitle\">"
-    + ((stack1 = container.invokePartial(partials.entry_subtitle,depth0,{"name":"entry_subtitle","data":data,"helpers":helpers,"partials":partials,"decorators":container.decorators})) != null ? stack1 : "")
-    + "</p>\n";
-},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
+this["Fliplet"]["Widget"]["Templates"]["build.splitViewSearchResultHeader"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing;
 
   return "<div class=\"search-result-header-container\">\n  <div class=\"search-result-header\">\n    <a href=\"#\" class=\"btn btn-link pull-right search-result-clear\">"
     + container.escapeExpression((helpers.search_result_clear || (depth0 && depth0.search_result_clear) || alias2).call(alias1,depth0,{"name":"search_result_clear","hash":{},"data":data}))
     + "</a>\n    <h5>"
     + ((stack1 = (helpers.search_result_header || (depth0 && depth0.search_result_header) || alias2).call(alias1,depth0,{"name":"search_result_header","hash":{},"data":data})) != null ? stack1 : "")
-    + "</h5>\n  </div>\n</div>\n<ul>"
-    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.result : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "</ul>\n";
-},"usePartial":true,"useData":true,"useDepths":true});
+    + "</h5>\n  </div>\n</div>\n";
+},"useData":true});

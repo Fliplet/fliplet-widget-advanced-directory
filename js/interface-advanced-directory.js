@@ -5,31 +5,21 @@
 var DataDirectoryForm = (function() {
 
   var $imagesContainer = $('.image-library');
-  var templates = {
-    folder: template('folder'),
-    app: template('app'),
-    organization: template('organization'),
-    noFiles: template('nofiles')
-  };
 
   function addFolder(folder) {
-    $imagesContainer.append(templates.folder(folder));
+    $imagesContainer.append(Fliplet.Widget.Templates['interface.files.folder'](folder));
   }
 
   function addApp(app) {
-    $imagesContainer.append(templates.app(app));
+    $imagesContainer.append(Fliplet.Widget.Templates['interface.files.app'](app));
   }
 
   function addOrganization(organization) {
-    $imagesContainer.append(templates.organization(organization));
+    $imagesContainer.append(Fliplet.Widget.Templates['interface.files.organization'](organization));
   }
 
   function noFiles() {
-    $imagesContainer.html(templates.noFiles());
-  }
-
-  function template(name) {
-    return Handlebars.compile($('#template-' + name).html());
+    $imagesContainer.html(Fliplet.Widget.Templates['interface.files.noFiles']());
   }
 
   var upTo = [{ back: openRoot, name: 'Root'}];
@@ -216,15 +206,14 @@ var DataDirectoryForm = (function() {
       });
 
       Handlebars.registerHelper("typeSelector", function(field){
-        var typeSelectorTemplate = Fliplet.Widget.Templates['interface.dataTypeSelector']();
+        var typeSelectorTemplate = Fliplet.Widget.Templates['interface.dataTypeSelector']({ 'field': field });
+
         var fieldType = 'text';
         if ( typeof _this.directoryConfig.field_types[field] !== 'undefined' ) {
           fieldType = _this.directoryConfig.field_types[field];
         }
 
         var $select = $( typeSelectorTemplate );
-        $select.attr('data-field', field);
-        $select.attr('data-type', 'type');
         $select.find('[value="' + fieldType + '"]').attr('selected', true);
 
         return $select[0].outerHTML;
@@ -526,18 +515,6 @@ var DataDirectoryForm = (function() {
       });
       data.field_types = JSON.stringify(data.field_types);
 
-      var detailFields = $('#data-detail-fields').val().trim();
-      if (detailFields !== "") {
-        detailFields = detailFields.split(",").map(function (field) {
-          return field.trim();
-        }).filter(function (field) {
-          return !(field.trim() === '');
-
-        });
-      } else {
-        detailFields = [];
-      }
-      data.detail_fields = detailFields;
       data.rows = this.rows;
 
       this.directoryConfig = data;

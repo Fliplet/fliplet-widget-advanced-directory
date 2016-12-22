@@ -99,14 +99,12 @@ SplitView.prototype.initialiseHandlebars = function(){
 
   var lastAlphabetIndex = '';
 
-  Handlebars.registerHelper('plaintext', function(partial, context){
-    // Create compiler function for said partial
-    var output = Handlebars.compile(Handlebars.partials[partial]);
+  Handlebars.registerHelper('plaintext', function(key, obj){
+    return $('<div></div>').html(obj[key]).text();
+  });
 
-    // Return compiled output using said context
-    var result = output(context);
-    result = $('<div></div>').html(result).text();
-    return $('<div></div>').html(result).text();
+  Handlebars.registerHelper('moment', function(key, format, obj){
+    return moment(obj[key]).format(format);
   });
 
   Handlebars.registerHelper('alphabet_divider', function(){
@@ -151,31 +149,24 @@ SplitView.prototype.initialiseHandlebars = function(){
     }
   });
 
-  Handlebars.registerPartial('entry_title', this.config.label_template.replace(/{{/g, "{{[").replace(/}}/g, "]}}"));
+  Handlebars.registerHelper('tag_filters', function (tagsField, entry) {
+    var tags = entry[tagsField];
+    if (!tags) {
+      return '';
+    }
 
-  if (this.config.hasOwnProperty('subtitle')) {
-    Handlebars.registerPartial('entry_subtitle', this.config.subtitle.replace(/{{/g, "{{[").replace(/}}/g, "]}}"));
-  }
+    var splitTags = tags.split(",");
+    return new Handlebars.SafeString(
+      splitTags.map(function (tag) {
+        tag = tag.trim();
+        if (tag !== '') {
+          return '<a class="data-linked" data-type="filter-value-tag" data-value="' + tag + '" data-filter="' + tagsField + '" href="#">' + tag + '</a> ';
+        }
 
-  if (this.config.hasOwnProperty('tags_field')) {
-    Handlebars.registerHelper('entry_tags', function (entry) {
-      var tags = entry[_this.config.tags_field];
-      if (!tags) {
         return '';
-      }
-      var splitTags = tags.split(",");
-      return new Handlebars.SafeString(
-        splitTags.map(function (tag) {
-          tag = tag.trim();
-          if (tag !== '') {
-            return '<a class="data-linked" data-type="filter-value-tag" data-value="' + tag + '" data-filter="' + _this.config.tags_field + '" href="#">' + tag + '</a> ';
-          }
-
-          return '';
-        }).join('<span class="tag-seperation">, </span>')
-      );
-    });
-  }
+      }).join('<span class="tag-seperation">, </span>')
+    );
+  });
 
   Handlebars.registerPartial('directory_filter_values', Fliplet.Widget.Templates['build.splitViewFilterValues']);
 };
@@ -197,7 +188,8 @@ SplitView.prototype.init = function(){
 };
 
 SplitView.prototype.verifyFields = function(fieldConfig){
-  if ( this.config[fieldConfig].constructor.name !== 'Array' ) return;
+  if ( !this.config.hasOwnProperty(fieldConfig)
+    || this.config[fieldConfig].constructor.name !== 'Array' ) return;
 
   var arr = [];
   for ( var i = 0, l = this.config[fieldConfig].length; i < l; i++ ) {
@@ -864,8 +856,12 @@ SplitView.prototype.renderSearchResult = function( options, callback ){
   }
 
   this.searchResultData = data.result;
-  var splitViewSearchResultHTML = Fliplet.Widget.Templates['build.splitViewSearchResult'](data);
-  this.$container.find('.search-result').html(splitViewSearchResultHTML).scrollTop(0);
+  var splitViewSearchResultHeaderHTML = Fliplet.Widget.Templates['build.splitViewSearchResultHeader'](data);
+  var splitViewSearchResultHTML = Fliplet.Widget.Templates['build.listView'](data.result);
+  this.$container.find('.search-result')
+    .html(splitViewSearchResultHeaderHTML)
+    .append(splitViewSearchResultHTML)
+    .scrollTop(0);
   if (typeof callback === 'function') setTimeout(callback, 0);
 };
 
