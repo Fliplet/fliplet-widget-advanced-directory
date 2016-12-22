@@ -121,7 +121,7 @@ this["Fliplet"]["Widget"]["Templates"]["build.listView"] = Handlebars.template({
     + "\">\n    <span class=\"icon fa fa-angle-right\"></span>\n    <div class=\"list-desc\">\n      <p class=\"list-title\">"
     + alias4((helpers.plaintext || (depth0 && depth0.plaintext) || alias2).call(alias1,"Title",depth0,{"name":"plaintext","hash":{},"data":data}))
     + "</p>\n      <p class=\"list-subtitle\">"
-    + alias4((helpers.moment || (depth0 && depth0.moment) || alias2).call(alias1,"Session start","HH:mm",depth0,{"name":"moment","hash":{},"data":data}))
+    + alias4((helpers.moment || (depth0 && depth0.moment) || alias2).call(alias1,"Session start","YYYY-MM-DD HH:mm",depth0,{"name":"moment","hash":{},"data":data}))
     + "&ndash;"
     + alias4((helpers.moment || (depth0 && depth0.moment) || alias2).call(alias1,"Session end","HH:mm",depth0,{"name":"moment","hash":{},"data":data}))
     + " &bull; "

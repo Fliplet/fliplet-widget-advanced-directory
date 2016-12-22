@@ -155,7 +155,7 @@
           </div>
           <div class="col-sm-8">
             <div class="radio">
-              <input type="radio" id="alphabetical" name="is_alphabetical" value="true" checked>
+              <input type="radio" id="alphabetical" name="sort_order" value="alphabetical">
               <label for="alphabetical">
                 <span class="check"><i class="fa fa-circle"></i></span> Alphabetically by
               </label>
@@ -168,7 +168,33 @@
               </div>
             </div>
             <div class="radio">
-              <input type="radio" id="order" name="is_alphabetical" value="false">
+              <input type="radio" id="chronological" name="sort_order" value="chronological">
+              <label for="chronological">
+                <span class="check"><i class="fa fa-circle"></i></span> Chronologically by
+              </label>
+              <div class="select-holder">
+                <label for="data-tags-fields-select" class="select-proxy-display">
+                  <span class="icon fa fa-chevron-down"></span>
+                  <span class="select-value-proxy"></span>
+                  <span id="data-chronological-fields"></span>
+                </label>
+              </div>
+            </div>
+            <div class="radio">
+              <input type="radio" id="reverse_chronological" name="sort_order" value="reverse_chronological">
+              <label for="reverse_chronological">
+                <span class="check"><i class="fa fa-circle"></i></span> Reverse-chronologically by
+              </label>
+              <div class="select-holder">
+                <label for="data-tags-fields-select" class="select-proxy-display">
+                  <span class="icon fa fa-chevron-down"></span>
+                  <span class="select-value-proxy"></span>
+                  <span id="data-reverse-chronological-fields"></span>
+                </label>
+              </div>
+            </div>
+            <div class="radio">
+              <input type="radio" id="order" name="sort_order" value="original">
               <label for="order">
                 <span class="check"><i class="fa fa-circle"></i></span> In the order as loaded
               </label>

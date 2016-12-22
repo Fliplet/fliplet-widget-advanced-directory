@@ -2,22 +2,6 @@ this["Fliplet"] = this["Fliplet"] || {};
 this["Fliplet"]["Widget"] = this["Fliplet"]["Widget"] || {};
 this["Fliplet"]["Widget"]["Templates"] = this["Fliplet"]["Widget"]["Templates"] || {};
 
-this["Fliplet"]["Widget"]["Templates"]["interface.dataAlphabeticalField"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
-    var alias1=container.lambda, alias2=container.escapeExpression;
-
-  return "        <option value=\""
-    + alias2(alias1(depth0, depth0))
-    + "\">"
-    + alias2(alias1(depth0, depth0))
-    + "</option>\n";
-},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1;
-
-  return "<select class=\"hidden-select form-control\" name=\"alphabetical_field\" id=\"data-alphabetical-fields-select\">\n"
-    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},depth0,{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "</select>";
-},"useData":true});
-
 this["Fliplet"]["Widget"]["Templates"]["interface.dataBrowseConfigurations"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing;
 
@@ -36,6 +20,26 @@ this["Fliplet"]["Widget"]["Templates"]["interface.dataBrowseConfigurations"] = H
   return "<table class=\"table table-hover\">\n<thead>\n<tr>\n    <th>Fields</th>\n    <th class=\"text-center\">Use as filter</th>\n    <th class=\"text-center\">Use for search</th>\n    <th>Display option</th>\n</tr>\n</thead>\n<tbody>\n"
     + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},depth0,{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "</tbody>\n</table>";
+},"useData":true});
+
+this["Fliplet"]["Widget"]["Templates"]["interface.dataFieldSelect"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
+    var alias1=container.lambda, alias2=container.escapeExpression;
+
+  return "        <option value=\""
+    + alias2(alias1(depth0, depth0))
+    + "\">"
+    + alias2(alias1(depth0, depth0))
+    + "</option>\n";
+},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+
+  return "<select class=\"hidden-select form-control\" name=\""
+    + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
+    + "\" id=\""
+    + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
+    + "\">\n"
+    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.fields : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "</select>\n";
 },"useData":true});
 
 this["Fliplet"]["Widget"]["Templates"]["interface.dataSourceOptions"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {

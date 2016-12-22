@@ -133,12 +133,12 @@ var DataDirectoryForm = (function() {
     delete configuration.dataSources;
 
     this.directoryConfig = $.extend( {
-      is_alphabetical : true,
-      alphabetical_field : "",
-      label_template : "",
+      sort_order : 'alphabetical',
+      alphabetical_field : '',
+      chronological_field : '',
+      reverse_chronological_field : '',
       filter_fields : [],
       search_fields : [],
-      detail_fields : [],
       source: '',
       field_types : {},
       folderConfig : {}
@@ -147,9 +147,9 @@ var DataDirectoryForm = (function() {
       this.directoryConfig.field_types = JSON.parse(this.directoryConfig.field_types);
     }
 
-    if (typeof configuration.thumbnail_field !== 'undefined' && configuration.thumbnail_field !== '') {
-      $('.thumbs-options').addClass('show');
-    }
+    // if (typeof configuration.thumbnail_field !== 'undefined' && configuration.thumbnail_field !== '') {
+    //   $('.thumbs-options').addClass('show');
+    // }
 
     if (typeof configuration.folderConfig !== 'undefined' && configuration.thumbnail_field.length) {
       if ('organizationId' in configuration.folderConfig) {
@@ -174,9 +174,6 @@ var DataDirectoryForm = (function() {
   DataDirectoryForm.prototype = {
     // Public functions
     constructor : DataDirectoryForm,
-
-    // Public variables
-    varName : null,
 
     initialiseHandlebars : function(){
       Handlebars.registerHelper("select", function(value, options){
@@ -232,7 +229,6 @@ var DataDirectoryForm = (function() {
               _this.autoConfigureSearch();
               _this.autoConfigureFilter();
               _this.autoConfigureBrowse();
-              _this.autoConfigureDetails();
             }
 
             return;
@@ -243,9 +239,23 @@ var DataDirectoryForm = (function() {
 
     loadDataDirectoryForm : function(){
       $('#data-sources').html(Fliplet.Widget.Templates['interface.dataSourceOptions'](_this.tables));
-      $('#data-alphabetical-fields').html(Fliplet.Widget.Templates['interface.dataAlphabeticalField'](_this.columns));
-      $('#data-tags-fields').html(Fliplet.Widget.Templates['interface.dataTagsField'](_this.columns));
-      $('#data-thumbnail-fields').html(Fliplet.Widget.Templates['interface.dataThumbnailField'](_this.columns));
+      $('#data-alphabetical-fields').html(Fliplet.Widget.Templates['interface.dataFieldSelect']({
+        fields: _this.columns,
+        name: 'alphabetical_field',
+        id: 'data-alphabetical-fields-select'
+      }));
+      $('#data-chronological-fields').html(Fliplet.Widget.Templates['interface.dataFieldSelect']({
+        fields: _this.columns,
+        name: 'chronological_field',
+        id: 'data-chronological-fields-select'
+      }));
+      $('#data-reverse-chronological-fields').html(Fliplet.Widget.Templates['interface.dataFieldSelect']({
+        fields: _this.columns,
+        name: 'reverse_chronological_field',
+        id: 'data-reverse-chronological-fields-select'
+      }));
+      // $('#data-tags-fields').html(Fliplet.Widget.Templates['interface.dataTagsField'](_this.columns));
+      // $('#data-thumbnail-fields').html(Fliplet.Widget.Templates['interface.dataThumbnailField'](_this.columns));
 
       if (!_this.tables.length) {
         $('#no-data-source-prompt').removeClass('hidden');
@@ -272,15 +282,7 @@ var DataDirectoryForm = (function() {
     },
 
     autoConfigureBrowse : function(){
-      _this.directoryConfig.label_template = "{{" + _this.columns[0] + "}}";
       _this.directoryConfig.alphabetical_field = _this.columns[0];
-    },
-
-    autoConfigureDetails : function(){
-      _this.directoryConfig.detail_fields = $.extend([],_this.columns);
-      if ( _this.directoryConfig.detail_fields.length > 1 ) {
-        _this.directoryConfig.detail_fields.shift();
-      }
     },
 
     loadConfigurations_ : function(){
@@ -294,35 +296,19 @@ var DataDirectoryForm = (function() {
       });
 
 
-      $('#directory-browse-label').val( _this.directoryConfig.label_template );
-
       $('#data-alphabetical-fields-select').val( _this.directoryConfig.alphabetical_field );
       updateSelectText($('#data-alphabetical-fields-select'));
 
-      if ( typeof _this.directoryConfig.is_alphabetical === 'string' ) {
-        _this.directoryConfig.is_alphabetical = ( _this.directoryConfig.is_alphabetical.toLowerCase().trim() === 'true' );
-      }
-      $('[name=is_alphabetical][value="' + (_this.directoryConfig.is_alphabetical ? 'true' : 'false') + '"]').attr('checked',true);
+      $('#data-chronological-fields-select').val( _this.directoryConfig.chronological_field );
+      updateSelectText($('#data-chronological-fields-select'));
 
+      $('#data-reverse-chronological-fields-select').val( _this.directoryConfig.reverse_chronological_field );
+      updateSelectText($('#data-reverse-chronological-fields-select'));
 
-      $('#data-thumbnail-fields-select').val( _this.directoryConfig.thumbnail_field );
-      updateSelectText($('#data-thumbnail-fields-select'));
+      $('[name=sort_order][value="' + _this.directoryConfig.sort_order + '"]').attr('checked',true);
 
-      $('#data-detail-fields').val(_this.directoryConfig.detail_fields.join(','));
-
-      if (_this.directoryConfig.show_subtitle) {
-        $('#show_subtitle').prop('checked', true);
-        $('#directory-browse-subtitle').val( _this.directoryConfig.subtitle );
-        updateSelectText($('#directory-browse-subtitle'));
-        $('.show-subtitle').show();
-      }
-
-      if (_this.directoryConfig.show_tags) {
-        $('#show_tags').prop('checked', true);
-        $('#data-tags-fields-select').val( _this.directoryConfig.tags_field );
-        updateSelectText($('#data-tags-fields-select'));
-        $('.show-tags').show();
-      }
+      // $('#data-thumbnail-fields-select').val( _this.directoryConfig.thumbnail_field );
+      // updateSelectText($('#data-thumbnail-fields-select'));
 
       if (_this.directoryConfig.enable_live_data) {
         $('#enable_live_data').prop('checked', true);
@@ -452,31 +438,12 @@ var DataDirectoryForm = (function() {
 
       $(document).on( "click", "#save-link", _this.saveDataDirectoryForm_ );
       $('#data-sources').on( 'change', $.proxy(_this.dataSourceChanged_,this) );
-      $('#data-source-tab').on( 'change', '#data-thumbnail-fields-select', _this.showThumbOptions_);
+      // $('#data-source-tab').on( 'change', '#data-thumbnail-fields-select', _this.showThumbOptions_);
       $('.nav.nav-stacked').on( 'click', 'li.disabled', function(){
         return false;
       } );
 
-      $('#show_subtitle').on('change', function() {
-        if ($(this).is(":checked")) {
-          var tagsField = _this.directoryConfig.tags_field ? _this.directoryConfig.tags_field : _this.columns[0];
-          $('#data-tags-fields-select').val(tagsField);
-          updateSelectText($('#data-tags-fields-select'));
-          $('.show-subtitle').fadeIn();
-        } else {
-          $('.show-subtitle').hide();
-        }
-      });
-
-      $('#show_tags').on('change', function() {
-        if ($(this).is(":checked")) {
-          $('.show-tags').fadeIn();
-        } else {
-          $('.show-tags').hide();
-        }
-      });
-
-      $('.tab-content').on('change', '#data-tags-fields-select, #data-alphabetical-fields-select, #data-sources, #data-thumbnail-fields-select, #data-browse-configurations select', function () {
+      $('.tab-content').on('change', '#data-tags-fields-select, #data-alphabetical-fields-select, #data-chronological-fields-select, #data-reverse-chronological-fields-select, #data-sources, #data-thumbnail-fields-select, #data-browse-configurations select', function () {
         updateSelectText($(this));
       });
     },
@@ -489,16 +456,17 @@ var DataDirectoryForm = (function() {
         data_fields: this.columns,
         field_types: {},
         folderConfig : _this.folderConfig,
-        label_template: $('#directory-browse-label').val(),
-        show_subtitle: $("#show_subtitle").is(':checked'),
-        subtitle: $("#show_subtitle").is(':checked') ? $('#directory-browse-subtitle').val() : '',
-        is_alphabetical: ( $('[name=is_alphabetical]:checked').val() === "true" ),
+        // show_subtitle: $("#show_subtitle").is(':checked'),
+        // subtitle: $("#show_subtitle").is(':checked') ? $('#directory-browse-subtitle').val() : '',
+        sort_order: $('[name=sort_order]:checked').val(),
         alphabetical_field: $('#data-alphabetical-fields-select').val(),
-        show_tags: $("#show_tags").is(':checked'),
-        tags_field: $("#show_tags").is(':checked') ? $('#data-tags-fields-select').val() : '',
-        thumbnail_field: $('#data-thumbnail-fields-select').val(),
-        show_thumb_list: ($('[name=enable_thumb_list]:checked').val() === "show" ? true : false),
-        show_thumb_detail: ($('[name=enable_thumb_details]:checked').val() === "show" ? true : false),
+        chronological_field: $('#data-chronological-fields-select').val(),
+        reverse_chronological_field: $('#data-reverse-chronological-fields-select').val(),
+        // show_tags: $("#show_tags").is(':checked'),
+        // tags_field: $("#show_tags").is(':checked') ? $('#data-tags-fields-select').val() : '',
+        // thumbnail_field: $('#data-thumbnail-fields-select').val(),
+        // show_thumb_list: ($('[name=enable_thumb_list]:checked').val() === "show" ? true : false),
+        // show_thumb_detail: ($('[name=enable_thumb_details]:checked').val() === "show" ? true : false),
         enable_live_data: ($('#enable_live_data:checked').val() === "on" ? true : false)
       };
 

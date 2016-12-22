@@ -33,7 +33,7 @@ var SplitView = function (config, container) {
   }
 
   this.config = $.extend({
-    is_alphabetical : false,
+    sort_order : "original",
     alphabetical_field : "",
     label_template : "",
     data_fields : [],
@@ -83,10 +83,6 @@ var SplitView = function (config, container) {
     });
   }
 
-  if ( typeof this.config.is_alphabetical === 'string' ) {
-    this.config.is_alphabetical = this.config.is_alphabetical.toLowerCase().trim() === 'true';
-  }
-
   if ( typeof this.config.field_types === 'string' && this.config.field_types.length ) {
     this.config.field_types = JSON.parse(this.config.field_types);
   }
@@ -108,7 +104,7 @@ SplitView.prototype.initialiseHandlebars = function(){
   });
 
   Handlebars.registerHelper('alphabet_divider', function(){
-    if (!_this.config.is_alphabetical) return '';
+    if (_this.config.sort_order !== 'alphabetical') return '';
 
     var entryTitleTemplate = Handlebars.compile( "{{["+_this.config.alphabetical_field+"]}}" );
     var firstCharacterOfTitle = entryTitleTemplate( this )[0].toUpperCase();
@@ -210,38 +206,51 @@ SplitView.prototype.renderListView = function(){
   var _this = this;
   var listData = [];
 
-  if ( this.config.is_alphabetical) {
-    listData = this.data.sort( function(a,b){
-      var attr = _this.config.alphabetical_field;
-      if (!a[attr] || !b[attr]) {
-        return 0;
-      }
+  switch (this.config.sort_order) {
+    case 'alphabetical':
+      listData = this.data.sort( function(a,b){
+        var attr = _this.config.alphabetical_field;
+        if (!a[attr] || !b[attr]) {
+          return 0;
+        }
 
-      if (a[attr].toUpperCase() < b[attr].toUpperCase())
-        return -1;
-      if (a[attr].toUpperCase() > b[attr].toUpperCase())
-        return 1;
-      return 0;
-    } );
-    this.$container.find('.directory-entries').addClass('list-index-enabled');
-  } else if (this.config.is_chronological) {
-    // @TODO: Add chronological sorting
-    listData = this.data;
-  } else {
-    listData = this.data;
+        if (a[attr].toUpperCase() < b[attr].toUpperCase())
+          return -1;
+        if (a[attr].toUpperCase() > b[attr].toUpperCase())
+          return 1;
+        return 0;
+      } );
+      this.$container.find('.directory-entries').addClass('list-index-enabled');
+      break;
+    case 'chronological':
+      listData = this.data.sort(function (left, right) {
+        var field = _this.config.chronological_field;
+        return moment.utc(left[field]).diff(moment.utc(right[field]));
+      });
+      break;
+    case 'reverse_chronological':
+    listData = this.data.sort(function (left, right) {
+      var field = _this.config.reverse_chronological_field;
+      return moment.utc(right[field]).diff(moment.utc(left[field]));
+    });
+      break;
+    case 'original':
+    default:
+      listData = this.data;
+      break;
   }
   this.data = listData;
 
   var listViewHTML = Fliplet.Widget.Templates['build.listView'](this.data);
 
   this.$container.find('.directory-entries').html(listViewHTML);
-  if ( this.config.is_alphabetical ) {
+  if ( this.config.sort_order === 'alphabetical' ) {
     this.renderIndexList();
   }
 };
 
 SplitView.prototype.renderIndexList = function(){
-  if ( !this.config.is_alphabetical ) return;
+  if ( !this.config.sort_order !== 'alphabetical' ) return;
 
   var $listIndex = this.$container.find('.directory-entries + .list-index');
   $listIndex.html('');
