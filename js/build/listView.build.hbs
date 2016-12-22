@@ -1,14 +1,14 @@
 <ul>{{#each this}}
   {{{alphabet_divider}}}
-  <li class="linked data-linked" data-type="entry" data-index="{{@index}}" data-source-entry-id="{{dataSourceEntryId}}">
-    <span class="icon fa fa-angle-right"></span>
+  <li class="linked data-linked" data-type="entry" data-index="{{@index}}">
+    <!-- <span class="icon fa fa-star"></span> -->
     <div class="list-desc">
       <p class="list-title">{{plaintext "Title" this}}</p>
-      <p class="list-subtitle">{{moment "Session start" "YYYY-MM-DD HH:mm" this}}&ndash;{{moment "Session end" "HH:mm" this}} &bull; {{Location}}<br>{{plaintext "Description" this}}</p>
+      <!-- <p class="survey-notification"><span class="survey-warning"><i class="fa fa-exclamation-circle"></i> Please complete survey</span></p> -->
+      <p class="time-place">{{moment "Session start" "HH:mm" this}} &ndash; {{moment "Session end" "HH:mm" this}} &#183; <span>{{Location}}</span></p>
     </div>
     <div class="list-tags">
       {{tag_filters "Tags" this}}
     </div>
-    <span class="buttonControl"></span>
   </li>
 {{/each}}</ul>

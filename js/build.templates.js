@@ -14,101 +14,6 @@ this["Fliplet"]["Widget"]["Templates"]["build.detailView"] = Handlebars.template
     + "</div>\n</div>\n";
 },"useData":true});
 
-this["Fliplet"]["Widget"]["Templates"]["build.directoryFieldTypeaccordion"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
-
-  return "<div class=\"panel-group\" id=\"accordion-"
-    + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
-    + "\" role=\"tablist\" aria-multiselectable=\"true\">\n  <div class=\"panel panel-default\">\n    <div class=\"panel-heading\" role=\"tab\" id=\"heading-"
-    + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
-    + "\">\n      <h4 class=\"panel-title collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion-"
-    + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
-    + "\" href=\"#collapse-"
-    + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
-    + "\">"
-    + alias4(((helper = (helper = helpers.label || (depth0 != null ? depth0.label : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"label","hash":{},"data":data}) : helper)))
-    + "</h4>\n    </div>\n    <div id=\"collapse-"
-    + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
-    + "\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"heading-"
-    + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
-    + "\">\n      <div class=\"panel-body\">\n        "
-    + ((stack1 = ((helper = (helper = helpers.value || (depth0 != null ? depth0.value : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"value","hash":{},"data":data}) : helper))) != null ? stack1 : "")
-    + "\n      </div>\n    </div>\n  </div>\n</div>\n";
-},"useData":true});
-
-this["Fliplet"]["Widget"]["Templates"]["build.directoryFieldTypeaddress"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1;
-
-  return ((stack1 = container.lambda(depth0, depth0)) != null ? stack1 : "")
-    + "\n";
-},"useData":true});
-
-this["Fliplet"]["Widget"]["Templates"]["build.directoryFieldTypedate"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return container.escapeExpression(container.lambda(depth0, depth0));
-},"useData":true});
-
-this["Fliplet"]["Widget"]["Templates"]["build.directoryFieldTypedatetime"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return container.escapeExpression(container.lambda(depth0, depth0))
-    + "\n";
-},"useData":true});
-
-this["Fliplet"]["Widget"]["Templates"]["build.directoryFieldTypeemail"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var alias1=container.lambda, alias2=container.escapeExpression;
-
-  return "<a href=\"mailto:"
-    + alias2(alias1(depth0, depth0))
-    + "\"><span class=\"fa fa-envelope\"></span> "
-    + alias2(alias1(depth0, depth0))
-    + "</a>";
-},"useData":true});
-
-this["Fliplet"]["Widget"]["Templates"]["build.directoryFieldTypefile"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<a href=\""
-    + container.escapeExpression(container.lambda(depth0, depth0))
-    + "\" class=\"btn btn-primary\">Click to open file</a>";
-},"useData":true});
-
-this["Fliplet"]["Widget"]["Templates"]["build.directoryFieldTypefilter"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
-
-  return "<a href=\"#\" class=\"data-linked\" data-type=\"filter-value\" data-filter=\""
-    + alias4(((helper = (helper = helpers.filter || (depth0 != null ? depth0.filter : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"filter","hash":{},"data":data}) : helper)))
-    + "\" data-value=\""
-    + alias4(((helper = (helper = helpers.value || (depth0 != null ? depth0.value : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"value","hash":{},"data":data}) : helper)))
-    + "\"><span class=\"fa fa-filter\"></span> "
-    + alias4(((helper = (helper = helpers.value || (depth0 != null ? depth0.value : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"value","hash":{},"data":data}) : helper)))
-    + "</a>\n";
-},"useData":true});
-
-this["Fliplet"]["Widget"]["Templates"]["build.directoryFieldTypeimage"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<img src=\""
-    + container.escapeExpression(container.lambda(depth0, depth0))
-    + "\"/>\n";
-},"useData":true});
-
-this["Fliplet"]["Widget"]["Templates"]["build.directoryFieldTypetel"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var alias1=container.lambda, alias2=container.escapeExpression;
-
-  return "<a href=\"#\" onclick=\"Fliplet.Navigate.url('tel:"
-    + alias2(alias1(depth0, depth0))
-    + "');return false;\"><span class=\"fa fa-phone\"></span> "
-    + alias2(alias1(depth0, depth0))
-    + "</a>\n";
-},"useData":true});
-
-this["Fliplet"]["Widget"]["Templates"]["build.directoryFieldTypetext"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1;
-
-  return ((stack1 = container.lambda(depth0, depth0)) != null ? stack1 : "")
-    + "\n";
-},"useData":true});
-
-this["Fliplet"]["Widget"]["Templates"]["build.directoryFieldTypeurl"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<span class=\"fa fa-external-link\"></span> <a href=\""
-    + container.escapeExpression(container.lambda(depth0, depth0))
-    + "\">View online</a>\n";
-},"useData":true});
-
 this["Fliplet"]["Widget"]["Templates"]["build.listView"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
@@ -116,21 +21,17 @@ this["Fliplet"]["Widget"]["Templates"]["build.listView"] = Handlebars.template({
     + ((stack1 = ((helper = (helper = helpers.alphabet_divider || (depth0 != null ? depth0.alphabet_divider : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"alphabet_divider","hash":{},"data":data}) : helper))) != null ? stack1 : "")
     + "\n  <li class=\"linked data-linked\" data-type=\"entry\" data-index=\""
     + alias4(((helper = (helper = helpers.index || (data && data.index)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"index","hash":{},"data":data}) : helper)))
-    + "\" data-source-entry-id=\""
-    + alias4(((helper = (helper = helpers.dataSourceEntryId || (depth0 != null ? depth0.dataSourceEntryId : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"dataSourceEntryId","hash":{},"data":data}) : helper)))
-    + "\">\n    <span class=\"icon fa fa-angle-right\"></span>\n    <div class=\"list-desc\">\n      <p class=\"list-title\">"
+    + "\">\n    <!-- <span class=\"icon fa fa-star\"></span> -->\n    <div class=\"list-desc\">\n      <p class=\"list-title\">"
     + alias4((helpers.plaintext || (depth0 && depth0.plaintext) || alias2).call(alias1,"Title",depth0,{"name":"plaintext","hash":{},"data":data}))
-    + "</p>\n      <p class=\"list-subtitle\">"
-    + alias4((helpers.moment || (depth0 && depth0.moment) || alias2).call(alias1,"Session start","YYYY-MM-DD HH:mm",depth0,{"name":"moment","hash":{},"data":data}))
-    + "&ndash;"
+    + "</p>\n      <!-- <p class=\"survey-notification\"><span class=\"survey-warning\"><i class=\"fa fa-exclamation-circle\"></i> Please complete survey</span></p> -->\n      <p class=\"time-place\">"
+    + alias4((helpers.moment || (depth0 && depth0.moment) || alias2).call(alias1,"Session start","HH:mm",depth0,{"name":"moment","hash":{},"data":data}))
+    + " &ndash; "
     + alias4((helpers.moment || (depth0 && depth0.moment) || alias2).call(alias1,"Session end","HH:mm",depth0,{"name":"moment","hash":{},"data":data}))
-    + " &bull; "
+    + " &#183; <span>"
     + alias4(((helper = (helper = helpers.Location || (depth0 != null ? depth0.Location : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"Location","hash":{},"data":data}) : helper)))
-    + "<br>"
-    + alias4((helpers.plaintext || (depth0 && depth0.plaintext) || alias2).call(alias1,"Description",depth0,{"name":"plaintext","hash":{},"data":data}))
-    + "</p>\n    </div>\n    <div class=\"list-tags\">\n      "
+    + "</span></p>\n    </div>\n    <div class=\"list-tags\">\n      "
     + alias4((helpers.tag_filters || (depth0 && depth0.tag_filters) || alias2).call(alias1,"Tags",depth0,{"name":"tag_filters","hash":{},"data":data}))
-    + "\n    </div>\n    <span class=\"buttonControl\"></span>\n  </li>\n";
+    + "\n    </div>\n  </li>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
