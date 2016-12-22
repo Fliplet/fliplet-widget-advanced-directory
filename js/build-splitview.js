@@ -117,7 +117,7 @@ SplitView.prototype.initialiseHandlebars = function(){
     if ( "1234567890".indexOf(firstCharacterOfTitle) > -1 ) firstCharacterOfTitle = '#';
     if ( firstCharacterOfTitle !== lastAlphabetIndex ) {
       lastAlphabetIndex = firstCharacterOfTitle;
-      return Handlebars.templates.listViewDivider(firstCharacterOfTitle);
+      return Fliplet.Widget.Templates['build.listViewDivider'](firstCharacterOfTitle);
     }
   });
 
@@ -177,7 +177,7 @@ SplitView.prototype.initialiseHandlebars = function(){
     });
   }
 
-  Handlebars.registerPartial('directory_filter_values', Handlebars.templates.splitViewFilterValues);
+  Handlebars.registerPartial('directory_filter_values', Fliplet.Widget.Templates['build.splitViewFilterValues']);
 };
 
 SplitView.prototype.init = function(){
@@ -240,7 +240,7 @@ SplitView.prototype.renderListView = function(){
   }
   this.data = listData;
 
-  var listViewHTML = Handlebars.templates.listView(this.data);
+  var listViewHTML = Fliplet.Widget.Templates['build.listView'](this.data);
 
   this.$container.find('.directory-entries').html(listViewHTML);
   if ( this.config.is_alphabetical ) {
@@ -301,7 +301,7 @@ SplitView.prototype.renderFilters = function(){
 
   if ( this.config.filter_fields.length ) {
     // 1 or more filter fields configured
-    var directoryFilterHTML = Handlebars.templates.splitViewFilters(this.config.filter_fields);
+    var directoryFilterHTML = Fliplet.Widget.Templates['build.splitViewFilters'](this.config.filter_fields);
     this.$container.find('.filter-list').html(directoryFilterHTML);
   } else {
     // No filter field configured
@@ -348,7 +348,7 @@ SplitView.prototype.renderFilterValues = function( filter, inOverlay ){
   data = { filter : filter.trim(), values : values, dataType: (tags_field === filter) ? 'filter-value-tag' : 'filter-value'};
 
   if ( inOverlay ) {
-    var overlayContent = Handlebars.templates.splitViewFilterOverlay(data);
+    var overlayContent = Fliplet.Widget.Templates['build.splitViewFilterOverlay'](data);
     this.filterOverlay = new Overlay(overlayContent,{
       title: 'Filter by ' + filter,
       classes: 'overlay-directory',
@@ -362,7 +362,7 @@ SplitView.prototype.renderFilterValues = function( filter, inOverlay ){
       }
     });
   } else {
-    var splitViewFilterValuesHTML = Handlebars.templates.splitViewFilterValues(data);
+    var splitViewFilterValuesHTML = Fliplet.Widget.Templates['build.splitViewFilterValues'](data);
     this.$container.find('.filter-value-list').html(splitViewFilterValuesHTML);
     this.$container.find('.filter-selected').html(filter);
     this.$container.find('.directory-filters')[0].scrollTop = 0;
@@ -594,7 +594,7 @@ SplitView.prototype.openDataEntry = function(entryIndex, type, trackEvent){
   //   }
   // }
 
-  var detailViewHTML = Handlebars.templates.detailView(_this.data[entryIndex]);
+  var detailViewHTML = Fliplet.Widget.Templates['build.detailView'](_this.data[entryIndex]);
 
   if ( type === 'search-result-entry' ) {
     this.switchMode('search-result-entry');
@@ -772,7 +772,7 @@ SplitView.prototype.getEntryField = function( entryIndex, fieldIndex, type ){
       }).join(', ');
       valueHTML = '<div class="list-tags">' + valueHTML + '</div>';
     } else {
-      valueHTML = Handlebars.templates['directoryFieldType' + fieldType](value);
+      valueHTML = Fliplet.Widget.Templates['build.directoryFieldType' + fieldType](value);
     }
   } else {
     valueHTML = '';
@@ -864,7 +864,7 @@ SplitView.prototype.renderSearchResult = function( options, callback ){
   }
 
   this.searchResultData = data.result;
-  var splitViewSearchResultHTML = Handlebars.templates.splitViewSearchResult(data);
+  var splitViewSearchResultHTML = Fliplet.Widget.Templates['build.splitViewSearchResult'](data);
   this.$container.find('.search-result').html(splitViewSearchResultHTML).scrollTop(0);
   if (typeof callback === 'function') setTimeout(callback, 0);
 };

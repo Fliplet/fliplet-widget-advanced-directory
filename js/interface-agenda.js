@@ -253,10 +253,10 @@ var DataDirectoryForm = (function() {
     },
 
     loadDataDirectoryForm : function(){
-      $('#data-sources').html(Handlebars.templates.dataSourceOptions(_this.tables));
-      $('#data-alphabetical-fields').html(Handlebars.templates.dataAlphabeticalField(_this.columns));
-      $('#data-tags-fields').html(Handlebars.templates.dataTagsField(_this.columns));
-      $('#data-thumbnail-fields').html(Handlebars.templates.dataThumbnailField(_this.columns));
+      $('#data-sources').html(Fliplet.Widget.Templates['interface.dataSourceOptions'](_this.tables));
+      $('#data-alphabetical-fields').html(Fliplet.Widget.Templates['interface.dataAlphabeticalField'](_this.columns));
+      $('#data-tags-fields').html(Fliplet.Widget.Templates['interface.dataTagsField'](_this.columns));
+      $('#data-thumbnail-fields').html(Fliplet.Widget.Templates['interface.dataThumbnailField'](_this.columns));
 
       if (!_this.tables.length) {
         $('#no-data-source-prompt').removeClass('hidden');
@@ -299,7 +299,7 @@ var DataDirectoryForm = (function() {
       $('a[href="#data-source"][data-toggle="tab"]').html('Change data source');
       $('.nav.nav-stacked li.disabled').removeClass('disabled');
 
-      $('#data-browse-configurations').html(Handlebars.templates.dataBrowseConfigurations(_this.columns));
+      $('#data-browse-configurations').html(Fliplet.Widget.Templates['interface.dataBrowseConfigurations'](_this.columns));
       $('#data-browse-configurations select').each(function() {
         updateSelectText($(this));
       });
