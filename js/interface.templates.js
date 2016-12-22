@@ -84,3 +84,7 @@ this["Fliplet"]["Widget"]["Templates"]["interface.dataThumbnailField"] = Handleb
     + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},depth0,{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "</select>";
 },"useData":true});
+
+this["Fliplet"]["Widget"]["Templates"]["interface.dataTypeSelector"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "<label class=\"select-proxy-display\">\n  <span class=\"icon fa fa-chevron-down\"></span>\n  <span class=\"select-value-proxy\">Display as text</span>\n  <select class=\"hidden-select form-control\">\n    <option value=\"text\">Display as text</option>\n    <option value=\"tel\">Tap to dial the number</option>\n    <option value=\"email\">Tap to send an email</option>\n    <option value=\"url\">Tap to visit webpage</option>\n      <option value=\"file\">Tap to open file</option>\n    <!-- <<option value=\"address\">Address</option> -->\n    <option value=\"image\">Display as an image</option>\n      <option value=\"accordion\">Display as an accordion</option>\n    <!-- <option value=\"datetime\">Date/time</option> -->\n      <option value=\"date\">Display as date</option>\n  </select>\n</label>\n";
+},"useData":true});

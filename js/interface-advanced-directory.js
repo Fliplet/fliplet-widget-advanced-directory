@@ -216,7 +216,7 @@ var DataDirectoryForm = (function() {
       });
 
       Handlebars.registerHelper("typeSelector", function(field){
-        var typeSelectorTemplate = $('#data-type-selector-template').html();
+        var typeSelectorTemplate = Fliplet.Widget.Templates['interface.dataTypeSelector']();
         var fieldType = 'text';
         if ( typeof _this.directoryConfig.field_types[field] !== 'undefined' ) {
           fieldType = _this.directoryConfig.field_types[field];
