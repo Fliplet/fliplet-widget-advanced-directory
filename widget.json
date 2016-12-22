@@ -20,7 +20,7 @@
     ],
     "assets": [
       "js/interface.templates.js",
-      "js/interface-agenda.js",
+      "js/interface-advanced-directory.js",
       "js/interface.js",
       "css/interface.css"
     ]

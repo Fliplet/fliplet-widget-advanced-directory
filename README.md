@@ -1,4 +1,4 @@
-# fliplet-widget-agenda
+# Advanced Directory
 
 To develop widgets, please follow our [widget development guide](https://github.com/Fliplet/fliplet-cli).
 
