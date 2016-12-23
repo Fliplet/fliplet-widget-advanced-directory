@@ -107,7 +107,7 @@ SplitView.prototype.initialiseHandlebars = function(){
     if (_this.config.sort_order !== 'alphabetical') return '';
 
     var entryTitleTemplate = Handlebars.compile( "{{["+_this.config.alphabetical_field+"]}}" );
-    var firstCharacterOfTitle = entryTitleTemplate( this )[0].toUpperCase();
+    var firstCharacterOfTitle = entryTitleTemplate( this )[0].toStrin().toUpperCase();
     if ( "1234567890".indexOf(firstCharacterOfTitle) > -1 ) firstCharacterOfTitle = '#';
     if ( firstCharacterOfTitle !== lastAlphabetIndex ) {
       lastAlphabetIndex = firstCharacterOfTitle;
@@ -897,9 +897,9 @@ SplitView.prototype.filter = function( field, value ) {
 
 function sortAlphabetically(a,b) {
   // Sort by alphabet
-  if (a.toUpperCase() < b.toUpperCase())
+  if (a.toString().toUpperCase() < b.toString().toUpperCase())
     return -1;
-  if (a.toUpperCase() > b.toUpperCase())
+  if (a.toString().toUpperCase() > b.toString().toUpperCase())
     return 1;
   return 0;
 }
