@@ -3,7 +3,7 @@
   "package": "com.fliplet.advanceddirectory",
   "version": "1.0.0",
   "icon": "img/icon.png",
-  "tags": ["category:data"],
+  "tags": ["type:component","category:data"],
   "provider_only": false,
   "html_tag": "span",
   "interface": {
