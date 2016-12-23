@@ -129,6 +129,10 @@ label {
     box-shadow: none;
 }
 
+textarea.form-control {
+  line-height: 1;
+}
+
 .form-control:focus {
     border-color: #00abd2;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(0, 171, 210, .6);

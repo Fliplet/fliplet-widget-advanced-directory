@@ -241,7 +241,8 @@ SplitView.prototype.renderListView = function(){
   }
   this.data = listData;
 
-  var listViewHTML = Fliplet.Widget.Templates['build.listView'](this.data);
+  var listViewTemplate = this.config.listviewTemplate ? Handlebars.compile(this.config.listviewTemplate) : Fliplet.Widget.Templates['build.listView'];
+  var listViewHTML = listViewTemplate(this.data);
 
   this.$container.find('.directory-entries').html(listViewHTML);
   if ( this.config.sort_order === 'alphabetical' ) {
@@ -595,7 +596,8 @@ SplitView.prototype.openDataEntry = function(entryIndex, type, trackEvent){
   //   }
   // }
 
-  var detailViewHTML = Fliplet.Widget.Templates['build.detailView'](_this.data[entryIndex]);
+  var detailViewTemplate = this.config.detailviewTemplate ? Handlebars.compile(this.config.detailviewTemplate) : Fliplet.Widget.Templates['build.detailView'];
+  var detailViewHTML = detailViewTemplate(_this.data[entryIndex]);
 
   if ( type === 'search-result-entry' ) {
     this.switchMode('search-result-entry');

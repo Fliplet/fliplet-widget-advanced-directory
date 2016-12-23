@@ -141,7 +141,11 @@ var DataDirectoryForm = (function() {
       search_fields : [],
       source: '',
       field_types : {},
-      folderConfig : {}
+      folderConfig : {},
+      listviewTemplate: '',
+      detailviewTemplate: '',
+      customCss: '',
+      customJs: ''
     }, configuration);
     if ( typeof this.directoryConfig.field_types === 'string' && this.directoryConfig.field_types.length ) {
       this.directoryConfig.field_types = JSON.parse(this.directoryConfig.field_types);
@@ -257,6 +261,27 @@ var DataDirectoryForm = (function() {
       // $('#data-tags-fields').html(Fliplet.Widget.Templates['interface.dataTagsField'](_this.columns));
       // $('#data-thumbnail-fields').html(Fliplet.Widget.Templates['interface.dataThumbnailField'](_this.columns));
 
+      // _this.listviewEditor = CodeMirror.fromTextArea(document.getElementById("listview-template"), {
+      //   mode: "text/x-handlebars-template",
+      //   lineNumbers: true,
+      //   lineWrapping: true
+      // });
+      // _this.detailviewEditor = CodeMirror.fromTextArea(document.getElementById("detailview-template"), {
+      //   mode: "text/x-handlebars-template",
+      //   lineNumbers: true,
+      //   lineWrapping: true
+      // });
+      // _this.customCssEditor = CodeMirror.fromTextArea(document.getElementById("custom-css"), {
+      //   mode: "text/css",
+      //   lineNumbers: true,
+      //   lineWrapping: true
+      // });
+      // _this.customJsEditor = CodeMirror.fromTextArea(document.getElementById("custom-js"), {
+      //   mode: "text/javascript",
+      //   lineNumbers: true,
+      //   lineWrapping: true
+      // });
+
       if (!_this.tables.length) {
         $('#no-data-source-prompt').removeClass('hidden');
       }
@@ -295,7 +320,6 @@ var DataDirectoryForm = (function() {
         updateSelectText($(this));
       });
 
-
       $('#data-alphabetical-fields-select').val( _this.directoryConfig.alphabetical_field );
       updateSelectText($('#data-alphabetical-fields-select'));
 
@@ -314,7 +338,15 @@ var DataDirectoryForm = (function() {
         $('#enable_live_data').prop('checked', true);
       }
 
+      $('#listview-template').val(_this.directoryConfig.listviewTemplate);
+      $('#detailview-template').val(_this.directoryConfig.detailviewTemplate);
+      $('#custom-css').val(_this.directoryConfig.customCss);
+      $('#custom-js').val(_this.directoryConfig.customJs);
 
+      // _this.listviewEditor.getDoc().setValue(_this.directoryConfig.listviewTemplate);
+      // _this.detailviewEditor.getDoc().setValue(_this.directoryConfig.detailviewTemplate);
+      // _this.customCssEditor.getDoc().setValue(_this.directoryConfig.customCss);
+      // _this.customJsEditor.getDoc().setValue(_this.directoryConfig.customJs);
     },
 
     attachObservers_ : function(){
@@ -467,7 +499,15 @@ var DataDirectoryForm = (function() {
         // thumbnail_field: $('#data-thumbnail-fields-select').val(),
         // show_thumb_list: ($('[name=enable_thumb_list]:checked').val() === "show" ? true : false),
         // show_thumb_detail: ($('[name=enable_thumb_details]:checked').val() === "show" ? true : false),
-        enable_live_data: ($('#enable_live_data:checked').val() === "on" ? true : false)
+        enable_live_data: ($('#enable_live_data:checked').val() === "on" ? true : false),
+        listviewTemplate: $('#listview-template').val(),
+        detailviewTemplate: $('#detailview-template').val(),
+        customCss: $('#custom-css').val(),
+        customJs: $('#custom-js').val()
+        // listviewTemplate: _this.listviewEditor.getValue(),
+        // detailviewTemplate: _this.detailviewEditor.getValue(),
+        // customCss: _this.customCssEditor.getValue(),
+        // customJs: _this.customJsEditor.getValue()
       };
 
       $('[data-type="filter"]:checked').each(function(){
