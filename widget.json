@@ -16,6 +16,7 @@
       "jquery-ui",
       "handlebars",
       "bootstrap",
+      "codemirror",
       "lodash"
     ],
     "assets": [

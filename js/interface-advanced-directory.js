@@ -261,26 +261,26 @@ var DataDirectoryForm = (function() {
       // $('#data-tags-fields').html(Fliplet.Widget.Templates['interface.dataTagsField'](_this.columns));
       // $('#data-thumbnail-fields').html(Fliplet.Widget.Templates['interface.dataThumbnailField'](_this.columns));
 
-      // _this.listviewEditor = CodeMirror.fromTextArea(document.getElementById("listview-template"), {
-      //   mode: "text/x-handlebars-template",
-      //   lineNumbers: true,
-      //   lineWrapping: true
-      // });
-      // _this.detailviewEditor = CodeMirror.fromTextArea(document.getElementById("detailview-template"), {
-      //   mode: "text/x-handlebars-template",
-      //   lineNumbers: true,
-      //   lineWrapping: true
-      // });
-      // _this.customCssEditor = CodeMirror.fromTextArea(document.getElementById("custom-css"), {
-      //   mode: "text/css",
-      //   lineNumbers: true,
-      //   lineWrapping: true
-      // });
-      // _this.customJsEditor = CodeMirror.fromTextArea(document.getElementById("custom-js"), {
-      //   mode: "text/javascript",
-      //   lineNumbers: true,
-      //   lineWrapping: true
-      // });
+      _this.listviewEditor = CodeMirror.fromTextArea(document.getElementById("listview-template"), {
+        mode: {name: "handlebars", base: "text/html"},
+        lineNumbers: true,
+        lineWrapping: true
+      });
+      _this.detailviewEditor = CodeMirror.fromTextArea(document.getElementById("detailview-template"), {
+        mode: {name: "handlebars", base: "text/html"},
+        lineNumbers: true,
+        lineWrapping: true
+      });
+      _this.customCssEditor = CodeMirror.fromTextArea(document.getElementById("custom-css"), {
+        mode: "text/css",
+        lineNumbers: true,
+        lineWrapping: true
+      });
+      _this.customJsEditor = CodeMirror.fromTextArea(document.getElementById("custom-js"), {
+        mode: "text/javascript",
+        lineNumbers: true,
+        lineWrapping: true
+      });
 
       if (!_this.tables.length) {
         $('#no-data-source-prompt').removeClass('hidden');
@@ -338,18 +338,26 @@ var DataDirectoryForm = (function() {
         $('#enable_live_data').prop('checked', true);
       }
 
-      $('#listview-template').val(_this.directoryConfig.listviewTemplate);
-      $('#detailview-template').val(_this.directoryConfig.detailviewTemplate);
-      $('#custom-css').val(_this.directoryConfig.customCss);
-      $('#custom-js').val(_this.directoryConfig.customJs);
+      _this.listviewEditor.getDoc().setValue(_this.directoryConfig.listviewTemplate);
+      _this.detailviewEditor.getDoc().setValue(_this.directoryConfig.detailviewTemplate);
+      _this.customCssEditor.getDoc().setValue(_this.directoryConfig.customCss);
+      _this.customJsEditor.getDoc().setValue(_this.directoryConfig.customJs);
 
-      // _this.listviewEditor.getDoc().setValue(_this.directoryConfig.listviewTemplate);
-      // _this.detailviewEditor.getDoc().setValue(_this.directoryConfig.detailviewTemplate);
-      // _this.customCssEditor.getDoc().setValue(_this.directoryConfig.customCss);
-      // _this.customJsEditor.getDoc().setValue(_this.directoryConfig.customJs);
+      setTimeout(_this.refreshCodeEditors_, 0);
+    },
+
+    refreshCodeEditors_ : function(){
+      _this.listviewEditor.refresh();
+      _this.detailviewEditor.refresh();
+      _this.customCssEditor.refresh();
+      _this.customJsEditor.refresh();
     },
 
     attachObservers_ : function(){
+      $('#developer-control').on('click', function(){
+        setTimeout(_this.refreshCodeEditors_, 0);
+      });
+
       $('.image-library')
         .on('dblclick', '[data-folder-id]', function () {
           var $el = $(this);
@@ -500,14 +508,10 @@ var DataDirectoryForm = (function() {
         // show_thumb_list: ($('[name=enable_thumb_list]:checked').val() === "show" ? true : false),
         // show_thumb_detail: ($('[name=enable_thumb_details]:checked').val() === "show" ? true : false),
         enable_live_data: ($('#enable_live_data:checked').val() === "on" ? true : false),
-        listviewTemplate: $('#listview-template').val(),
-        detailviewTemplate: $('#detailview-template').val(),
-        customCss: $('#custom-css').val(),
-        customJs: $('#custom-js').val()
-        // listviewTemplate: _this.listviewEditor.getValue(),
-        // detailviewTemplate: _this.detailviewEditor.getValue(),
-        // customCss: _this.customCssEditor.getValue(),
-        // customJs: _this.customJsEditor.getValue()
+        listviewTemplate: _this.listviewEditor.getValue(),
+        detailviewTemplate: _this.detailviewEditor.getValue(),
+        customCss: _this.customCssEditor.getValue(),
+        customJs: _this.customJsEditor.getValue()
       };
 
       $('[data-type="filter"]:checked').each(function(){

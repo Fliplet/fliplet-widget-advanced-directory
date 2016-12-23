@@ -214,9 +214,9 @@ SplitView.prototype.renderListView = function(){
           return 0;
         }
 
-        if (a[attr].toUpperCase() < b[attr].toUpperCase())
+        if (a[attr].toString().toUpperCase() < b[attr].toString().toUpperCase())
           return -1;
-        if (a[attr].toUpperCase() > b[attr].toUpperCase())
+        if (a[attr].toString().toUpperCase() > b[attr].toString().toUpperCase())
           return 1;
         return 0;
       } );
