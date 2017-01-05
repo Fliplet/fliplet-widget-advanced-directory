@@ -5,16 +5,16 @@ $('[data-directory-id]').each(function(){
   var config = Fliplet.Widget.getData(id);
   if (config.source) {
     if (!config.enable_live_data) {
-      return dataDirectory[id] = new SplitView(config, container);
+      return dataDirectory[id] = new AdvancedDirectory(config, container);
     }
 
     Fliplet.Storage.get('data-directory-rows-' + id)
       .then(function (rows) {
         if (rows) {
           config.rows = rows;
-          dataDirectory[id] = new SplitView(config, container);
+          dataDirectory[id] = new AdvancedDirectory(config, container);
         } else {
-          dataDirectory[id] = new SplitView(config, container);
+          dataDirectory[id] = new AdvancedDirectory(config, container);
         }
 
         if (Fliplet.Navigator.isOnline()) {
