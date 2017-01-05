@@ -46,7 +46,7 @@
       "vendor/bootstrap-datepicker.min.js",
       "vendor/bootstrap-datepicker-mobile.js",
       "js/build.templates.js",
-      "js/build-splitview.js",
+      "js/build-advanced-directory.js",
       "js/build.js",
       "css/build.css",
       "vendor/overlay.css",
