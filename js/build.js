@@ -2,13 +2,14 @@ var dataDirectory = {};
 $('[data-directory-id]').each(function(){
   var container = this;
   var id = $(this).data('directory-id');
+  var uuid = $(this).data('directory-uuid');
   var config = Fliplet.Widget.getData(id);
   if (config.source) {
     if (!config.enable_live_data) {
       return dataDirectory[id] = new AdvancedDirectory(config, container);
     }
 
-    Fliplet.Storage.get('data-directory-rows-' + id)
+    Fliplet.Storage.get('data-directory-rows-' + uuid)
       .then(function (rows) {
         if (rows) {
           config.rows = rows;
@@ -28,7 +29,7 @@ $('[data-directory-id]').each(function(){
                 return row.data;
               });
 
-              Fliplet.Storage.set('data-directory-rows-' + id, config.rows);
+              Fliplet.Storage.set('data-directory-rows-' + uuid, config.rows);
               dataDirectory[id].init();
             });
         }
