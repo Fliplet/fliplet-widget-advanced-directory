@@ -594,21 +594,13 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
 
   var detailData = {
     has_thumbnail : this.config.show_thumb_detail ? this.config.show_thumb_detail : false,
-    fields : [],
-    dataSourceEntryId: _this.data[entryIndex]['dataSourceEntryId'] || ''
+    data : _this.data[entryIndex]
   };
 
   // @TODO: Review Thumbnail-related code
   // if (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '') {
   //   detailData['has_thumbnail'] = (typeof this.config.thumbnail_field !== 'undefined' && this.config.thumbnail_field.trim() !== '' && this.config.show_thumb_detail ? this.config.show_thumb_detail : false );
   //   detailData['thumbnail'] = (type == 'search-result-entry') ? this.searchResultData[entryIndex][this.config.thumbnail_field] : this.data[entryIndex][this.config.thumbnail_field];
-  // }
-
-  // for (var fieldIndex = 0, l = this.config.detail_fields.length; fieldIndex < l; fieldIndex++) {
-  //   var fieldObj = this.getEntryField( entryIndex, fieldIndex, type );
-  //   if (fieldObj.value.length) {
-  //     detailData.fields.push( fieldObj );
-  //   }
   // }
 
   var detailViewTemplate = this.config.detailviewTemplate
