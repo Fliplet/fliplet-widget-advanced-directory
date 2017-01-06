@@ -4,33 +4,51 @@ $('[data-directory-id]').each(function(){
   var id = $(this).data('directory-id');
   var uuid = $(this).data('directory-uuid');
   var config = Fliplet.Widget.getData(id);
+  var pvKey = 'data-directory-source-' + uuid;
   if (config.source) {
-    if (!config.enable_live_data) {
-      return dataDirectory[id] = new AdvancedDirectory(config, container);
-    }
 
-    Fliplet.Storage.get('data-directory-rows-' + uuid)
-      .then(function (rows) {
-        if (rows) {
-          config.rows = rows;
-          dataDirectory[id] = new AdvancedDirectory(config, container);
+    // Always start by attempting to use locally cached data
+    Fliplet.Storage.get(pvKey)
+      .then(function (cachedSource) {
+        if (cachedSource) {
+          config.rows = cachedSource.rows;
         } else {
-          dataDirectory[id] = new AdvancedDirectory(config, container);
+          // First time loading the interface...
+          // Cache the data on device with a timestamp
+          cachedSource = {
+            rows: config.rows,
+            updatedAt: new Date().getTime()
+          };
+          Fliplet.Storage.set(pvKey, cachedSource);
         }
+        dataDirectory[id] = new AdvancedDirectory(config, container);
 
-        if (Fliplet.Navigator.isOnline()) {
+        if (config.enable_live_data && Fliplet.Navigator.isOnline()) {
+          var sourceUpdatedAt = cachedSource.updatedAt;
+
           Fliplet.DataSources.connect(config.source)
             .then(function (source) {
               return source.find();
             })
             .then(function (rows) {
-              dataDirectory[id].data = rows.map(function (row) {
-                row.data.dataSourceEntryId = row.id;
-                return row.data;
+              // Find out when the source was last updated
+              _.each(rows, function(row){
+                sourceUpdatedAt = Math.max(sourceUpdatedAt, new Date(row.updatedAt).getTime());
               });
 
-              Fliplet.Storage.set('data-directory-rows-' + uuid, config.rows);
-              dataDirectory[id].init();
+              if (sourceUpdatedAt > cachedSource.updatedAt) {
+                dataDirectory[id].data = rows.map(function (row) {
+                  row.data.dataSourceEntryId = row.id;
+                  return row.data;
+                });
+
+                Fliplet.Storage.set(pvKey, {
+                  rows: dataDirectory[id].data,
+                  updatedAt: new Date().getTime()
+                });
+
+                dataDirectory[id].init();
+              }
             });
         }
       });

@@ -359,7 +359,7 @@ AdvancedDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
 
   if ( inOverlay ) {
     var overlayContent = Fliplet.Widget.Templates['build.advancedDirectoryFilterOverlay'](data);
-    this.filterOverlay = new Overlay(overlayContent,{
+    this.filterOverlay = new Fliplet.Utils.Overlay(overlayContent,{
       title: 'Filter by ' + filter,
       classes: 'overlay-directory',
       showOnInit: true,
@@ -430,7 +430,7 @@ AdvancedDirectory.prototype.attachObservers = function(){
 
   this.$container.on( 'click', '.data-linked', $.proxy( this.dataLinkClicked, this ) );
   $(window).on( 'resize', function(){
-    _this.deviceIsTablet = window.innerWidth >= 640;
+    _this.deviceIsTablet = window.innerWidth >= 640 && window.innerHeight >= 640;
     _this.resizeSearch();
     _this.navHeight = $('.fl-viewport-header').height() || 0;
     _this.searchBarHeight = _this.$container.find('.directory-search').outerHeight();
@@ -680,7 +680,7 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
       $listEntry.addClass('active');
     },0);
   } else {
-    this.entryOverlay = new Overlay( detailViewHTML, {
+    this.entryOverlay = new Fliplet.Utils.Overlay( detailViewHTML, {
       showOnInit : true,
       classes: 'overlay-directory',
       closeText: '<i class="fa fa-chevron-left"></i>',
