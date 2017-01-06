@@ -47,7 +47,7 @@ $('[data-directory-id]').each(function(){
                   updatedAt: new Date().getTime()
                 });
 
-                dataDirectory[id].init();
+                dataDirectory[id].refreshDirectory();
               }
             });
         }

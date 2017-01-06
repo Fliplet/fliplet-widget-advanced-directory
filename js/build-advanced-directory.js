@@ -44,7 +44,7 @@ var AdvancedDirectory = function (config, container) {
   this.$container = $(container).parents('body');
   this.$listContainer = this.$container.find('.directory-entries');
   this.$searchResultsContainer = this.$container.find('.search-result');
-  this.deviceIsTablet = ( window.innerWidth >= 640 );
+  this.deviceIsTablet = window.innerWidth >= 640 && window.innerHeight >= 640;
   this.navHeight = $('.fl-viewport-header').height() || 0;
   this.searchBarHeight = this.$container.find('.directory-search').outerHeight();
   this.directoryMode = this.$container.find('.container-fluid').attr('data-mode');
@@ -55,39 +55,28 @@ var AdvancedDirectory = function (config, container) {
   this.liveSearchInterval = 200;
   this.currentEntry;
 
-  var folderID = this.config.folderConfig;
-
-  function initialize () {
-    if (_this.data.length) {
-      _this.initialiseHandlebars();
-      _this.init();
-      _this.attachObservers();
-      _this.parseQueryVars();
-    } else {
-      _this.directoryNotConfigured();
-    }
-  }
-
-  Fliplet.Media.Folders.get(folderID).then(function (response) {
-    response.files.forEach(renderThumb);
-    initialize();
-  }, function onMediaFolderError(err) {
-    console.error(err);
-    initialize();
-  });
-
-  function renderThumb(file) {
-    // Returns placeholder if no match
-    _this.data.forEach(function(entry) {
-      if (file.url.indexOf( entry[_this.config.thumbnail_field]) !== -1 && entry[_this.config.thumbnail_field].trim() !== '') {
-        entry[_this.config.thumbnail_field] = file.url;
-      }
-    });
-  }
-
   if ( typeof this.config.field_types === 'string' && this.config.field_types.length ) {
     this.config.field_types = JSON.parse(this.config.field_types);
   }
+
+  var folderID = this.config.folderConfig;
+  Fliplet.Media.Folders.get(folderID).then(function (response) {
+    response.files.forEach( function renderThumb (file) {
+        // Returns placeholder if no match
+        _this.data.forEach(function(entry) {
+          if (file.url.indexOf( entry[_this.config.thumbnail_field]) !== -1 && entry[_this.config.thumbnail_field].trim() !== '') {
+            entry[_this.config.thumbnail_field] = file.url;
+          }
+        });
+      }
+    );
+    _this.init();
+    _this.refreshDirectory();
+  }, function onMediaFolderError(err) {
+    console.error(err);
+    _this.init();
+    _this.refreshDirectory();
+  });
 
   return this;
 };
@@ -169,7 +158,21 @@ AdvancedDirectory.prototype.initialiseHandlebars = function(){
   Handlebars.registerPartial('directory_filter_values', Fliplet.Widget.Templates['build.advancedDirectoryFilterValues']);
 };
 
-AdvancedDirectory.prototype.init = function(){
+AdvancedDirectory.prototype.init = function() {
+  this.initialiseHandlebars();
+  this.attachObservers();
+}
+
+AdvancedDirectory.prototype.refreshDirectory = function() {
+  if (this.data.length) {
+    this.renderDirectory();
+    this.parseQueryVars();
+  } else {
+    this.directoryNotConfigured();
+  }
+}
+
+AdvancedDirectory.prototype.renderDirectory = function(){
   this.verifyConfig();
   this.renderListView();
   this.renderFilters();
@@ -179,7 +182,10 @@ AdvancedDirectory.prototype.init = function(){
     "flDirectoryListRendered",
     {
       bubbles: true,
-      cancelable: true
+      cancelable: true,
+      detail: {
+        context: this
+      }
     }
   );
   document.dispatchEvent(flDirectoryListRendered);
@@ -453,18 +459,18 @@ AdvancedDirectory.prototype.attachObservers = function(){
       _this.renderLiveSearch($(this).val());
     } );
   }
-  $(this.$container).on( 'click', '.search-cancel', function(){
+  this.$container.on( 'click', '.search-cancel', function(){
     _this.$container.find('.search').val('');
     _this.deactivateSearch();
     return false;
   } );
-  $(this.$container).on( 'click', '.search-result-clear', function(){
+  this.$container.on( 'click', '.search-result-clear', function(){
     _this.$container.find('.search').val('');
     _this.switchMode('search');
     return false;
   } );
 
-  $(this.$container).on( 'touchmove', '.search-result ul, .filters', function(){
+  this.$container.on( 'touchmove', '.search-result ul, .filters', function(){
     _this.$container.find('.search').trigger('blur');
   } );
 
@@ -624,6 +630,7 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
       bubbles: true,
       cancelable: true,
       detail: {
+        context: this,
         detailData: detailData
       }
     }
@@ -660,6 +667,7 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
         bubbles: true,
         cancelable: true,
         detail: {
+          context: this,
           detailData: detailData
         }
       }
