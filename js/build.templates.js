@@ -73,7 +73,9 @@ this["Fliplet"]["Widget"]["Templates"]["build.listView"] = Handlebars.template({
 
   return "\n  "
     + ((stack1 = ((helper = (helper = helpers.alphabet_divider || (depth0 != null ? depth0.alphabet_divider : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"alphabet_divider","hash":{},"data":data}) : helper))) != null ? stack1 : "")
-    + "\n  <li class=\"linked data-linked\">\n    <!-- <span class=\"icon fa fa-star\"></span> -->\n    <div class=\"list-desc\">\n      <p class=\"list-title\">"
+    + "\n  <li class=\"linked data-linked\" data-type=\"entry\" data-index=\""
+    + alias4(((helper = (helper = helpers.index || (data && data.index)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"index","hash":{},"data":data}) : helper)))
+    + "\">\n    <!-- <span class=\"icon fa fa-star\"></span> -->\n    <div class=\"list-desc\">\n      <p class=\"list-title\">"
     + alias4((helpers.plaintext || (depth0 && depth0.plaintext) || alias2).call(alias1,"Title",depth0,{"name":"plaintext","hash":{},"data":data}))
     + "</p>\n      <!-- <p class=\"survey-notification\"><span class=\"survey-warning\"><i class=\"fa fa-exclamation-circle\"></i> Please complete survey</span></p> -->\n      <p class=\"time-place\">"
     + alias4((helpers.moment || (depth0 && depth0.moment) || alias2).call(alias1,"Session start","HH:mm",depth0,{"name":"moment","hash":{},"data":data}))

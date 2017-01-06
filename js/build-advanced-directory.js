@@ -2,11 +2,11 @@
 /*****************  AdvancedDirectory  *****************/
 /*****************  AdvancedDirectory  *****************/
 
-var messageTimeout,
-  loadingTimeout,
-  messageDelay = 5000,        // "Loading..." text delay to display
-  loadingOverlayDelay = 1000, // Time it takes to display the loading overlay after a click
-  date_filter;                // Filter used before pick date range when filtering by a date type field
+var messageTimeout;
+var loadingTimeout;
+var messageDelay = 5000; // "Loading..." text delay to display
+var loadingOverlayDelay = 1000; // Time it takes to display the loading overlay after a click
+var date_filter; // Filter used before pick date range when filtering by a date type field
 
 
 var AdvancedDirectory = function (config, container) {
@@ -42,6 +42,8 @@ var AdvancedDirectory = function (config, container) {
     field_types : "" // Formatted as a JSON string to avoid invalid key characters (e.g. "?'#") violating CodeIgniter security
   }, config);
   this.$container = $(container).parents('body');
+  this.$listContainer = this.$container.find('.directory-entries');
+  this.$searchResultsContainer = this.$container.find('.search-result');
   this.deviceIsTablet = ( window.innerWidth >= 640 );
   this.navHeight = $('.fl-viewport-header').height() || 0;
   this.searchBarHeight = this.$container.find('.directory-search').outerHeight();
@@ -241,10 +243,15 @@ AdvancedDirectory.prototype.renderListView = function(){
   }
   this.data = listData;
 
-  var listViewTemplate = this.config.listviewTemplate ? Handlebars.compile(this.config.listviewTemplate) : Fliplet.Widget.Templates['build.listView'];
+  var listViewTemplate = this.config.listviewTemplate
+                            ? Handlebars.compile(this.config.listviewTemplate)
+                            : Fliplet.Widget.Templates['build.listView'];
   var listViewHTML = listViewTemplate(this.data);
 
-  this.$container.find('.directory-entries').html(listViewHTML);
+  this.$listContainer
+    .html(listViewHTML)
+    .find('.data-linked:not([data-type])')
+      .attr('data-type', 'entry');
   if ( this.config.sort_order === 'alphabetical' ) {
     this.renderIndexList();
   }
@@ -561,7 +568,7 @@ AdvancedDirectory.prototype.dataLinkClicked = function(e){
     case 'entry':
     case 'search-result-entry':
     default:
-      this.openDataEntry($(e.currentTarget).index()-1, e.currentTarget.dataset.type);
+      this.openDataEntry(e.currentTarget.dataset.index, e.currentTarget.dataset.type);
       break;
   }
 };
@@ -572,11 +579,13 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
   if ( typeof type === 'undefined' ) type = 'entry';
   if ( typeof trackEvent === 'undefined' ) trackEvent = true;
 
-  var $listEntry = this.$container.find('li[data-type="' + type + '"]:eq(' + entryIndex + ')');
-  var $entrytitle = this.$container.find('li[data-type="' + type + '"]:eq(' + entryIndex + ') .list-title');
-  var title = $entrytitle.text().trim();
+  var $container = this.$listContainer;
+  if (type === 'search-result-entry') {
+    $container = this.$searchResultsContainer;
+  }
+  var $listEntry = this.$container.find('[data-type="' + type + '"][data-index="' + entryIndex + '"]');
+
   var detailData = {
-    title : title,
     has_thumbnail : this.config.show_thumb_detail ? this.config.show_thumb_detail : false,
     fields : [],
     dataSourceEntryId: _this.data[entryIndex]['dataSourceEntryId'] || ''
@@ -595,8 +604,13 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
   //   }
   // }
 
-  var detailViewTemplate = this.config.detailviewTemplate ? Handlebars.compile(this.config.detailviewTemplate) : Fliplet.Widget.Templates['build.detailView'];
-  var detailViewHTML = detailViewTemplate(_this.data[entryIndex]);
+  var detailViewTemplate = this.config.detailviewTemplate
+                            ? Handlebars.compile(this.config.detailviewTemplate)
+                            : Fliplet.Widget.Templates['build.detailView'];
+  var data = (type === 'search-result-entry')
+                ? _this.searchResultData[entryIndex]
+                : _this.data[entryIndex];
+  var detailViewHTML = detailViewTemplate(data);
 
   if ( type === 'search-result-entry' ) {
     this.switchMode('search-result-entry');
@@ -620,14 +634,14 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
     $(".directory-detail-value a").not(".data-linked").on("click", function(e){
       if ($(e.target).attr("href").indexOf("mailto") === 0) {
         // Analytics - Track Event
-        Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_email', title: title });
+        Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_email', title: '' });
 
       } else if ($(e.target).attr("href").indexOf("tel") === 0) {
         // Analytics - Track Event
-        Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_phone', title: title });
+        Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_phone', title: '' });
       } else {
         // Analytics - Track Event
-        Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_email', title: title });
+        Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_email', title: '' });
       }
     });
     $(".directory-detail-value a.data-linked").on("click", function(e){
@@ -686,7 +700,7 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
 
   // Analytics - Track Event
   if (trackEvent) {
-    Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_open', title: title });
+    Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_open', title: '' });
   }
 };
 
@@ -868,10 +882,10 @@ AdvancedDirectory.prototype.renderSearchResult = function( options, callback ){
   this.searchResultData = data.result;
   var advancedDirectorySearchResultHeaderHTML = Fliplet.Widget.Templates['build.advancedDirectorySearchResultHeader'](data);
   var advancedDirectorySearchResultHTML = Fliplet.Widget.Templates['build.listView'](data.result);
-  this.$container.find('.search-result')
+  this.$searchResultsContainer
     .html(advancedDirectorySearchResultHeaderHTML)
     .append(advancedDirectorySearchResultHTML)
-    .find('.data-linked')
+    .find('.data-linked[data-type="entry"]')
       .attr('data-type', 'search-result-entry')
     .end()
     .scrollTop(0);
