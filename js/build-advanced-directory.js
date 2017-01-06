@@ -359,7 +359,7 @@ AdvancedDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
 
   if ( inOverlay ) {
     var overlayContent = Fliplet.Widget.Templates['build.advancedDirectoryFilterOverlay'](data);
-    this.filterOverlay = new Overlay(overlayContent,{
+    this.filterOverlay = new Fliplet.Utils.Overlay(overlayContent,{
       title: 'Filter by ' + filter,
       classes: 'overlay-directory',
       showOnInit: true,
@@ -680,7 +680,7 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
       $listEntry.addClass('active');
     },0);
   } else {
-    this.entryOverlay = new Overlay( detailViewHTML, {
+    this.entryOverlay = new Fliplet.Utils.Overlay( detailViewHTML, {
       showOnInit : true,
       classes: 'overlay-directory',
       closeText: '<i class="fa fa-chevron-left"></i>',
