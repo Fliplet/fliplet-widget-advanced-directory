@@ -317,6 +317,7 @@ AdvancedDirectory.prototype.renderFilters = function(){
     this.$container.find('.search').attr('placeholder','Search');
     this.$container.find('.filters').remove();
   }
+  this.$container.find('.search').attr('disabled',false);
 
 };
 
@@ -446,9 +447,9 @@ AdvancedDirectory.prototype.attachObservers = function(){
       value: _this.$container.find('.search').val()
     } );
   } );
-  this.$container.find('.search').on( 'focus', $.proxy( this.activateSearch, this ) );
+  this.$container.on( 'focus', '.search', $.proxy( this.activateSearch, this ) );
   if ( this.supportLiveSearch ) {
-    this.$container.find('.search').on( 'keydown paste input', function(e){
+    this.$container.on( 'keydown paste input', '.search', function(e){
       _this.renderLiveSearch($(this).val());
     } );
   }
@@ -479,10 +480,10 @@ AdvancedDirectory.prototype.attachObservers = function(){
     _this.removeLoading();
   }, false);
 
-  this.$container.find('.date_cancel, .overlay-date-range .closeButton').on( 'click', function(){
+  this.$container.on( 'click', '.date_cancel, .overlay-date-range .closeButton', function(){
     $('.overlay-date-range').removeClass('active');
   });
-  this.$container.find('.date_go').on( 'click', function(){
+  this.$container.on( 'click', '.date_go', function(){
     $('.overlay-date-range').removeClass('active');
     _this.renderFilterValues(date_filter, !_this.deviceIsTablet)
   });
