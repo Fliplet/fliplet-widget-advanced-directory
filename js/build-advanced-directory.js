@@ -430,7 +430,7 @@ AdvancedDirectory.prototype.attachObservers = function(){
 
   this.$container.on( 'click', '.data-linked', $.proxy( this.dataLinkClicked, this ) );
   $(window).on( 'resize', function(){
-    _this.deviceIsTablet = window.innerWidth >= 640;
+    _this.deviceIsTablet = window.innerWidth >= 640 && window.innerHeight >= 640;
     _this.resizeSearch();
     _this.navHeight = $('.fl-viewport-header').height() || 0;
     _this.searchBarHeight = _this.$container.find('.directory-search').outerHeight();
