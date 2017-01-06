@@ -29,7 +29,7 @@ $('[data-directory-id]').each(function(){
                 return row.data;
               });
 
-              Fliplet.Storage.set('data-directory-rows-' + uuid, config.rows);
+              Fliplet.Storage.set('data-directory-rows-' + uuid, dataDirectory[id].data);
               dataDirectory[id].init();
             });
         }
