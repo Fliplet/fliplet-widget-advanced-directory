@@ -164,11 +164,11 @@ AdvancedDirectory.prototype.init = function() {
 }
 
 AdvancedDirectory.prototype.refreshDirectory = function() {
-  if (_this.data.length) {
-    _this.renderDirectory();
-    _this.parseQueryVars();
+  if (this.data.length) {
+    this.renderDirectory();
+    this.parseQueryVars();
   } else {
-    _this.directoryNotConfigured();
+    this.directoryNotConfigured();
   }
 }
 
