@@ -1,5 +1,5 @@
 var dataDirectory = {};
-$(document).on('ready', function(){
+document.addEventListener('DOMContentLoaded', function() {
   $('[data-directory-id]').each(function(){
     var container = this;
     var id = $(this).data('directory-id');
