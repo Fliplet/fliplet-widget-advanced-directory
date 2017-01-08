@@ -59,6 +59,9 @@ var AdvancedDirectory = function (config, container) {
     this.config.field_types = JSON.parse(this.config.field_types);
   }
 
+  _this.init();
+  _this.refreshDirectory();
+
   var folderID = this.config.folderConfig;
   Fliplet.Media.Folders.get(folderID).then(function (response) {
     response.files.forEach( function renderThumb (file) {
@@ -70,12 +73,8 @@ var AdvancedDirectory = function (config, container) {
         });
       }
     );
-    _this.init();
-    _this.refreshDirectory();
   }, function onMediaFolderError(err) {
     console.error(err);
-    _this.init();
-    _this.refreshDirectory();
   });
 
   return this;
