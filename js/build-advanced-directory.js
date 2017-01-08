@@ -528,11 +528,11 @@ AdvancedDirectory.prototype.resizeSearch = function(){
 };
 
 AdvancedDirectory.prototype.filterOverlayIsActive = function(){
-  return this.filterOverlay instanceof Overlay;
+  return this.filterOverlay instanceof Fliplet.Utils.Overlay;
 };
 
 AdvancedDirectory.prototype.entryOverlayIsActive = function(){
-  return this.entryOverlay instanceof Overlay;
+  return this.entryOverlay instanceof Fliplet.Utils.Overlay;
 };
 
 AdvancedDirectory.prototype.dataLinkClicked = function(e){
