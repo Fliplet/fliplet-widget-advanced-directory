@@ -4,7 +4,7 @@
 
 var messageTimeout;
 var loadingTimeout;
-var messageDelay = 5000; // "Loading..." text delay to display
+var messageDelay = 5000; // 'Loading...' text delay to display
 var loadingOverlayDelay = 1000; // Time it takes to display the loading overlay after a click
 var date_filter; // Filter used before pick date range when filtering by a date type field
 
@@ -14,9 +14,9 @@ var AdvancedDirectory = function (config, container) {
 
   this.data = config.rows;
 
-  // Custom event to fire before an entry is rendered in the detailed view.
+  // Custom event to fire before the directory is initialised
   var flDirectoryBeforeInit = new CustomEvent(
-    "flDirectoryBeforeInit",
+    'flDirectoryBeforeInit',
     {
       bubbles: true,
       cancelable: true,
@@ -33,13 +33,13 @@ var AdvancedDirectory = function (config, container) {
   }
 
   this.config = $.extend({
-    sort_order : "original",
-    alphabetical_field : "",
-    label_template : "",
+    sort_order : 'original',
+    alphabetical_field : '',
+    label_template : '',
     data_fields : [],
     filter_fields : [],
     search_fields : [],
-    field_types : "" // Formatted as a JSON string to avoid invalid key characters (e.g. "?'#") violating CodeIgniter security
+    field_types : '' // Formatted as a JSON string to avoid invalid key characters (e.g. "?'#") violating CodeIgniter security
   }, config);
   this.$container = $(container).parents('body');
   this.$listContainer = this.$container.find('.directory-entries');
@@ -77,6 +77,19 @@ var AdvancedDirectory = function (config, container) {
     console.error(err);
   });
 
+  // Custom event to fire after the directory is initialised
+  var flDirectoryAfterInit = new CustomEvent(
+    'flDirectoryAfterInit',
+    {
+      bubbles: true,
+      cancelable: true,
+      detail: {
+        context: this
+      }
+    }
+  );
+  document.dispatchEvent(flDirectoryAfterInit);
+
   return this;
 };
 
@@ -96,9 +109,9 @@ AdvancedDirectory.prototype.initialiseHandlebars = function(){
   Handlebars.registerHelper('alphabet_divider', function(){
     if (_this.config.sort_order !== 'alphabetical') return '';
 
-    var entryTitleTemplate = Handlebars.compile( "{{["+_this.config.alphabetical_field+"]}}" );
+    var entryTitleTemplate = Handlebars.compile( '{{['+_this.config.alphabetical_field+']}}' );
     var firstCharacterOfTitle = entryTitleTemplate( this )[0].toString().toUpperCase();
-    if ( "1234567890".indexOf(firstCharacterOfTitle) > -1 ) firstCharacterOfTitle = '#';
+    if ( '1234567890'.indexOf(firstCharacterOfTitle) > -1 ) firstCharacterOfTitle = '#';
     if ( firstCharacterOfTitle !== lastAlphabetIndex ) {
       lastAlphabetIndex = firstCharacterOfTitle;
       return Fliplet.Widget.Templates['build.listViewDivider'](firstCharacterOfTitle);
@@ -141,7 +154,7 @@ AdvancedDirectory.prototype.initialiseHandlebars = function(){
       return '';
     }
 
-    var splitTags = tags.split(",");
+    var splitTags = tags.split(',');
     return new Handlebars.SafeString(
       splitTags.map(function (tag) {
         tag = tag.trim();
@@ -178,7 +191,7 @@ AdvancedDirectory.prototype.renderDirectory = function(){
 
   // Custom event to fire after the directory list is rendered.
   var flDirectoryListRendered = new CustomEvent(
-    "flDirectoryListRendered",
+    'flDirectoryListRendered',
     {
       bubbles: true,
       cancelable: true,
@@ -340,7 +353,7 @@ AdvancedDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
       var entryTags = record[tags_field].split(',');
       entryTags.forEach(function(tag) {
         tag = tag.trim();
-        if (tag !== "" && values.indexOf(tag) === -1) {
+        if (tag !== '' && values.indexOf(tag) === -1) {
           values.push(tag);
         }
       });
@@ -348,8 +361,8 @@ AdvancedDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
 
     values = values.sort(sortAlphabetically);
   } else if (_this.config.field_types[filter] === 'date') {
-    var start_date = new Date($('.start_date').datepicker("getDate"))
-    var end_date = new Date($('.finish_date').datepicker("getDate"))
+    var start_date = new Date($('.start_date').datepicker('getDate'))
+    var end_date = new Date($('.finish_date').datepicker('getDate'))
         this.data.forEach(function(value, index) {
           var entryDate = new Date(value[filter]);
            if (entryDate >= start_date && entryDate <= end_date) {
@@ -473,7 +486,7 @@ AdvancedDirectory.prototype.attachObservers = function(){
     _this.$container.find('.search').trigger('blur');
   } );
 
-  document.addEventListener("flDirectoryEntryBeforeRender", function () {
+  document.addEventListener('flDirectoryEntryBeforeRender', function () {
     _this.disableClicks();
     _this.removeLoading();
     loadingTimeout = setTimeout(function () {
@@ -481,7 +494,7 @@ AdvancedDirectory.prototype.attachObservers = function(){
     }, loadingOverlayDelay);
   }, false);
 
-  document.addEventListener("flDirectoryEntryAfterRender", function () {
+  document.addEventListener('flDirectoryEntryAfterRender', function () {
     _this.removeLoading();
   }, false);
 
@@ -616,7 +629,7 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
 
   // Custom event to fire before an entry is rendered in the detailed view.
   var flDirectoryEntryBeforeRender = new CustomEvent(
-    "flDirectoryEntryBeforeRender",
+    'flDirectoryEntryBeforeRender',
     {
       bubbles: true,
       cancelable: true,
@@ -630,12 +643,12 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
 
   var after_render = function() {
     // Link taps listeners
-    $(".directory-detail-value a").not(".data-linked").on("click", function(e){
-      if ($(e.target).attr("href").indexOf("mailto") === 0) {
+    $('.directory-detail-value a').not('.data-linked').on('click', function(e){
+      if ($(e.target).attr('href').indexOf('mailto') === 0) {
         // Analytics - Track Event
         Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_email', title: '' });
 
-      } else if ($(e.target).attr("href").indexOf("tel") === 0) {
+      } else if ($(e.target).attr('href').indexOf('tel') === 0) {
         // Analytics - Track Event
         Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_phone', title: '' });
       } else {
@@ -643,17 +656,17 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
         Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_email', title: '' });
       }
     });
-    $(".directory-detail-value a.data-linked").on("click", function(e){
-      var filterType = (typeof $(e.target).data("type") !== "undefined") ? $(e.target).data("type") : "";
-      var filterValue = (typeof $(e.target).data("value") !== "undefined") ? $(e.target).data("value") : "";
+    $('.directory-detail-value a.data-linked').on('click', function(e){
+      var filterType = (typeof $(e.target).data('type') !== 'undefined') ? $(e.target).data('type') : '';
+      var filterValue = (typeof $(e.target).data('value') !== 'undefined') ? $(e.target).data('value') : '';
 
       // Analytics - Track Event
-      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_email', title: filterType + ": " + filterValue });
+      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_email', title: filterType + ': ' + filterValue });
     });
 
     // Custom event to fire after an entry is rendered in the detailed view.
     var flDirectoryEntryAfterRender = new CustomEvent(
-      "flDirectoryEntryAfterRender",
+      'flDirectoryEntryAfterRender',
       {
         bubbles: true,
         cancelable: true,
@@ -717,9 +730,9 @@ AdvancedDirectory.prototype.addLoading = function () {
     this.$container.find('.directory-list').find('.directory-loading').fadeIn(400);
   }
 
-  // Delay to display the "Loading..." text
+  // Delay to display the 'Loading...' text
   messageTimeout = setTimeout(function () {
-    $('.directory-loading .loading-text').hide().text("Loading...").fadeIn(250);
+    $('.directory-loading .loading-text').hide().text('Loading...').fadeIn(250);
   }, messageDelay);
 };
 
@@ -735,7 +748,7 @@ AdvancedDirectory.prototype.removeLoading = function () {
   }
 
   this.$container.find('.directory-list, .directory-details').removeClass('disabled'); // Enables List
-  $('.directory-loading .loading-text').text(""); // Resets Loading text
+  $('.directory-loading .loading-text').text(''); // Resets Loading text
 };
 
 AdvancedDirectory.prototype.getEntryField = function( entryIndex, fieldIndex, type ){
@@ -778,7 +791,7 @@ AdvancedDirectory.prototype.getEntryField = function( entryIndex, fieldIndex, ty
   var valueHTML;
   if ( (typeof value === 'object' && value && value.value && value.value.length) || (typeof value === 'string' && value.length) ) {
     if (this.config.show_tags && this.config.tags_field === label && fieldType === 'filter') {
-      valueHTML = value.value.split(",").map(function (tag) {
+      valueHTML = value.value.split(',').map(function (tag) {
         tag = tag.trim();
         if (tag !== '') {
           return '<a class="data-linked" data-type="filter-value-tag" data-value="'+tag+'" data-filter="'+value.filter+'" href="#">'+tag+'</a>';
@@ -862,7 +875,7 @@ AdvancedDirectory.prototype.renderSearchResult = function( options, callback ){
       data.result = this.data.filter(filterByTag);
 
       // Analytics - Track Event
-      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'list_tag_filter', title: options.type + ": " + options.value });
+      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'list_tag_filter', title: options.type + ': ' + options.value });
 
       break;
     case 'search':
@@ -874,7 +887,7 @@ AdvancedDirectory.prototype.renderSearchResult = function( options, callback ){
       data.result = this.search( options.value );
 
       // Analytics - Track Event
-      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'filter', title: options.type + ": " + options.value });
+      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'filter', title: options.type + ': ' + options.value });
 
       break;
   }
