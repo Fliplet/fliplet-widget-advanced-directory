@@ -12,7 +12,17 @@ var date_filter; // Filter used before pick date range when filtering by a date 
 var AdvancedDirectory = function (config, container) {
   var _this = this;
 
-  this.data = config.rows;
+  this.config = $.extend({
+    sort_order : 'original',
+    alphabetical_field : '',
+    label_template : '',
+    data_fields : [],
+    filter_fields : [],
+    search_fields : [],
+    field_types : '' // Formatted as a JSON string to avoid invalid key characters (e.g. "?'#") violating CodeIgniter security
+  }, config);
+  this.data = this.config.rows;
+  delete this.config.rows;
 
   // Custom event to fire before the directory is initialised
   var flDirectoryBeforeInit = new CustomEvent(
@@ -27,20 +37,6 @@ var AdvancedDirectory = function (config, container) {
   );
   document.dispatchEvent(flDirectoryBeforeInit);
 
-  // Function to run before initialising the directory.
-  if (typeof config.before_init === 'function') {
-    this.data = config.before_init(JSON.parse(JSON.stringify(this.data)));
-  }
-
-  this.config = $.extend({
-    sort_order : 'original',
-    alphabetical_field : '',
-    label_template : '',
-    data_fields : [],
-    filter_fields : [],
-    search_fields : [],
-    field_types : '' // Formatted as a JSON string to avoid invalid key characters (e.g. "?'#") violating CodeIgniter security
-  }, config);
   this.$container = $(container).parents('body');
   this.$listContainer = this.$container.find('.directory-entries');
   this.$searchResultsContainer = this.$container.find('.search-result');
@@ -91,6 +87,18 @@ var AdvancedDirectory = function (config, container) {
   document.dispatchEvent(flDirectoryAfterInit);
 
   return this;
+};
+
+AdvancedDirectory.prototype.getConfig = function(key){
+  if (key.length && this.config.hasOwnProperty(key)) {
+    return this.config[key];
+  }
+};
+
+AdvancedDirectory.prototype.setConfig = function(key, value){
+  if (key.length) {
+    this.config[key] = value;
+  }
 };
 
 AdvancedDirectory.prototype.initialiseHandlebars = function(){
@@ -678,11 +686,6 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
     );
     document.dispatchEvent(flDirectoryEntryAfterRender);
   };
-
-  // Function to run before rendering the entry
-  if (typeof this.config.before_render_entry === 'function') {
-    detailViewHTML = this.config.before_render_entry(detailData, detailViewHTML);
-  }
 
   if ( this.deviceIsTablet ) {
     this.$container.find('.directory-details .directory-details-content').html(detailViewHTML);
