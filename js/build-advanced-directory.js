@@ -19,7 +19,8 @@ var AdvancedDirectory = function (config, container) {
     data_fields : [],
     filter_fields : [],
     search_fields : [],
-    field_types : '' // Formatted as a JSON string to avoid invalid key characters (e.g. "?'#") violating CodeIgniter security
+    field_types : '', // Formatted as a JSON string to avoid invalid key characters (e.g. "?'#") violating CodeIgniter security
+    search_only : false
   }, config);
   this.data = this.config.rows;
   delete this.config.rows;
@@ -184,18 +185,28 @@ AdvancedDirectory.prototype.init = function() {
 }
 
 AdvancedDirectory.prototype.refreshDirectory = function() {
-  if (this.data.length) {
-    this.renderDirectory();
-    this.parseQueryVars();
-  } else {
-    this.directoryNotConfigured();
+  if (!this.data.length) {
+    return this.directoryNotConfigured();
   }
+
+  this.renderDirectory();
+  this.parseQueryVars();
 }
 
 AdvancedDirectory.prototype.renderDirectory = function(){
+  var _this = this;
+
   this.verifyConfig();
-  this.renderListView();
   this.renderFilters();
+
+  if (this.config.search_only) {
+    this.activateSearch();
+    setTimeout(function(){
+      // _this.$container.find('.search').trigger( 'focus' );
+    }, 0);
+    return;
+  }
+  this.renderListView();
 
   // Custom event to fire after the directory list is rendered.
   var flDirectoryListRendered = new CustomEvent(
@@ -516,6 +527,14 @@ AdvancedDirectory.prototype.attachObservers = function(){
 };
 
 AdvancedDirectory.prototype.activateSearch = function(){
+  this.$container.find('.search-cancel').css({
+    'top': this.config.search_only ? '-9999px' : ''
+  });
+  this.$container.find('.directory-screen').css({
+    'opacity': this.config.search_only ? '0' : '',
+    'pointer-events': this.config.search_only ? 'none' : ''
+  });
+
   if ( this.isMode('default') ) {
     this.$container.find('.filter-selected').html('');
   }
@@ -527,6 +546,10 @@ AdvancedDirectory.prototype.activateSearch = function(){
 };
 
 AdvancedDirectory.prototype.deactivateSearch = function(){
+  if (this.config.search_only) {
+    return;
+  }
+
   this.$container.find('.search').trigger('blur');
   if ( this.deviceIsTablet && this.isMode('search-result-entry') ) {
     this.openDataEntry(0, 'entry', false);
@@ -539,6 +562,10 @@ AdvancedDirectory.prototype.deactivateSearch = function(){
 AdvancedDirectory.prototype.resizeSearch = function(){
   var _this = this;
   setTimeout(function(){
+    if (_this.config.search_only) {
+      return _this.$container.find('.search').css( 'width', '' );
+    }
+
     if ( _this.isMode('search') || _this.isMode('filter-values') || _this.isMode('search-result') || _this.isMode('search-result-entry') ) {
       _this.$container.find('.search').css( 'width', _this.$container.find('.directory-search').width() - _this.$container.find('.search-cancel').outerWidth() + 8 );
     } else {
@@ -964,8 +991,8 @@ AdvancedDirectory.prototype.parseQueryVars = function(){
       case 'open':
         break;
     }
-  } else if ( this.deviceIsTablet ) {
-    // Open the first entry if on a tablet
+  } else if ( this.deviceIsTablet && !this.config.search_only ) {
+    // Open the first entry if on a tablet and search_only mode isn't on
     this.openDataEntry(0, 'entry', false);
   }
 };
