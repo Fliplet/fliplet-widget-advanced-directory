@@ -12,6 +12,8 @@
     right: 0;
     bottom: 0;
     overflow: hidden;
+    -webkit-transition: top 0.2s;
+    transition: top 0.2s;
 }
 
 .fl-with-top-menu .directory-wrapper {
