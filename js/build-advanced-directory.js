@@ -542,6 +542,10 @@ AdvancedDirectory.prototype.activateSearch = function(){
     this.switchMode('search');
   }
 
+  if (!this.config.search_only) {
+    document.body.classList.add('fl-top-menu-hidden');
+  }
+
   this.flViewportRedraw();
 };
 
@@ -555,6 +559,8 @@ AdvancedDirectory.prototype.deactivateSearch = function(){
     this.openDataEntry(0, 'entry', false);
   }
   this.switchMode('default');
+
+  document.body.classList.remove('fl-top-menu-hidden');
 
   this.flViewportRedraw();
 };
