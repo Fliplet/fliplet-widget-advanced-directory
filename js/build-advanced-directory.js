@@ -403,7 +403,6 @@ AdvancedDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
       closeText: '<i class="fa fa-chevron-left"></i>',
       entranceAnim: 'slideInRight',
       exitAnim: 'slideOutRight',
-      closeText: 'Cancel',
       afterClose: function(){
         _this.filterOverlay = null;
       }
