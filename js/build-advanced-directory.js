@@ -679,7 +679,7 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
     });
 
     // Custom event to fire after an entry is rendered in the detailed view.
-    this.trigger('flDirectoryEntryAfterRender', {detailData: detailData});
+    _this.trigger('flDirectoryEntryAfterRender', {detailData: detailData});
   };
 
   if ( this.deviceIsTablet ) {
