@@ -48,11 +48,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     updatedAt: new Date().getTime()
                   });
 
+                  dataDirectory[id].trigger('flDirectoryBeforeInit');
                   dataDirectory[id].refreshDirectory();
                 }
               });
           }
         });
     }
-  });  
+  });
 });

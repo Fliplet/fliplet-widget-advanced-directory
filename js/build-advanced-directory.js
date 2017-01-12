@@ -26,17 +26,7 @@ var AdvancedDirectory = function (config, container) {
   delete this.config.rows;
 
   // Custom event to fire before the directory is initialised
-  var flDirectoryBeforeInit = new CustomEvent(
-    'flDirectoryBeforeInit',
-    {
-      bubbles: true,
-      cancelable: true,
-      detail: {
-        context: this
-      }
-    }
-  );
-  document.dispatchEvent(flDirectoryBeforeInit);
+  this.trigger('flDirectoryBeforeInit');
 
   this.$container = $(container).parents('body');
   this.$listContainer = this.$container.find('.directory-entries');
@@ -75,19 +65,24 @@ var AdvancedDirectory = function (config, container) {
   });
 
   // Custom event to fire after the directory is initialised
-  var flDirectoryAfterInit = new CustomEvent(
-    'flDirectoryAfterInit',
+  this.trigger('flDirectoryAfterInit');
+
+  return this;
+};
+
+AdvancedDirectory.prototype.trigger = function(event, detail){
+  var detail = $.extend({
+    context: this
+  }, detail || {});
+  var customEvent = new CustomEvent(
+    event,
     {
       bubbles: true,
       cancelable: true,
-      detail: {
-        context: this
-      }
+      detail: detail
     }
   );
-  document.dispatchEvent(flDirectoryAfterInit);
-
-  return this;
+  document.dispatchEvent(customEvent);
 };
 
 AdvancedDirectory.prototype.getConfig = function(key){
@@ -209,17 +204,7 @@ AdvancedDirectory.prototype.renderDirectory = function(){
   this.renderListView();
 
   // Custom event to fire after the directory list is rendered.
-  var flDirectoryListRendered = new CustomEvent(
-    'flDirectoryListRendered',
-    {
-      bubbles: true,
-      cancelable: true,
-      detail: {
-        context: this
-      }
-    }
-  );
-  document.dispatchEvent(flDirectoryListRendered);
+  this.trigger('flDirectoryListRendered');
 };
 
 AdvancedDirectory.prototype.verifyFields = function(fieldConfig){
@@ -668,18 +653,7 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
   }
 
   // Custom event to fire before an entry is rendered in the detailed view.
-  var flDirectoryEntryBeforeRender = new CustomEvent(
-    'flDirectoryEntryBeforeRender',
-    {
-      bubbles: true,
-      cancelable: true,
-      detail: {
-        context: this,
-        detailData: detailData
-      }
-    }
-  );
-  document.dispatchEvent(flDirectoryEntryBeforeRender);
+  this.trigger('flDirectoryEntryBeforeRender', {detailData: detailData});
 
   var after_render = function() {
     // Link taps listeners
@@ -705,18 +679,7 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
     });
 
     // Custom event to fire after an entry is rendered in the detailed view.
-    var flDirectoryEntryAfterRender = new CustomEvent(
-      'flDirectoryEntryAfterRender',
-      {
-        bubbles: true,
-        cancelable: true,
-        detail: {
-          context: this,
-          detailData: detailData
-        }
-      }
-    );
-    document.dispatchEvent(flDirectoryEntryAfterRender);
+    this.trigger('flDirectoryEntryAfterRender', {detailData: detailData});
   };
 
   if ( this.deviceIsTablet ) {
