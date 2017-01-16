@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
           // Pull latest data
           connection.pull()
             .then(function (result) {
-              if (!result.pull) {
+              if (!result.pulled) {
                 return;
               }
 
