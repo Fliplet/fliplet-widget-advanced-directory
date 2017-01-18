@@ -8,7 +8,6 @@ var messageDelay = 5000; // 'Loading...' text delay to display
 var loadingOverlayDelay = 1000; // Time it takes to display the loading overlay after a click
 var date_filter; // Filter used before pick date range when filtering by a date type field
 
-
 var AdvancedDirectory = function (config, container) {
   var _this = this;
 
