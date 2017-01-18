@@ -24,10 +24,6 @@ var AdvancedDirectory = function (config, container) {
   }, config);
   this.data = this.config.rows;
   delete this.config.rows;
-  this.checkMobileMode();
-
-  // Custom event to fire before the directory is initialised
-  this.trigger('flDirectoryBeforeInit');
 
   this.$container = $(container).parents('body');
   this.$listContainer = this.$container.find('.directory-entries');
@@ -39,9 +35,16 @@ var AdvancedDirectory = function (config, container) {
   this.filterOverlay = null;
   this.entryOverlay = null;
   this.searchResultData = [];
-  this.supportLiveSearch = this.data.length <= 500;
   this.liveSearchInterval = 200;
   this.currentEntry;
+
+  this.checkMobileMode();
+
+  // Custom event to fire before the directory is initialised
+  this.trigger('flDirectoryBeforeInit');
+  this.supportLiveSearch = this.data.length <= 500;
+
+  this.checkMobileMode();
 
   if ( typeof this.config.field_types === 'string' && this.config.field_types.length ) {
     this.config.field_types = JSON.parse(this.config.field_types);
