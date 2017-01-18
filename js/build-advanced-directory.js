@@ -19,10 +19,12 @@ var AdvancedDirectory = function (config, container) {
     filter_fields : [],
     search_fields : [],
     field_types : '', // Formatted as a JSON string to avoid invalid key characters (e.g. "?'#") violating CodeIgniter security
-    search_only : false
+    search_only : false,
+    mobile_mode : false
   }, config);
   this.data = this.config.rows;
   delete this.config.rows;
+  this.checkMobileMode();
 
   // Custom event to fire before the directory is initialised
   this.trigger('flDirectoryBeforeInit');
@@ -30,7 +32,7 @@ var AdvancedDirectory = function (config, container) {
   this.$container = $(container).parents('body');
   this.$listContainer = this.$container.find('.directory-entries');
   this.$searchResultsContainer = this.$container.find('.search-result');
-  this.deviceIsTablet = window.innerWidth >= 640 && window.innerHeight >= 640;
+  this.deviceIsTablet = (window.innerWidth >= 640 && window.innerHeight >= 640);
   this.navHeight = $('.fl-viewport-header').height() || 0;
   this.searchBarHeight = this.$container.find('.directory-search').outerHeight();
   this.directoryMode = this.$container.find('.container-fluid').attr('data-mode');
@@ -179,6 +181,8 @@ AdvancedDirectory.prototype.init = function() {
 }
 
 AdvancedDirectory.prototype.refreshDirectory = function() {
+  this.checkMobileMode();
+
   if (!this.data.length) {
     return this.directoryNotConfigured();
   }
@@ -450,7 +454,8 @@ AdvancedDirectory.prototype.attachObservers = function(){
 
   this.$container.on( 'click', '.data-linked', $.proxy( this.dataLinkClicked, this ) );
   $(window).on( 'resize', function(){
-    _this.deviceIsTablet = window.innerWidth >= 640 && window.innerHeight >= 640;
+    _this.deviceIsTablet = (window.innerWidth >= 640 && window.innerHeight >= 640);
+    _this.checkMobileMode();
     _this.resizeSearch();
     _this.navHeight = $('.fl-viewport-header').height() || 0;
     _this.searchBarHeight = _this.$container.find('.directory-search').outerHeight();
@@ -505,7 +510,7 @@ AdvancedDirectory.prototype.attachObservers = function(){
   });
   this.$container.on( 'click', '.date_go', function(){
     $('.overlay-date-range').removeClass('active');
-    _this.renderFilterValues(date_filter, !_this.deviceIsTablet)
+    _this.renderFilterValues(date_filter, _this.config.mobile_mode || !_this.deviceIsTablet);
   });
 };
 
@@ -538,7 +543,7 @@ AdvancedDirectory.prototype.deactivateSearch = function(){
   }
 
   this.$container.find('.search').trigger('blur');
-  if ( this.deviceIsTablet && this.isMode('search-result-entry') ) {
+  if ( !this.config.mobile_mode && this.deviceIsTablet && this.isMode('search-result-entry') ) {
     this.openDataEntry(0, 'entry', false);
   }
   this.switchMode('default');
@@ -546,6 +551,14 @@ AdvancedDirectory.prototype.deactivateSearch = function(){
   document.body.classList.remove('fl-top-menu-hidden');
 
   this.flViewportRedraw();
+};
+
+AdvancedDirectory.prototype.checkMobileMode = function(){
+  if (this.config.mobile_mode) {
+    this.$container.addClass('directory-mobile-mode');
+  } else {
+    this.$container.removeClass('directory-mobile-mode');
+  }
 };
 
 AdvancedDirectory.prototype.resizeSearch = function(){
@@ -590,7 +603,7 @@ AdvancedDirectory.prototype.dataLinkClicked = function(e){
     case 'filter-tag':
     case 'filter':
       var filter = e.currentTarget.dataset.filter;
-      this.renderFilterValues( filter, !this.deviceIsTablet );
+      this.renderFilterValues( filter, (this.config.mobile_mode || !this.deviceIsTablet) );
       break;
     case 'filter-value-tag':
       e.stopPropagation();
@@ -681,7 +694,7 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
     _this.trigger('flDirectoryEntryAfterRender', {detailData: detailData});
   };
 
-  if ( this.deviceIsTablet ) {
+  if ( !this.config.mobile_mode && this.deviceIsTablet ) {
     this.$container.find('.directory-details .directory-details-content').html(detailViewHTML);
     after_render();
     setTimeout(function(){
@@ -721,10 +734,10 @@ AdvancedDirectory.prototype.disableClicks = function () {
 // Function that will fade in the loading overlay
 AdvancedDirectory.prototype.addLoading = function () {
   // The following adds Loading Overlay to a specific area depending on the device width
-  if (this.deviceIsTablet) {
-    this.$container.find('.directory-details').find('.directory-loading').fadeIn(400);
-  } else {
+  if (this.config.mobile_mode || !this.deviceIsTablet) {
     this.$container.find('.directory-list').find('.directory-loading').fadeIn(400);
+  } else {
+    this.$container.find('.directory-details').find('.directory-loading').fadeIn(400);
   }
 
   // Delay to display the 'Loading...' text
@@ -738,10 +751,10 @@ AdvancedDirectory.prototype.removeLoading = function () {
   clearTimeout(loadingTimeout); // Clears delay loading overlay
   clearTimeout(messageTimeout); // Clears delay for text to appear
   // The following removes Loading Overlay from a specific area depending on the device width
-  if (this.deviceIsTablet) {
-    this.$container.find('.directory-details').find('.directory-loading').fadeOut(400);
-  } else {
+  if (this.config.mobile_mode || !this.deviceIsTablet) {
     this.$container.find('.directory-list').find('.directory-loading').fadeOut(400);
+  } else {
+    this.$container.find('.directory-details').find('.directory-loading').fadeOut(400);
   }
 
   this.$container.find('.directory-list, .directory-details').removeClass('disabled'); // Enables List
@@ -958,7 +971,7 @@ AdvancedDirectory.prototype.parseQueryVars = function(){
       case 'open':
         break;
     }
-  } else if ( this.deviceIsTablet && !this.config.search_only ) {
+  } else if ( !this.config.mobile_mode && this.deviceIsTablet && !this.config.search_only ) {
     // Open the first entry if on a tablet and search_only mode isn't on
     this.openDataEntry(0, 'entry', false);
   }
@@ -972,7 +985,7 @@ AdvancedDirectory.prototype.presetSearch = function( value ){
   } );
   if (this.searchResultData.length === 1) {
     this.openDataEntry(0,'search-result-entry');
-    if (!this.deviceIsTablet) {
+    if (this.config.mobile_mode || !this.deviceIsTablet) {
       this.switchMode('default');
     }
   }
