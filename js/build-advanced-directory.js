@@ -847,6 +847,7 @@ AdvancedDirectory.prototype.renderLiveSearch = function( value ) {
 
 AdvancedDirectory.prototype.renderSearchResult = function( options, callback ){
 
+  this.activateSearch();
   this.flViewportRedraw();
 
   // Return all results of search term is empty
