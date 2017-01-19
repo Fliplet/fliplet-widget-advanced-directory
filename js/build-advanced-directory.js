@@ -846,8 +846,13 @@ AdvancedDirectory.prototype.renderLiveSearch = function( value ) {
 };
 
 AdvancedDirectory.prototype.renderSearchResult = function( options, callback ){
+  options = options || {};
 
-  this.activateSearch();
+  if (!options.hasOwnProperty('userTriggered')) {
+    options.userTriggered = true;
+  }
+
+  if (options.userTriggered) this.activateSearch();
   this.flViewportRedraw();
 
   // Return all results of search term is empty
@@ -989,7 +994,8 @@ AdvancedDirectory.prototype.presetSearch = function( value ){
   this.$container.find('.search').val( value );
   this.renderSearchResult( {
     type : 'search',
-    value : value
+    value : value,
+    userTriggered : false
   } );
   if (this.searchResultData.length === 1) {
     this.openDataEntry(0,'search-result-entry');
@@ -1004,7 +1010,8 @@ AdvancedDirectory.prototype.presetFilter = function( field, value ){
   this.renderSearchResult( {
     type : 'filter',
     field : field,
-    value : value
+    value : value,
+    userTriggered : false
   } );
   this.flViewportRedraw();
 };
