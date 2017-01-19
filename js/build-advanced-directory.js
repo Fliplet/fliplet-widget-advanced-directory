@@ -360,13 +360,15 @@ AdvancedDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
   // Check if it's the tag filter
   if (tags_field === filter) {
     this.data.forEach(function (record) {
-      var entryTags = record[tags_field].split(',');
-      entryTags.forEach(function(tag) {
-        tag = tag.trim();
-        if (tag !== '' && values.indexOf(tag) === -1) {
-          values.push(tag);
-        }
-      });
+      if (record[tags_field]) {
+        var entryTags = record[tags_field].split(',');
+        entryTags.forEach(function(tag) {
+          tag = tag.trim();
+          if (tag !== '' && values.indexOf(tag) === -1) {
+            values.push(tag);
+          }
+        });
+      }
     });
 
     values = values.sort(sortAlphabetically);
