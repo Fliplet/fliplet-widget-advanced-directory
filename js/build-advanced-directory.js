@@ -450,7 +450,7 @@ AdvancedDirectory.prototype.attachObservers = function(){
       var img = new Image();
 
       img.addEventListener('load', function(){
-        $('.list-default li:eq('+i+') .list-image').css('background-image', 'url(' + this.src + ')');
+        $('.list-default.directory-entries li:eq('+i+') .list-image').css('background-image', 'url(' + this.src + ')');
       }, false);
 
       img.src = imgURL;
