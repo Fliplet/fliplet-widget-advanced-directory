@@ -953,7 +953,7 @@ function sortAlphabetically(a,b) {
 
 AdvancedDirectory.prototype.getFilterValues = function( field ) {
   var path = '."'+field+'"';
-  var values = JSONSelect.match( path, this.data );
+  var values = JSONSelect.match( path, this.data ).filter(function(value){ return value !== null; });
 
   return values.sort(sortAlphabetically).reduce( function(a,b){
     // Remove duplicates
