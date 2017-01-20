@@ -238,6 +238,10 @@ AdvancedDirectory.prototype.renderListView = function(){
 
   switch (this.config.sort_order) {
     case 'alphabetical':
+      if (!this.config.alphabetical_field) {
+        listData = this.data;
+        break;
+      }
       listData = this.data.sort( function(a,b){
         var attr = _this.config.alphabetical_field;
         if (!a[attr] || !b[attr]) {
@@ -253,16 +257,24 @@ AdvancedDirectory.prototype.renderListView = function(){
       this.$container.find('.directory-entries').addClass('list-index-enabled');
       break;
     case 'chronological':
+      if (!this.config.chronological_field) {
+        listData = this.data;
+        break;
+      }
       listData = this.data.sort(function (left, right) {
         var field = _this.config.chronological_field;
         return moment.utc(left[field]).diff(moment.utc(right[field]));
       });
       break;
     case 'reverse_chronological':
-    listData = this.data.sort(function (left, right) {
-      var field = _this.config.reverse_chronological_field;
-      return moment.utc(right[field]).diff(moment.utc(left[field]));
-    });
+      if (!this.config.reverse_chronological_field) {
+        listData = this.data;
+        break;
+      }
+      listData = this.data.sort(function (left, right) {
+        var field = _this.config.reverse_chronological_field;
+        return moment.utc(right[field]).diff(moment.utc(left[field]));
+      });
       break;
     case 'original':
     default:
@@ -286,7 +298,7 @@ AdvancedDirectory.prototype.renderListView = function(){
 };
 
 AdvancedDirectory.prototype.renderIndexList = function(){
-  if ( !this.config.sort_order !== 'alphabetical' ) return;
+  if ( this.config.sort_order !== 'alphabetical' ) return;
 
   var $listIndex = this.$container.find('.directory-entries + .list-index');
   $listIndex.html('');
