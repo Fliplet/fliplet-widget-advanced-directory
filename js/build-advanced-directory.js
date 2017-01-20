@@ -646,9 +646,10 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
   }
   var $listEntry = this.$container.find('[data-type="' + type + '"][data-index="' + entryIndex + '"]');
 
+  var dataArr = (type === 'search-result-entry') ? _this.searchResultData : _this.data;
   var detailData = {
     has_thumbnail : this.config.show_thumb_detail ? this.config.show_thumb_detail : false,
-    data : _this.data[entryIndex]
+    data: dataArr[entryIndex]['dataSourceEntryId'] || ''
   };
 
   // @TODO: Review Thumbnail-related code
