@@ -465,6 +465,10 @@
   padding-top: 36px;
 }
 
+.search-result ul > .divider {
+  display: none;
+}
+
 .search {
   height: 24px;
   line-height: 20px;
