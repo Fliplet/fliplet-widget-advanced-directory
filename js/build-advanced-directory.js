@@ -952,7 +952,7 @@ AdvancedDirectory.prototype.renderSearchResult = function( options, callback ){
     ? Handlebars.compile(this.config.listviewTemplate)
     : Fliplet.Widget.Templates['build.listView'];
 
-  var advancedDirectorySearchResultHTML = advancedDirectorySearchResultTemplate(data);
+  var advancedDirectorySearchResultHTML = advancedDirectorySearchResultTemplate(data.result);
   this.$searchResultsContainer
     .html(advancedDirectorySearchResultHeaderHTML)
     .append(advancedDirectorySearchResultHTML)
