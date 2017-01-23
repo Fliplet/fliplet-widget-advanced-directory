@@ -620,6 +620,9 @@ AdvancedDirectory.prototype.dataLinkClicked = function(e){
   if (_this.config.field_types[e.currentTarget.dataset.filter] === 'date' && e.currentTarget.dataset.type === 'filter') {
     date_filter = e.currentTarget.dataset.filter;
     $('.date-picker').datepicker();
+    if (isMobile && Modernizr.inputtypes.date && 'ontouchstart' in document.documentElement) {
+      $('.date-picker').datepicker('remove')
+    }
     $('.overlay-date-range').addClass('active');
     return;
   }
@@ -644,13 +647,12 @@ AdvancedDirectory.prototype.dataLinkClicked = function(e){
         if ( _this.entryOverlayIsActive() ) {
           _this.entryOverlay.close();
         }
+        setTimeout(function(){
+          if ( _this.searchResultData.length === 1 ) {
+            _this.openDataEntry(0, 'search-result-entry');
+          }
+        }, 0);
       } );
-      if ( this.searchResultData.length === 1 ) {
-        this.openDataEntry(0, 'search-result-entry');
-        if (this.config.mobile_mode || !this.deviceIsTablet) {
-          this.switchMode('default');
-        }
-      }
       break;
     case 'entry':
     case 'search-result-entry':
