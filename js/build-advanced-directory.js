@@ -902,6 +902,7 @@ AdvancedDirectory.prototype.renderSearchResult = function( options, callback ){
 
   switch (options.type) {
     case 'filter':
+    case 'filter-value':
       data.type = 'filter';
       data.field = options.field;
       data.value = options.value;
@@ -910,6 +911,8 @@ AdvancedDirectory.prototype.renderSearchResult = function( options, callback ){
         var [startDate, endDate] = options.value;
         data.value = `${startDate.format("DD MMM ‘YY")} &mdash; ${endDate.format("DD MMM ‘YY")}`;
       }
+      // Analytics - Track Event
+      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'filter', title: options.type + ': ' + options.value });
       break;
     case 'filter-value-tag':
       var filterByTag = function(value) {
@@ -935,15 +938,13 @@ AdvancedDirectory.prototype.renderSearchResult = function( options, callback ){
 
       break;
     case 'search':
-      data.type = 'search';
-    case 'filter-value':
-      data.type = 'filter';
     default:
+      data.type = 'search';
       data.value = options.value;
       data.result = this.search( options.value );
 
       // Analytics - Track Event
-      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'filter', title: options.type + ': ' + options.value });
+      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'search', title: options.type + ': ' + options.value });
 
       break;
   }
