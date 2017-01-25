@@ -238,7 +238,7 @@ AdvancedDirectory.prototype.renderListView = function(){
 
   switch (this.config.sort_order) {
     case 'alphabetical':
-      if (!this.config.alphabetical_field) {
+      if (this.config.alphabetical_field === '') {
         listData = this.data;
         break;
       }
