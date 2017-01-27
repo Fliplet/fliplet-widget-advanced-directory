@@ -8,7 +8,6 @@ var messageDelay = 5000; // 'Loading...' text delay to display
 var loadingOverlayDelay = 1000; // Time it takes to display the loading overlay after a click
 var date_filter; // Filter used before pick date range when filtering by a date type field
 
-
 var AdvancedDirectory = function (config, container) {
   var _this = this;
 
@@ -20,37 +19,32 @@ var AdvancedDirectory = function (config, container) {
     filter_fields : [],
     search_fields : [],
     field_types : '', // Formatted as a JSON string to avoid invalid key characters (e.g. "?'#") violating CodeIgniter security
-    search_only : false
+    search_only : false,
+    mobile_mode : false
   }, config);
   this.data = this.config.rows;
   delete this.config.rows;
 
-  // Custom event to fire before the directory is initialised
-  var flDirectoryBeforeInit = new CustomEvent(
-    'flDirectoryBeforeInit',
-    {
-      bubbles: true,
-      cancelable: true,
-      detail: {
-        context: this
-      }
-    }
-  );
-  document.dispatchEvent(flDirectoryBeforeInit);
-
   this.$container = $(container).parents('body');
   this.$listContainer = this.$container.find('.directory-entries');
   this.$searchResultsContainer = this.$container.find('.search-result');
-  this.deviceIsTablet = window.innerWidth >= 640 && window.innerHeight >= 640;
+  this.deviceIsTablet = (window.innerWidth >= 640 && window.innerHeight >= 640);
   this.navHeight = $('.fl-viewport-header').height() || 0;
   this.searchBarHeight = this.$container.find('.directory-search').outerHeight();
   this.directoryMode = this.$container.find('.container-fluid').attr('data-mode');
   this.filterOverlay = null;
   this.entryOverlay = null;
   this.searchResultData = [];
-  this.supportLiveSearch = this.data.length <= 500;
   this.liveSearchInterval = 200;
   this.currentEntry;
+
+  this.checkMobileMode();
+
+  // Custom event to fire before the directory is initialised
+  this.trigger('flDirectoryBeforeInit');
+  this.supportLiveSearch = this.data.length <= 500;
+
+  this.checkMobileMode();
 
   if ( typeof this.config.field_types === 'string' && this.config.field_types.length ) {
     this.config.field_types = JSON.parse(this.config.field_types);
@@ -75,19 +69,24 @@ var AdvancedDirectory = function (config, container) {
   });
 
   // Custom event to fire after the directory is initialised
-  var flDirectoryAfterInit = new CustomEvent(
-    'flDirectoryAfterInit',
+  this.trigger('flDirectoryAfterInit');
+
+  return this;
+};
+
+AdvancedDirectory.prototype.trigger = function(event, detail){
+  var detail = $.extend({
+    context: this
+  }, detail || {});
+  var customEvent = new CustomEvent(
+    event,
     {
       bubbles: true,
       cancelable: true,
-      detail: {
-        context: this
-      }
+      detail: detail
     }
   );
-  document.dispatchEvent(flDirectoryAfterInit);
-
-  return this;
+  document.dispatchEvent(customEvent);
 };
 
 AdvancedDirectory.prototype.getConfig = function(key){
@@ -185,6 +184,8 @@ AdvancedDirectory.prototype.init = function() {
 }
 
 AdvancedDirectory.prototype.refreshDirectory = function() {
+  this.checkMobileMode();
+
   if (!this.data.length) {
     return this.directoryNotConfigured();
   }
@@ -209,17 +210,7 @@ AdvancedDirectory.prototype.renderDirectory = function(){
   this.renderListView();
 
   // Custom event to fire after the directory list is rendered.
-  var flDirectoryListRendered = new CustomEvent(
-    'flDirectoryListRendered',
-    {
-      bubbles: true,
-      cancelable: true,
-      detail: {
-        context: this
-      }
-    }
-  );
-  document.dispatchEvent(flDirectoryListRendered);
+  this.trigger('flDirectoryListRendered');
 };
 
 AdvancedDirectory.prototype.verifyFields = function(fieldConfig){
@@ -247,6 +238,10 @@ AdvancedDirectory.prototype.renderListView = function(){
 
   switch (this.config.sort_order) {
     case 'alphabetical':
+      if (this.config.alphabetical_field === '') {
+        listData = this.data;
+        break;
+      }
       listData = this.data.sort( function(a,b){
         var attr = _this.config.alphabetical_field;
         if (!a[attr] || !b[attr]) {
@@ -262,16 +257,24 @@ AdvancedDirectory.prototype.renderListView = function(){
       this.$container.find('.directory-entries').addClass('list-index-enabled');
       break;
     case 'chronological':
+      if (!this.config.chronological_field) {
+        listData = this.data;
+        break;
+      }
       listData = this.data.sort(function (left, right) {
         var field = _this.config.chronological_field;
         return moment.utc(left[field]).diff(moment.utc(right[field]));
       });
       break;
     case 'reverse_chronological':
-    listData = this.data.sort(function (left, right) {
-      var field = _this.config.reverse_chronological_field;
-      return moment.utc(right[field]).diff(moment.utc(left[field]));
-    });
+      if (!this.config.reverse_chronological_field) {
+        listData = this.data;
+        break;
+      }
+      listData = this.data.sort(function (left, right) {
+        var field = _this.config.reverse_chronological_field;
+        return moment.utc(right[field]).diff(moment.utc(left[field]));
+      });
       break;
     case 'original':
     default:
@@ -295,7 +298,7 @@ AdvancedDirectory.prototype.renderListView = function(){
 };
 
 AdvancedDirectory.prototype.renderIndexList = function(){
-  if ( !this.config.sort_order !== 'alphabetical' ) return;
+  if ( this.config.sort_order !== 'alphabetical' ) return;
 
   var $listIndex = this.$container.find('.directory-entries + .list-index');
   $listIndex.html('');
@@ -369,25 +372,35 @@ AdvancedDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
   // Check if it's the tag filter
   if (tags_field === filter) {
     this.data.forEach(function (record) {
-      var entryTags = record[tags_field].split(',');
-      entryTags.forEach(function(tag) {
-        tag = tag.trim();
-        if (tag !== '' && values.indexOf(tag) === -1) {
-          values.push(tag);
-        }
-      });
+      if (record[tags_field]) {
+        var entryTags = record[tags_field].split(',');
+        entryTags.forEach(function(tag) {
+          tag = tag.trim();
+          if (tag !== '' && values.indexOf(tag) === -1) {
+            values.push(tag);
+          }
+        });
+      }
     });
 
-    values = values.sort(sortAlphabetically);
-  } else if (_this.config.field_types[filter] === 'date') {
-    var start_date = new Date($('.start_date').datepicker('getDate'))
-    var end_date = new Date($('.finish_date').datepicker('getDate'))
-        this.data.forEach(function(value, index) {
-          var entryDate = new Date(value[filter]);
-           if (entryDate >= start_date && entryDate <= end_date) {
-             values.push(value[filter]);
-           }
-        });
+    values = _.sortBy(values);
+  } else if (this.config.field_types[filter] === 'date') {
+    var isMobile = Modernizr.mobile || Modernizr.tablet;
+    var start_date;
+    var end_date;
+
+    if (isMobile && Modernizr.inputtypes.date) {
+      start_date = getFormatedDate($('.start_date').val());
+      end_date = getFormatedDate($('.finish_date').val());
+    } else {
+      start_date = getFormatedDate($('.start_date').datepicker("getDate"));
+      end_date = getFormatedDate($('.finish_date').datepicker("getDate"));
+    }
+    return this.renderSearchResult( {
+      type: 'filter',
+      field: filter,
+      value: [start_date, end_date]
+    } );
   } else {
     values = this.getFilterValues( filter );
   }
@@ -457,7 +470,7 @@ AdvancedDirectory.prototype.attachObservers = function(){
       var img = new Image();
 
       img.addEventListener('load', function(){
-        $('.list-default li:eq('+i+') .list-image').css('background-image', 'url(' + this.src + ')');
+        $('.list-default.directory-entries li:eq('+i+') .list-image').css('background-image', 'url(' + this.src + ')');
       }, false);
 
       img.src = imgURL;
@@ -466,7 +479,8 @@ AdvancedDirectory.prototype.attachObservers = function(){
 
   this.$container.on( 'click', '.data-linked', $.proxy( this.dataLinkClicked, this ) );
   $(window).on( 'resize', function(){
-    _this.deviceIsTablet = window.innerWidth >= 640 && window.innerHeight >= 640;
+    _this.deviceIsTablet = (window.innerWidth >= 640 && window.innerHeight >= 640);
+    _this.checkMobileMode();
     _this.resizeSearch();
     _this.navHeight = $('.fl-viewport-header').height() || 0;
     _this.searchBarHeight = _this.$container.find('.directory-search').outerHeight();
@@ -521,7 +535,7 @@ AdvancedDirectory.prototype.attachObservers = function(){
   });
   this.$container.on( 'click', '.date_go', function(){
     $('.overlay-date-range').removeClass('active');
-    _this.renderFilterValues(date_filter, !_this.deviceIsTablet)
+    _this.renderFilterValues(date_filter, _this.config.mobile_mode || !_this.deviceIsTablet);
   });
 };
 
@@ -554,7 +568,7 @@ AdvancedDirectory.prototype.deactivateSearch = function(){
   }
 
   this.$container.find('.search').trigger('blur');
-  if ( this.deviceIsTablet && this.isMode('search-result-entry') ) {
+  if ( !this.config.mobile_mode && this.deviceIsTablet && this.isMode('search-result-entry') ) {
     this.openDataEntry(0, 'entry', false);
   }
   this.switchMode('default');
@@ -562,6 +576,14 @@ AdvancedDirectory.prototype.deactivateSearch = function(){
   document.body.classList.remove('fl-top-menu-hidden');
 
   this.flViewportRedraw();
+};
+
+AdvancedDirectory.prototype.checkMobileMode = function(){
+  if (this.config.mobile_mode) {
+    this.$container.addClass('directory-mobile-mode');
+  } else {
+    this.$container.removeClass('directory-mobile-mode');
+  }
 };
 
 AdvancedDirectory.prototype.resizeSearch = function(){
@@ -598,6 +620,9 @@ AdvancedDirectory.prototype.dataLinkClicked = function(e){
   if (_this.config.field_types[e.currentTarget.dataset.filter] === 'date' && e.currentTarget.dataset.type === 'filter') {
     date_filter = e.currentTarget.dataset.filter;
     $('.date-picker').datepicker();
+    if (isMobile && Modernizr.inputtypes.date && 'ontouchstart' in document.documentElement) {
+      $('.date-picker').datepicker('remove')
+    }
     $('.overlay-date-range').addClass('active');
     return;
   }
@@ -606,7 +631,7 @@ AdvancedDirectory.prototype.dataLinkClicked = function(e){
     case 'filter-tag':
     case 'filter':
       var filter = e.currentTarget.dataset.filter;
-      this.renderFilterValues( filter, !this.deviceIsTablet );
+      this.renderFilterValues( filter, (this.config.mobile_mode || !this.deviceIsTablet) );
       break;
     case 'filter-value-tag':
       e.stopPropagation();
@@ -622,6 +647,11 @@ AdvancedDirectory.prototype.dataLinkClicked = function(e){
         if ( _this.entryOverlayIsActive() ) {
           _this.entryOverlay.close();
         }
+        setTimeout(function(){
+          if ( _this.searchResultData.length === 1 ) {
+            _this.openDataEntry(0, 'search-result-entry');
+          }
+        }, 0);
       } );
       break;
     case 'entry':
@@ -644,9 +674,10 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
   }
   var $listEntry = this.$container.find('[data-type="' + type + '"][data-index="' + entryIndex + '"]');
 
+  var dataArr = (type === 'search-result-entry') ? _this.searchResultData : _this.data;
   var detailData = {
     has_thumbnail : this.config.show_thumb_detail ? this.config.show_thumb_detail : false,
-    data : _this.data[entryIndex]
+    data: dataArr[entryIndex]['dataSourceEntryId'] || ''
   };
 
   // @TODO: Review Thumbnail-related code
@@ -668,18 +699,7 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
   }
 
   // Custom event to fire before an entry is rendered in the detailed view.
-  var flDirectoryEntryBeforeRender = new CustomEvent(
-    'flDirectoryEntryBeforeRender',
-    {
-      bubbles: true,
-      cancelable: true,
-      detail: {
-        context: this,
-        detailData: detailData
-      }
-    }
-  );
-  document.dispatchEvent(flDirectoryEntryBeforeRender);
+  this.trigger('flDirectoryEntryBeforeRender', {detailData: detailData});
 
   var after_render = function() {
     // Link taps listeners
@@ -705,21 +725,10 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
     });
 
     // Custom event to fire after an entry is rendered in the detailed view.
-    var flDirectoryEntryAfterRender = new CustomEvent(
-      'flDirectoryEntryAfterRender',
-      {
-        bubbles: true,
-        cancelable: true,
-        detail: {
-          context: this,
-          detailData: detailData
-        }
-      }
-    );
-    document.dispatchEvent(flDirectoryEntryAfterRender);
+    _this.trigger('flDirectoryEntryAfterRender', {detailData: detailData});
   };
 
-  if ( this.deviceIsTablet ) {
+  if ( !this.config.mobile_mode && this.deviceIsTablet ) {
     this.$container.find('.directory-details .directory-details-content').html(detailViewHTML);
     after_render();
     setTimeout(function(){
@@ -759,10 +768,10 @@ AdvancedDirectory.prototype.disableClicks = function () {
 // Function that will fade in the loading overlay
 AdvancedDirectory.prototype.addLoading = function () {
   // The following adds Loading Overlay to a specific area depending on the device width
-  if (this.deviceIsTablet) {
-    this.$container.find('.directory-details').find('.directory-loading').fadeIn(400);
-  } else {
+  if (this.config.mobile_mode || !this.deviceIsTablet) {
     this.$container.find('.directory-list').find('.directory-loading').fadeIn(400);
+  } else {
+    this.$container.find('.directory-details').find('.directory-loading').fadeIn(400);
   }
 
   // Delay to display the 'Loading...' text
@@ -776,10 +785,10 @@ AdvancedDirectory.prototype.removeLoading = function () {
   clearTimeout(loadingTimeout); // Clears delay loading overlay
   clearTimeout(messageTimeout); // Clears delay for text to appear
   // The following removes Loading Overlay from a specific area depending on the device width
-  if (this.deviceIsTablet) {
-    this.$container.find('.directory-details').find('.directory-loading').fadeOut(400);
-  } else {
+  if (this.config.mobile_mode || !this.deviceIsTablet) {
     this.$container.find('.directory-list').find('.directory-loading').fadeOut(400);
+  } else {
+    this.$container.find('.directory-details').find('.directory-loading').fadeOut(400);
   }
 
   this.$container.find('.directory-list, .directory-details').removeClass('disabled'); // Enables List
@@ -866,7 +875,13 @@ AdvancedDirectory.prototype.renderLiveSearch = function( value ) {
 };
 
 AdvancedDirectory.prototype.renderSearchResult = function( options, callback ){
+  options = options || {};
 
+  if (!options.hasOwnProperty('userTriggered')) {
+    options.userTriggered = true;
+  }
+
+  if (options.userTriggered) this.activateSearch();
   this.flViewportRedraw();
 
   // Return all results of search term is empty
@@ -887,17 +902,26 @@ AdvancedDirectory.prototype.renderSearchResult = function( options, callback ){
 
   switch (options.type) {
     case 'filter':
+    case 'filter-value':
       data.type = 'filter';
       data.field = options.field;
       data.value = options.value;
       data.result = this.filter( options.field, options.value );
+      if (this.config.field_types[options.field] === 'date') {
+        var [startDate, endDate] = options.value;
+        data.value = `${startDate.format("DD MMM ‘YY")} &mdash; ${endDate.format("DD MMM ‘YY")}`;
+      }
+      // Analytics - Track Event
+      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'filter', title: options.type + ': ' + options.value });
       break;
     case 'filter-value-tag':
       var filterByTag = function(value) {
-        var splitTags = value[options.field].split(',');
-        for (var i = 0; i < splitTags.length; i++) {
-          if (splitTags[i].trim() === options.value.trim()) {
-            return true;
+        if (value[options.field]) {
+          var splitTags = value[options.field].split(',');
+          for (var i = 0; i < splitTags.length; i++) {
+            if (splitTags[i].trim() === options.value.trim()) {
+              return true;
+            }
           }
         }
 
@@ -914,22 +938,24 @@ AdvancedDirectory.prototype.renderSearchResult = function( options, callback ){
 
       break;
     case 'search':
-      data.type = 'search';
-    case 'filter-value':
-      data.type = 'filter';
     default:
+      data.type = 'search';
       data.value = options.value;
       data.result = this.search( options.value );
 
       // Analytics - Track Event
-      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'filter', title: options.type + ': ' + options.value });
+      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'search', title: options.type + ': ' + options.value });
 
       break;
   }
 
   this.searchResultData = data.result;
   var advancedDirectorySearchResultHeaderHTML = Fliplet.Widget.Templates['build.advancedDirectorySearchResultHeader'](data);
-  var advancedDirectorySearchResultHTML = Fliplet.Widget.Templates['build.listView'](data.result);
+  var advancedDirectorySearchResultTemplate = this.config.listviewTemplate
+    ? Handlebars.compile(this.config.listviewTemplate)
+    : Fliplet.Widget.Templates['build.listView'];
+
+  var advancedDirectorySearchResultHTML = advancedDirectorySearchResultTemplate(data.result);
   this.$searchResultsContainer
     .html(advancedDirectorySearchResultHeaderHTML)
     .append(advancedDirectorySearchResultHTML)
@@ -954,29 +980,27 @@ AdvancedDirectory.prototype.search = function( value ) {
 }
 
 AdvancedDirectory.prototype.filter = function( field, value ) {
+  if (this.config.field_types[field] === 'date') {
+    var [startDate, endDate] = value;
+    var output = _.filter(this.data, function(o){
+      if (!o.hasOwnProperty(field) || !o[field]) {
+        return false;
+      }
+      return moment(o[field]).isBetween(startDate, endDate, 'day', '[]');
+    });
+    return _.sortBy(output, [function(o){
+      return parseInt(moment(o[field]).format('x'));
+    }]);
+  }
+
   var path = ':root > :has(."' + field + '":val("' + value + '"))';
-
   return JSONSelect.match( path, this.data );
-}
-
-function sortAlphabetically(a,b) {
-  // Sort by alphabet
-  if (a.toString().toUpperCase() < b.toString().toUpperCase())
-    return -1;
-  if (a.toString().toUpperCase() > b.toString().toUpperCase())
-    return 1;
-  return 0;
 }
 
 AdvancedDirectory.prototype.getFilterValues = function( field ) {
   var path = '."'+field+'"';
-  var values = JSONSelect.match( path, this.data );
-
-  return values.sort(sortAlphabetically).reduce( function(a,b){
-    // Remove duplicates
-    if (a.indexOf(b) < 0 && b.trim() !== '' ) a.push(b);
-    return a;
-  }, [] );
+  var values = JSONSelect.match( path, this.data ).filter(function(value){ return value !== null && value !== ''; });
+  return _.sortedUniq(_.sortBy(values));
 };
 
 AdvancedDirectory.prototype.parseQueryVars = function(){
@@ -996,7 +1020,7 @@ AdvancedDirectory.prototype.parseQueryVars = function(){
       case 'open':
         break;
     }
-  } else if ( this.deviceIsTablet && !this.config.search_only ) {
+  } else if ( !this.config.mobile_mode && this.deviceIsTablet && !this.config.search_only ) {
     // Open the first entry if on a tablet and search_only mode isn't on
     this.openDataEntry(0, 'entry', false);
   }
@@ -1006,11 +1030,12 @@ AdvancedDirectory.prototype.presetSearch = function( value ){
   this.$container.find('.search').val( value );
   this.renderSearchResult( {
     type : 'search',
-    value : value
+    value : value,
+    userTriggered : false
   } );
   if (this.searchResultData.length === 1) {
     this.openDataEntry(0,'search-result-entry');
-    if (!this.deviceIsTablet) {
+    if (this.config.mobile_mode || !this.deviceIsTablet) {
       this.switchMode('default');
     }
   }
@@ -1021,7 +1046,8 @@ AdvancedDirectory.prototype.presetFilter = function( field, value ){
   this.renderSearchResult( {
     type : 'filter',
     field : field,
-    value : value
+    value : value,
+    userTriggered : false
   } );
   this.flViewportRedraw();
 };

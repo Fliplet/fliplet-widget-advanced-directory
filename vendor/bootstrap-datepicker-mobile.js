@@ -28,7 +28,7 @@
   function bootstrapDatepickerMobile(ev) {
 
     var $inputs = $('input.date-picker');
-    var isMobile = $(window).width() <= 480 || Modernizr.touch;
+    var isMobile = Modernizr.mobile || Modernizr.tablet;
 
     $inputs.each(function() {
 
@@ -44,7 +44,7 @@
 
       var isMoment = moment.isMoment(valMoment);
 
-      if (isMobile && Modernizr.inputtypes.date) {
+      if (isMobile && Modernizr.inputtypes.date && 'ontouchstart' in document.documentElement) {
         if (isMoment) val = valMoment.format('YYYY-MM-DD');
         $input.datepicker('remove');
         $input.val(val);

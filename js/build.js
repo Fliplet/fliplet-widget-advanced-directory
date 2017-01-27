@@ -42,5 +42,5 @@ document.addEventListener('DOMContentLoaded', function() {
         // Start data directory with no data
         dataDirectory[id] = new AdvancedDirectory(config, container);
       });
-  });  
+  });
 });
