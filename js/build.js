@@ -19,7 +19,9 @@ document.addEventListener('DOMContentLoaded', function() {
         return source.find();
       })
       .then(function (rows) {
-        config.rows = formatRows(rows);
+        config.rows = rows.map(function(x){
+          return x.data;
+        });
 
         // Start data directory
         dataDirectory[id] = new AdvancedDirectory(config, container);
@@ -33,7 +35,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
               }
 
-              config.rows = formatRows(result.entries);
+              config.rows = result.entriesmap(function(x){
+                return x.data;
+              });
               dataDirectory[id].refreshDirectory();
             })
         }
