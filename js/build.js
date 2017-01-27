@@ -5,55 +5,46 @@ document.addEventListener('DOMContentLoaded', function() {
     var id = $(this).data('directory-id');
     var uuid = $(this).data('directory-uuid');
     var config = Fliplet.Widget.getData(id);
-    var pvKey = 'data-directory-source-' + uuid;
-    if (config.source) {
+    var connection;
 
-      // Always start by attempting to use locally cached data
-      Fliplet.Storage.get(pvKey)
-        .then(function (cachedSource) {
-          if (cachedSource) {
-            config.rows = cachedSource.rows;
-          } else {
-            // First time loading the interface...
-            // Cache the data on device with a timestamp
-            cachedSource = {
-              rows: config.rows,
-              updatedAt: new Date().getTime()
-            };
-            Fliplet.Storage.set(pvKey, cachedSource);
-          }
-          dataDirectory[id] = new AdvancedDirectory(config, container);
-
-          if (config.enable_live_data && Fliplet.Navigator.isOnline()) {
-            var sourceUpdatedAt = cachedSource.updatedAt;
-
-            Fliplet.DataSources.connect(config.source)
-              .then(function (source) {
-                return source.find();
-              })
-              .then(function (rows) {
-                // Find out when the source was last updated
-                _.each(rows, function(row){
-                  sourceUpdatedAt = Math.max(sourceUpdatedAt, new Date(row.updatedAt).getTime());
-                });
-
-                if (sourceUpdatedAt > cachedSource.updatedAt) {
-                  dataDirectory[id].data = rows.map(function (row) {
-                    row.data.dataSourceEntryId = row.id;
-                    return row.data;
-                  });
-
-                  Fliplet.Storage.set(pvKey, {
-                    rows: dataDirectory[id].data,
-                    updatedAt: new Date().getTime()
-                  });
-
-                  dataDirectory[id].trigger('flDirectoryBeforeInit');
-                  dataDirectory[id].refreshDirectory();
-                }
-              });
-          }
-        });
+    if (!config.source) {
+      // Start data directory with no data
+      return dataDirectory[id] = new AdvancedDirectory(config, container);
     }
+
+    // Load local data
+    Fliplet.DataSources.connect(config.source)
+      .then(function (source) {
+        connection = source;
+        return source.find();
+      })
+      .then(function (rows) {
+        config.rows = rows.map(function(x){
+          return x.data;
+        });
+
+        // Start data directory
+        dataDirectory[id] = new AdvancedDirectory(config, container);
+
+        // Check if live data is enabled
+        if (config.enable_live_data) {
+          // Pull latest data
+          connection.pull()
+            .then(function (result) {
+              if (!result.pulled) {
+                return;
+              }
+
+              config.rows = result.entriesmap(function(x){
+                return x.data;
+              });
+              dataDirectory[id].refreshDirectory();
+            })
+        }
+      })
+      .catch(function (error) {
+        // Start data directory with no data
+        dataDirectory[id] = new AdvancedDirectory(config, container);
+      });
   });
 });

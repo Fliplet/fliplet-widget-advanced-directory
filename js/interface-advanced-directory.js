@@ -227,7 +227,6 @@ var DataDirectoryForm = (function() {
           if ( _this.tables[i].hasOwnProperty('id') && _this.tables[i].id == tableID ) {
             _this.source = _this.tables[i].id;
             _this.columns = _this.tables[i].columns;
-            _this.rows = _this.tables[i].rows;
 
             if (autoConfigure) {
               _this.autoConfigureSearch();
@@ -527,7 +526,8 @@ var DataDirectoryForm = (function() {
       });
       data.field_types = JSON.stringify(data.field_types);
 
-      data.rows = this.rows;
+      // Start empty rows. On native it will get from device, on web from live data source
+      data.rows = [];
 
       this.directoryConfig = data;
     },
