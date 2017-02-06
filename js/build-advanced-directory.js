@@ -202,7 +202,7 @@ AdvancedDirectory.prototype.renderDirectory = function(){
   this.verifyConfig();
   this.renderFilters();
 
-  this.$container.find('.directory-entries').addClass('not-configured');
+  this.$container.find('.directory-entries').removeClass('not-configured');
   if (this.config.search_only) {
     this.activateSearch();
     setTimeout(function(){
