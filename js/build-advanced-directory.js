@@ -209,6 +209,7 @@ AdvancedDirectory.prototype.renderDirectory = function(){
     }, 0);
     return;
   }
+  this.$container.find('.directory-entries').addClass('not-configured');
   this.renderListView();
 
   // Custom event to fire after the directory list is rendered.
