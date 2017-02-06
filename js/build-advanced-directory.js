@@ -20,7 +20,8 @@ var AdvancedDirectory = function (config, container) {
     search_fields : [],
     field_types : '', // Formatted as a JSON string to avoid invalid key characters (e.g. "?'#") violating CodeIgniter security
     search_only : false,
-    mobile_mode : false
+    mobile_mode : false,
+    directory_enabled: true
   }, config);
   this.data = this.config.rows;
   delete this.config.rows;
@@ -51,6 +52,7 @@ var AdvancedDirectory = function (config, container) {
   }
 
   _this.init();
+  if (!this.config.directory_enabled) return;
   _this.refreshDirectory();
 
   var folderID = this.config.folderConfig;
