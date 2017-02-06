@@ -202,6 +202,7 @@ AdvancedDirectory.prototype.renderDirectory = function(){
   this.verifyConfig();
   this.renderFilters();
 
+  this.$container.find('.directory-entries').addClass('not-configured');
   if (this.config.search_only) {
     this.activateSearch();
     setTimeout(function(){
@@ -209,7 +210,6 @@ AdvancedDirectory.prototype.renderDirectory = function(){
     }, 0);
     return;
   }
-  this.$container.find('.directory-entries').addClass('not-configured');
   this.renderListView();
 
   // Custom event to fire after the directory list is rendered.
