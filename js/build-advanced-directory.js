@@ -51,8 +51,8 @@ var AdvancedDirectory = function (config, container) {
     this.config.field_types = JSON.parse(this.config.field_types);
   }
 
-  if (!this.config.directory_enabled) return;
   _this.init();
+  if (!this.config.directory_enabled) return;
   _this.refreshDirectory();
 
   var folderID = this.config.folderConfig;
