@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
           if (config.enable_live_data && Fliplet.Navigator.isOnline()) {
             var sourceUpdatedAt = cachedSource.updatedAt;
 
-            Fliplet.DataSources.connect(config.source)
+            Fliplet.DataSources.connect(config.source, {offline: false})
               .then(function (source) {
                 return source.find();
               })
