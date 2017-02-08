@@ -985,7 +985,8 @@ AdvancedDirectory.prototype.search = function( value ) {
 
 AdvancedDirectory.prototype.filter = function( field, value ) {
   if (this.config.field_types[field] === 'date') {
-    var [startDate, endDate] = value;
+    var startDate = value[0];
+    var endDate = value[1];
     var output = _.filter(this.data, function(o){
       if (!o.hasOwnProperty(field) || !o[field]) {
         return false;
