@@ -206,6 +206,7 @@ AdvancedDirectory.prototype.renderDirectory = function(){
 
   this.verifyConfig();
   this.renderFilters();
+  this.sortEntries();
 
   this.$container.find('.directory-entries').removeClass('not-configured');
   if (this.config.search_only) {
@@ -240,10 +241,7 @@ AdvancedDirectory.prototype.verifyConfig = function(){
   this.verifyFields('detail_fields');
 };
 
-AdvancedDirectory.prototype.renderListView = function(){
-  var _this = this;
-  var listData = [];
-
+AdvancedDirectory.prototype.sortEntries = function(){
   switch (this.config.sort_order) {
     case 'alphabetical':
       if (this.config.alphabetical_field === '') {
@@ -290,7 +288,9 @@ AdvancedDirectory.prototype.renderListView = function(){
       break;
   }
   this.data = listData;
+};
 
+AdvancedDirectory.prototype.renderListView = function(){
   var listViewTemplate = this.config.listviewTemplate
                             ? Handlebars.compile(this.config.listviewTemplate)
                             : Fliplet.Widget.Templates['build.listView'];
