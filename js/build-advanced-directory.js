@@ -243,6 +243,7 @@ AdvancedDirectory.prototype.verifyConfig = function(){
 };
 
 AdvancedDirectory.prototype.sortEntries = function(){
+  var _this = this;
   switch (this.config.sort_order) {
     case 'alphabetical':
       if (this.config.alphabetical_field === '') {
