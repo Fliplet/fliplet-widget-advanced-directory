@@ -509,7 +509,7 @@ AdvancedDirectory.prototype.attachObservers = function(){
   } );
   this.$container.on( 'focus', '.search', $.proxy( this.activateSearch, this ) );
   if ( this.supportLiveSearch ) {
-    this.$container.on( 'keydown paste input', '.search', function(e){
+    this.$container.on( 'keydown paste change', '.search', function(e){
       _this.renderLiveSearch($(this).val());
     } );
   }
