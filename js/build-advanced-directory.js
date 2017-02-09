@@ -1065,7 +1065,7 @@ AdvancedDirectory.prototype.presetFilter = function( field, value ){
 };
 
 AdvancedDirectory.prototype.directoryNotConfigured = function(){
-  this.$container.find('.directory-entries').addClass('not-configured').html('No data is found for the directory');
+  this.$container.find('.directory-entries').addClass('not-configured').html('Loading...');
 };
 
 AdvancedDirectory.prototype.flViewportRedraw = function(){
