@@ -1,5 +1,5 @@
 var dataDirectory = {};
-document.addEventListener('DOMContentLoaded', function() {
+Fliplet.Navigator.onReady().then(function () {
   $('[data-directory-id]').each(function(){
     var container = this;
     var id = $(this).data('directory-id');
