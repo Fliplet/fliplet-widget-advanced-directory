@@ -293,6 +293,12 @@ table .checkbox label {
 .checkbox .select-holder,
 .radio .select-holder {
     padding-left: 30px;
+    display: none;
+}
+
+.checkbox > input[type="checkbox"]:checked ~ .select-holder,
+.radio > input[type="radio"]:checked ~ .select-holder {
+  display: block;
 }
 
 .inline-radio .radio input {
