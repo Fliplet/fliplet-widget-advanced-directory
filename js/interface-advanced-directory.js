@@ -259,12 +259,12 @@ var DataDirectoryForm = (function() {
         },
         showAutocompleteOnFocus: true
       });
-      $('#data-chronological-fields').html(Fliplet.Widget.Templates['interface.dataFieldSelect']({
+      $('#data-chronological-fields').replaceWith(Fliplet.Widget.Templates['interface.dataFieldSelect']({
         fields: _this.columns,
         name: 'chronological_field',
         id: 'data-chronological-fields-select'
       }));
-      $('#data-reverse-chronological-fields').html(Fliplet.Widget.Templates['interface.dataFieldSelect']({
+      $('#data-reverse-chronological-fields').replaceWith(Fliplet.Widget.Templates['interface.dataFieldSelect']({
         fields: _this.columns,
         name: 'reverse_chronological_field',
         id: 'data-reverse-chronological-fields-select'
