@@ -170,6 +170,27 @@ var DataDirectoryForm = (function() {
       this.directoryConfig.alphabetical_fields = [this.directoryConfig.alphabetical_field];
     }
 
+    this.listviewEditor = CodeMirror.fromTextArea(document.getElementById("listview-template"), {
+      mode: {name: "handlebars", base: "text/html"},
+      lineNumbers: true,
+      lineWrapping: true
+    });
+    this.detailviewEditor = CodeMirror.fromTextArea(document.getElementById("detailview-template"), {
+      mode: {name: "handlebars", base: "text/html"},
+      lineNumbers: true,
+      lineWrapping: true
+    });
+    this.customCssEditor = CodeMirror.fromTextArea(document.getElementById("custom-css"), {
+      mode: "text/css",
+      lineNumbers: true,
+      lineWrapping: true
+    });
+    this.customJsEditor = CodeMirror.fromTextArea(document.getElementById("custom-js"), {
+      mode: "text/javascript",
+      lineNumbers: true,
+      lineWrapping: true
+    });
+
     this.initialiseHandlebars();
     this.parseSelectedTable(this.source);
     this.loadDataDirectoryForm();
@@ -247,7 +268,9 @@ var DataDirectoryForm = (function() {
     },
 
     loadDataDirectoryForm : function(){
-      $('#data-sources').prop('disabled',false).html(Fliplet.Widget.Templates['interface.dataSourceOptions'](_this.tables));
+      var $dataSources = $('#data-sources');
+      $dataSources.prop('disabled',false).html(Fliplet.Widget.Templates['interface.dataSourceOptions'](_this.tables));
+      updateSelectText($dataSources);
       $('#data-alphabetical-fields').html(Fliplet.Widget.Templates['interface.dataFieldTokenField']({
         name: 'alphabetical_fields',
         id: 'data-alphabetical-fields-tokenfield'
@@ -272,33 +295,11 @@ var DataDirectoryForm = (function() {
       // $('#data-tags-fields').html(Fliplet.Widget.Templates['interface.dataTagsField'](_this.columns));
       // $('#data-thumbnail-fields').html(Fliplet.Widget.Templates['interface.dataThumbnailField'](_this.columns));
 
-      _this.listviewEditor = CodeMirror.fromTextArea(document.getElementById("listview-template"), {
-        mode: {name: "handlebars", base: "text/html"},
-        lineNumbers: true,
-        lineWrapping: true
-      });
-      _this.detailviewEditor = CodeMirror.fromTextArea(document.getElementById("detailview-template"), {
-        mode: {name: "handlebars", base: "text/html"},
-        lineNumbers: true,
-        lineWrapping: true
-      });
-      _this.customCssEditor = CodeMirror.fromTextArea(document.getElementById("custom-css"), {
-        mode: "text/css",
-        lineNumbers: true,
-        lineWrapping: true
-      });
-      _this.customJsEditor = CodeMirror.fromTextArea(document.getElementById("custom-js"), {
-        mode: "text/javascript",
-        lineNumbers: true,
-        lineWrapping: true
-      });
-
       if (!_this.tables.length) {
         $('#no-data-source-prompt').removeClass('hidden');
       }
 
       if (_this.source !== '') {
-        $dataSources = $('#data-sources');
         $dataSources.val(_this.source);
         updateSelectText($dataSources);
         _this.loadConfigurations_();
@@ -366,11 +367,8 @@ var DataDirectoryForm = (function() {
     attachObservers_ : function(){
       $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         $(window).trigger('resize');
+        _this.refreshCodeEditors_();
       })
-
-      $('#developer-control').on('click', function(){
-        setTimeout(_this.refreshCodeEditors_, 0);
-      });
 
       $('.image-library')
         .on('dblclick', '[data-folder-id]', function () {
