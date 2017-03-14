@@ -135,6 +135,7 @@ var DataDirectoryForm = (function() {
     this.directoryConfig = $.extend( {
       sort_order : 'alphabetical',
       alphabetical_field : '',
+      alphabetical_fields : [],
       chronological_field : '',
       reverse_chronological_field : '',
       filter_fields : [],
@@ -163,6 +164,10 @@ var DataDirectoryForm = (function() {
       } else if ('folderId' in configuration.folderConfig) {
         $('.item-holder[data-folder-id="'+configuration.folderConfig.folderId+'"]').addClass('selected');
       }
+    }
+
+    if (!this.directoryConfig.alphabetical_fields.length && this.directoryConfig.alphabetical_field !== '') {
+      this.directoryConfig.alphabetical_fields = [this.directoryConfig.alphabetical_field];
     }
 
     this.initialiseHandlebars();
@@ -242,18 +247,24 @@ var DataDirectoryForm = (function() {
     },
 
     loadDataDirectoryForm : function(){
-      $('#data-sources').html(Fliplet.Widget.Templates['interface.dataSourceOptions'](_this.tables));
-      $('#data-alphabetical-fields').html(Fliplet.Widget.Templates['interface.dataFieldSelect']({
-        fields: _this.columns,
-        name: 'alphabetical_field',
-        id: 'data-alphabetical-fields-select'
+      $('#data-sources').prop('disabled',false).html(Fliplet.Widget.Templates['interface.dataSourceOptions'](_this.tables));
+      $('#data-alphabetical-fields').html(Fliplet.Widget.Templates['interface.dataFieldTokenField']({
+        name: 'alphabetical_fields',
+        id: 'data-alphabetical-fields-tokenfield'
       }));
-      $('#data-chronological-fields').html(Fliplet.Widget.Templates['interface.dataFieldSelect']({
+      $('#data-alphabetical-fields-tokenfield').tokenfield('destroy').tokenfield({
+        autocomplete: {
+          source: _this.columns,
+          delay: 100
+        },
+        showAutocompleteOnFocus: true
+      });
+      $('#data-chronological-fields').replaceWith(Fliplet.Widget.Templates['interface.dataFieldSelect']({
         fields: _this.columns,
         name: 'chronological_field',
         id: 'data-chronological-fields-select'
       }));
-      $('#data-reverse-chronological-fields').html(Fliplet.Widget.Templates['interface.dataFieldSelect']({
+      $('#data-reverse-chronological-fields').replaceWith(Fliplet.Widget.Templates['interface.dataFieldSelect']({
         fields: _this.columns,
         name: 'reverse_chronological_field',
         id: 'data-reverse-chronological-fields-select'
@@ -307,7 +318,7 @@ var DataDirectoryForm = (function() {
     },
 
     autoConfigureBrowse : function(){
-      _this.directoryConfig.alphabetical_field = _this.columns[0];
+      _this.directoryConfig.alphabetical_fields = [_this.columns[0]];
     },
 
     loadConfigurations_ : function(){
@@ -320,8 +331,7 @@ var DataDirectoryForm = (function() {
         updateSelectText($(this));
       });
 
-      $('#data-alphabetical-fields-select').val( _this.directoryConfig.alphabetical_field );
-      updateSelectText($('#data-alphabetical-fields-select'));
+      $('#data-alphabetical-fields-tokenfield').tokenfield('setTokens', _this.directoryConfig.alphabetical_fields );
 
       $('#data-chronological-fields-select').val( _this.directoryConfig.chronological_field );
       updateSelectText($('#data-chronological-fields-select'));
@@ -354,6 +364,10 @@ var DataDirectoryForm = (function() {
     },
 
     attachObservers_ : function(){
+      $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        $(window).trigger('resize');
+      })
+
       $('#developer-control').on('click', function(){
         setTimeout(_this.refreshCodeEditors_, 0);
       });
@@ -483,7 +497,7 @@ var DataDirectoryForm = (function() {
         return false;
       } );
 
-      $('.tab-content').on('change', '#data-tags-fields-select, #data-alphabetical-fields-select, #data-chronological-fields-select, #data-reverse-chronological-fields-select, #data-sources, #data-thumbnail-fields-select, #data-browse-configurations select', function () {
+      $('.tab-content').on('change', '#data-tags-fields-select, #data-chronological-fields-select, #data-reverse-chronological-fields-select, #data-sources, #data-thumbnail-fields-select, #data-browse-configurations select', function () {
         updateSelectText($(this));
       });
     },
@@ -499,7 +513,9 @@ var DataDirectoryForm = (function() {
         // show_subtitle: $("#show_subtitle").is(':checked'),
         // subtitle: $("#show_subtitle").is(':checked') ? $('#directory-browse-subtitle').val() : '',
         sort_order: $('[name=sort_order]:checked').val(),
-        alphabetical_field: $('#data-alphabetical-fields-select').val(),
+        alphabetical_fields: $('#data-alphabetical-fields-tokenfield').val().split(',').map(function(x){
+          return x.trim();
+        }),
         chronological_field: $('#data-chronological-fields-select').val(),
         reverse_chronological_field: $('#data-reverse-chronological-fields-select').val(),
         // show_tags: $("#show_tags").is(':checked'),

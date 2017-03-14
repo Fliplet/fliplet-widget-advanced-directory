@@ -14,6 +14,7 @@ var AdvancedDirectory = function (config, container) {
   this.config = $.extend({
     sort_order : 'original',
     alphabetical_field : '',
+    alphabetical_fields : [],
     label_template : '',
     data_fields : [],
     filter_fields : [],
@@ -123,9 +124,19 @@ AdvancedDirectory.prototype.initialiseHandlebars = function(){
   });
 
   Handlebars.registerHelper('alphabet_divider', function(){
-    if (_this.config.sort_order !== 'alphabetical') return '';
+    if (_this.config.sort_order !== 'alphabetical') {
+      return '';
+    }
 
-    var entryTitleTemplate = Handlebars.compile( '{{['+_this.config.alphabetical_field+']}}' );
+    if (_this.config.alphabetical_fields.length !== 1) {
+      return '';
+    }
+
+    var field = (_this.config.alphabetical_fields.length)
+      ? _this.config.alphabetical_fields[0]
+      : _this.config.alphabetical_field;
+
+    var entryTitleTemplate = Handlebars.compile( '{{['+field+']}}' );
     var firstCharacterOfTitle = entryTitleTemplate( this )[0].toString().toUpperCase();
     if ( '1234567890'.indexOf(firstCharacterOfTitle) > -1 ) firstCharacterOfTitle = '#';
     if ( firstCharacterOfTitle !== lastAlphabetIndex ) {
@@ -186,6 +197,23 @@ AdvancedDirectory.prototype.initialiseHandlebars = function(){
   Handlebars.registerPartial('directory_filter_values', Fliplet.Widget.Templates['build.advancedDirectoryFilterValues']);
 };
 
+AdvancedDirectory.prototype.alphaSortByAttr = function (data, attr) {
+  if (!Array.isArray(data)) {
+    return data;
+  }
+  return data.sort( function(a,b){
+    if (!a.hasOwnProperty(attr) || !b.hasOwnProperty(attr)) {
+      return 0;
+    }
+
+    if (a[attr].toString().toUpperCase() < b[attr].toString().toUpperCase())
+      return -1;
+    if (a[attr].toString().toUpperCase() > b[attr].toString().toUpperCase())
+      return 1;
+    return 0;
+  } );
+}
+
 AdvancedDirectory.prototype.init = function() {
   this.initialiseHandlebars();
   this.attachObservers();
@@ -244,49 +272,42 @@ AdvancedDirectory.prototype.verifyConfig = function(){
 
 AdvancedDirectory.prototype.sortEntries = function(){
   var _this = this;
+  listData = JSON.parse(JSON.stringify(this.data));
   switch (this.config.sort_order) {
     case 'alphabetical':
-      if (this.config.alphabetical_field === '') {
-        listData = this.data;
+      if (this.config.alphabetical_field === '' && !this.config.alphabetical_fields.length) {
         break;
       }
-      listData = this.data.sort( function(a,b){
-        var attr = _this.config.alphabetical_field;
-        if (!a[attr] || !b[attr]) {
-          return 0;
-        }
-
-        if (a[attr].toString().toUpperCase() < b[attr].toString().toUpperCase())
-          return -1;
-        if (a[attr].toString().toUpperCase() > b[attr].toString().toUpperCase())
-          return 1;
-        return 0;
-      } );
-      this.$container.find('.directory-entries').addClass('list-index-enabled');
+      if (!this.config.alphabetical_fields.length) {
+        this.config.alphabetical_fields = [this.config.alphabetical_field];
+      }
+      if (this.config.alphabetical_fields.length === 1) {
+        this.$container.find('.directory-entries').addClass('list-index-enabled');
+      }
+      while (this.config.alphabetical_fields.length) {
+        listData = this.alphaSortByAttr(listData, this.config.alphabetical_fields.pop());
+      }
       break;
     case 'chronological':
       if (!this.config.chronological_field) {
-        listData = this.data;
         break;
       }
-      listData = this.data.sort(function (left, right) {
+      listData = listData.sort(function (left, right) {
         var field = _this.config.chronological_field;
         return moment.utc(left[field]).diff(moment.utc(right[field]));
       });
       break;
     case 'reverse_chronological':
       if (!this.config.reverse_chronological_field) {
-        listData = this.data;
         break;
       }
-      listData = this.data.sort(function (left, right) {
+      listData = listData.sort(function (left, right) {
         var field = _this.config.reverse_chronological_field;
         return moment.utc(right[field]).diff(moment.utc(left[field]));
       });
       break;
     case 'original':
     default:
-      listData = this.data;
       break;
   }
   this.data = listData;

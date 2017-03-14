@@ -29,11 +29,11 @@
         </div>
         <div class="col-sm-8">
           <label for="data-sources" class="select-proxy-display">
-            <span class="icon fa fa-chevron-down"></span>
-            <span class="select-value-proxy">Select a table</span>
-            <select id="data-sources" data-label="select" class="hidden-select form-control">
-              <option>&mdash; Select a table &mdash;</option>
+            <select id="data-sources" data-label="select" class="hidden-select form-control" disabled>
+              <option>&mdash; Please wait</option>
             </select>
+            <span class="icon fa fa-chevron-down"></span>
+            <span class="select-value-proxy">&mdash; Please wait</span>
           </label>
         </div>
       </div>
@@ -160,13 +160,8 @@
               <label for="alphabetical">
                 <span class="check"><i class="fa fa-circle"></i></span> Alphabetically by
               </label>
-              <div class="select-holder">
-                <label for="data-tags-fields-select" class="select-proxy-display">
-                  <span class="icon fa fa-chevron-down"></span>
-                  <span class="select-value-proxy"></span>
-                  <span id="data-alphabetical-fields"></span>
-                </label>
-              </div>
+              <div class="select-holder" id="data-alphabetical-fields"></div>
+              <p class="select-holder help-block">Supports sort by multiple columns</p>
             </div>
             <div class="radio">
               <input type="radio" id="chronological" name="sort_order" value="chronological">
@@ -175,9 +170,9 @@
               </label>
               <div class="select-holder">
                 <label for="data-tags-fields-select" class="select-proxy-display">
+                  <span id="data-chronological-fields"></span>
                   <span class="icon fa fa-chevron-down"></span>
                   <span class="select-value-proxy"></span>
-                  <span id="data-chronological-fields"></span>
                 </label>
               </div>
             </div>
@@ -188,9 +183,9 @@
               </label>
               <div class="select-holder">
                 <label for="data-tags-fields-select" class="select-proxy-display">
+                  <span id="data-reverse-chronological-fields"></span>
                   <span class="icon fa fa-chevron-down"></span>
                   <span class="select-value-proxy"></span>
-                  <span id="data-reverse-chronological-fields"></span>
                 </label>
               </div>
             </div>

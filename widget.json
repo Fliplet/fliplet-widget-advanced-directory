@@ -20,6 +20,9 @@
       "lodash"
     ],
     "assets": [
+      "vendor/jquery-ui.min.css",
+      "vendor/bootstrap-tokenfield.min.css",
+      "vendor/bootstrap-tokenfield.min.js",
       "js/interface.templates.js",
       "js/interface-advanced-directory.js",
       "js/interface.js",
