@@ -95,6 +95,10 @@ table .select-proxy-display .icon {
   vertical-align: middle;
 }
 
+.table td.text-center .checkbox-icon {
+  display: inline-block;
+}
+
 .no-data-source-prompt,
 .options,
 .thumbs-options {

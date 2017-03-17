@@ -7,9 +7,9 @@ this["Fliplet"]["Widget"]["Templates"]["interface.dataBrowseConfigurations"] = H
 
   return "    <tr>\n        <td>"
     + container.escapeExpression(container.lambda(depth0, depth0))
-    + "</td>\n        <td>"
+    + "</td>\n        <td class=\"text-center\">"
     + ((stack1 = (helpers.filterCheckbox || (depth0 && depth0.filterCheckbox) || alias2).call(alias1,depth0,{"name":"filterCheckbox","hash":{},"data":data})) != null ? stack1 : "")
-    + "</td>\n        <td>"
+    + "</td>\n        <td class=\"text-center\">"
     + ((stack1 = (helpers.searchCheckbox || (depth0 && depth0.searchCheckbox) || alias2).call(alias1,depth0,{"name":"searchCheckbox","hash":{},"data":data})) != null ? stack1 : "")
     + "</td>\n        <td>"
     + ((stack1 = (helpers.typeSelector || (depth0 && depth0.typeSelector) || alias2).call(alias1,depth0,{"name":"typeSelector","hash":{},"data":data})) != null ? stack1 : "")
@@ -19,7 +19,7 @@ this["Fliplet"]["Widget"]["Templates"]["interface.dataBrowseConfigurations"] = H
 
   return "<table class=\"table table-hover\">\n<thead>\n<tr>\n    <th>Fields</th>\n    <th class=\"text-center\">Use as filter</th>\n    <th class=\"text-center\">Use for search</th>\n    <th>Display option</th>\n</tr>\n</thead>\n<tbody>\n"
     + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},depth0,{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "</tbody>\n</table>";
+    + "</tbody>\n</table>\n";
 },"useData":true});
 
 this["Fliplet"]["Widget"]["Templates"]["interface.dataFieldSelect"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
