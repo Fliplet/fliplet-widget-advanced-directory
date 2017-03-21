@@ -2,20 +2,10 @@ var widgetId = Fliplet.Widget.getDefaultId();
 var data = Fliplet.Widget.getData(widgetId) || {};
 var dataDirectoryForm;
 var organizationId = Fliplet.Env.get('organizationId');
-var ignoreDataSourceTypes = ['menu'];
 
-Fliplet.DataSources.get({ organizationId: organizationId })
+Fliplet.DataSources.get({ organizationId: organizationId, type: null })
   .then(function (dataSources) {
-    var filteredDataSources = dataSources.filter(function (dataSource) {
-      for (var i = 0; i < ignoreDataSourceTypes.length; i++) {
-        if (ignoreDataSourceTypes[i] === dataSource.type) {
-          return false;
-        }
-      }
-
-      return true;
-    });
-    return Promise.all(filteredDataSources.map(function (dataSource) {
+    return Promise.all(dataSources.map(function (dataSource) {
       return Fliplet.DataSources.connect(dataSource.id)
         .then(function (source) {
           return source.find();
