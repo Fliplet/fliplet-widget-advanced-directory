@@ -998,7 +998,7 @@ AdvancedDirectory.prototype.renderSearchResult = function( options, callback ){
   if (typeof callback === 'function') setTimeout(callback, 0);
 };
 
-DataDirectory.prototype.search = function(search) {
+AdvancedDirectory.prototype.search = function(search) {
   var entries = [];
   var searchFields = this.config.search_fields;
   this.data.forEach(function (entry) {
@@ -1041,7 +1041,7 @@ AdvancedDirectory.prototype.filter = function( field, value ) {
   return JSONSelect.match( path, this.data );
 }
 
-DataDirectory.prototype.getFilterValues = function(field) {
+AdvancedDirectory.prototype.getFilterValues = function(field) {
   var values = [];
   this.data.forEach(function getValues(entry) {
     var entryValue = entry[field];
