@@ -1001,9 +1001,12 @@ AdvancedDirectory.prototype.renderSearchResult = function( options, callback ){
 AdvancedDirectory.prototype.search = function(search) {
   var entries = [];
   var searchFields = this.config.search_fields;
+  // Escape search
+  var s = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+  var term = new RegExp(s, "i");
+
   this.data.forEach(function (entry) {
     for (var i = 0; i < searchFields.length; i++) {
-      var term = new RegExp(search, "i");
       var value = entry[searchFields[i]];
       if (!value) {
         break;
