@@ -8,6 +8,12 @@ var messageDelay = 5000; // 'Loading...' text delay to display
 var loadingOverlayDelay = 1000; // Time it takes to display the loading overlay after a click
 var date_filter; // Filter used before pick date range when filtering by a date type field
 
+function html_entity_decode(html) {
+  var txt = document.createElement("textarea");
+  txt.innerHTML = html;
+  return txt.value;
+}
+
 var AdvancedDirectory = function (config, container) {
   var _this = this;
 
@@ -760,7 +766,7 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
   };
 
   if ( !this.config.mobile_mode && this.deviceIsTablet ) {
-    this.$container.find('.directory-details .directory-details-content').html(detailViewHTML);
+    this.$container.find('.directory-details .directory-details-content').html(html_entity_decode(detailViewHTML));
     after_render();
     setTimeout(function(){
       _this.$container.find('li[data-type=' + type + '].active').removeClass('active');
