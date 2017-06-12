@@ -22,7 +22,7 @@ this["Fliplet"]["Widget"]["Templates"]["build.advancedDirectoryFilters"] = Handl
     var stack1;
 
   return "<ul>"
-    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},depth0,{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),depth0,{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "</ul>\n";
 },"useData":true});
 
@@ -42,12 +42,12 @@ this["Fliplet"]["Widget"]["Templates"]["build.advancedDirectoryFilterValues"] = 
     var stack1;
 
   return "<ul>"
-    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.values : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.values : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "</ul>\n";
 },"useData":true,"useDepths":true});
 
 this["Fliplet"]["Widget"]["Templates"]["build.advancedDirectorySearchResultHeader"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing;
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
   return "<div class=\"search-result-header-container\">\n  <div class=\"search-result-header\">\n    <a href=\"#\" class=\"btn btn-link pull-right search-result-clear\">"
     + container.escapeExpression((helpers.search_result_clear || (depth0 && depth0.search_result_clear) || alias2).call(alias1,depth0,{"name":"search_result_clear","hash":{},"data":data}))
@@ -57,40 +57,24 @@ this["Fliplet"]["Widget"]["Templates"]["build.advancedDirectorySearchResultHeade
 },"useData":true});
 
 this["Fliplet"]["Widget"]["Templates"]["build.detailView"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+    var helper;
 
   return "<div data-source-entry-id=\""
-    + alias4(((helper = (helper = helpers.ID || (depth0 != null ? depth0.ID : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"ID","hash":{},"data":data}) : helper)))
-    + "\">\n  <div class=\"directory-detail-title\">"
-    + alias4(((helper = (helper = helpers.Title || (depth0 != null ? depth0.Title : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"Title","hash":{},"data":data}) : helper)))
-    + "</div>\n  <div class=\"directory-detail-label\">Location</div>\n  <div class=\"directory-detail-value\">"
-    + alias4(((helper = (helper = helpers.Location || (depth0 != null ? depth0.Location : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"Location","hash":{},"data":data}) : helper)))
-    + "</div>\n</div>\n";
+    + container.escapeExpression(((helper = (helper = helpers.ID || (depth0 != null ? depth0.ID : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"ID","hash":{},"data":data}) : helper)))
+    + "\">\n  <div class=\"directory-detail-title\">Template not configured</div>\n  <div class=\"directory-detail-value\">\n    <em>Please configure the template via <strong>Developers > Detailview template</strong></em>\n  </div>\n</div>\n";
 },"useData":true});
 
 this["Fliplet"]["Widget"]["Templates"]["build.listView"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+    var helper;
 
-  return "\n  "
-    + ((stack1 = ((helper = (helper = helpers.alphabet_divider || (depth0 != null ? depth0.alphabet_divider : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"alphabet_divider","hash":{},"data":data}) : helper))) != null ? stack1 : "")
-    + "\n  <li class=\"linked data-linked\" data-type=\"entry\" data-index=\""
-    + alias4(((helper = (helper = helpers.index || (data && data.index)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"index","hash":{},"data":data}) : helper)))
-    + "\">\n    <!-- <span class=\"icon fa fa-star\"></span> -->\n    <div class=\"list-desc\">\n      <p class=\"list-title\">"
-    + alias4((helpers.plaintext || (depth0 && depth0.plaintext) || alias2).call(alias1,"Title",depth0,{"name":"plaintext","hash":{},"data":data}))
-    + "</p>\n      <!-- <p class=\"survey-notification\"><span class=\"survey-warning\"><i class=\"fa fa-exclamation-circle\"></i> Please complete survey</span></p> -->\n      <p class=\"time-place\">"
-    + alias4((helpers.moment || (depth0 && depth0.moment) || alias2).call(alias1,"Session start","HH:mm",depth0,{"name":"moment","hash":{},"data":data}))
-    + " &ndash; "
-    + alias4((helpers.moment || (depth0 && depth0.moment) || alias2).call(alias1,"Session end","HH:mm",depth0,{"name":"moment","hash":{},"data":data}))
-    + " &#183; <span>"
-    + alias4(((helper = (helper = helpers.Location || (depth0 != null ? depth0.Location : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"Location","hash":{},"data":data}) : helper)))
-    + "</span></p>\n    </div>\n    <div class=\"list-tags\">\n      "
-    + alias4((helpers.tag_filters || (depth0 && depth0.tag_filters) || alias2).call(alias1,"Tags",depth0,{"name":"tag_filters","hash":{},"data":data}))
-    + "\n    </div>\n  </li>\n";
+  return "\n  <li class=\"linked data-linked\" data-type=\"entry\" data-index=\""
+    + container.escapeExpression(((helper = (helper = helpers.index || (data && data.index)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"index","hash":{},"data":data}) : helper)))
+    + "\">\n    <div class=\"list-desc\">\n      <p class=\"list-title\"><em>Please configure the template for the widget via <strong>Developers > Listview template</strong></em></p>\n    </div>\n  </li>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return "<ul>"
-    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},depth0,{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+  return "<h3 class=\"container-fluid\">Template not configured</h3>\n<ul>"
+    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),depth0,{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "</ul>\n";
 },"useData":true});
 
