@@ -3,7 +3,7 @@ this["Fliplet"]["Widget"] = this["Fliplet"]["Widget"] || {};
 this["Fliplet"]["Widget"]["Templates"] = this["Fliplet"]["Widget"]["Templates"] || {};
 
 this["Fliplet"]["Widget"]["Templates"]["interface.dataBrowseConfigurations"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing;
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing;
 
   return "    <tr>\n        <td>"
     + container.escapeExpression(container.lambda(depth0, depth0))
@@ -18,7 +18,7 @@ this["Fliplet"]["Widget"]["Templates"]["interface.dataBrowseConfigurations"] = H
     var stack1;
 
   return "<table class=\"table table-hover\">\n<thead>\n<tr>\n    <th>Fields</th>\n    <th class=\"text-center\">Use as filter</th>\n    <th class=\"text-center\">Use for search</th>\n    <th>Display option</th>\n</tr>\n</thead>\n<tbody>\n"
-    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},depth0,{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),depth0,{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "</tbody>\n</table>\n";
 },"useData":true});
 
@@ -31,7 +31,7 @@ this["Fliplet"]["Widget"]["Templates"]["interface.dataFieldSelect"] = Handlebars
     + alias2(alias1(depth0, depth0))
     + "</option>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
   return "<select class=\"hidden-select form-control\" name=\""
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
@@ -43,7 +43,7 @@ this["Fliplet"]["Widget"]["Templates"]["interface.dataFieldSelect"] = Handlebars
 },"useData":true});
 
 this["Fliplet"]["Widget"]["Templates"]["interface.dataFieldTokenField"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+    var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
   return "<input class=\"form-control tokenfield\" type=\"text\" name=\""
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
@@ -55,7 +55,7 @@ this["Fliplet"]["Widget"]["Templates"]["interface.dataFieldTokenField"] = Handle
 },"useData":true});
 
 this["Fliplet"]["Widget"]["Templates"]["interface.dataSourceOptions"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
-    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+    var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
   return "    <option value=\""
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
@@ -66,7 +66,7 @@ this["Fliplet"]["Widget"]["Templates"]["interface.dataSourceOptions"] = Handleba
     var stack1;
 
   return "<option>&mdash; Select a table &mdash;</option>\n"
-    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},depth0,{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),depth0,{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"useData":true});
 
 this["Fliplet"]["Widget"]["Templates"]["interface.dataTagsField"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
@@ -81,7 +81,7 @@ this["Fliplet"]["Widget"]["Templates"]["interface.dataTagsField"] = Handlebars.t
     var stack1;
 
   return "<select class=\"hidden-select form-control\" name=\"tags_field\" id=\"data-tags-fields-select\">\n"
-    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},depth0,{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),depth0,{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "</select>\n";
 },"useData":true});
 
@@ -97,7 +97,7 @@ this["Fliplet"]["Widget"]["Templates"]["interface.dataThumbnailField"] = Handleb
     var stack1;
 
   return "<select class=\"hidden-select form-control\" name=\"thumbnail_field\" id=\"data-thumbnail-fields-select\">\n    <option value=\"\">Choose a field (optional)</option>\n"
-    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},depth0,{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),depth0,{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "</select>";
 },"useData":true});
 
@@ -105,12 +105,12 @@ this["Fliplet"]["Widget"]["Templates"]["interface.dataTypeSelector"] = Handlebar
     var helper;
 
   return "<label class=\"select-proxy-display\" data-field=\""
-    + container.escapeExpression(((helper = (helper = helpers.field || (depth0 != null ? depth0.field : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"field","hash":{},"data":data}) : helper)))
+    + container.escapeExpression(((helper = (helper = helpers.field || (depth0 != null ? depth0.field : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"field","hash":{},"data":data}) : helper)))
     + "\" data-type=\"type\">\n  <span class=\"icon fa fa-chevron-down\"></span>\n  <span class=\"select-value-proxy\">Display as text</span>\n  <select class=\"hidden-select form-control\">\n    <option value=\"text\">Display as text</option>\n    <option value=\"tel\">Tap to dial the number</option>\n    <option value=\"email\">Tap to send an email</option>\n    <option value=\"url\">Tap to visit webpage</option>\n      <option value=\"file\">Tap to open file</option>\n    <!-- <<option value=\"address\">Address</option> -->\n    <option value=\"image\">Display as an image</option>\n      <option value=\"accordion\">Display as an accordion</option>\n    <!-- <option value=\"datetime\">Date/time</option> -->\n      <option value=\"date\">Display as date</option>\n  </select>\n</label>\n";
 },"useData":true});
 
 this["Fliplet"]["Widget"]["Templates"]["interface.files.app"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+    var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
   return "<div class=\"col-xs-4 item-holder folder\" data-app-id=\""
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
@@ -122,7 +122,7 @@ this["Fliplet"]["Widget"]["Templates"]["interface.files.app"] = Handlebars.templ
 },"useData":true});
 
 this["Fliplet"]["Widget"]["Templates"]["interface.files.folder"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+    var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
   return "<div class=\"col-xs-4 item-holder folder\" data-folder-id=\""
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
@@ -140,7 +140,7 @@ this["Fliplet"]["Widget"]["Templates"]["interface.files.noFiles"] = Handlebars.t
 },"useData":true});
 
 this["Fliplet"]["Widget"]["Templates"]["interface.files.organization"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+    var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
   return "<div class=\"col-xs-4 item-holder folder\" data-organization-id=\""
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))

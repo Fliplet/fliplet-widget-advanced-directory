@@ -101,6 +101,7 @@ table .select-proxy-display .icon {
 
 .no-data-source-prompt,
 .options,
+.options-no-columns,
 .thumbs-options {
   display: none;
 }

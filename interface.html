@@ -39,7 +39,6 @@
       </div>
 
       <div class="options">
-
         <div class="form-group clearfix">
           <div class="col-sm-4 control-label">
             <label for="enable_live_data">Do you want to retrieve data whenever new data is available?</label>
@@ -54,93 +53,13 @@
             </div>
           </div>
         </div>
-
-        <!-- <div class="title-header">
-          <p>Thumbnail options</p>
-          <p>You can enable a thumbnail on your main list and/or detail views. Configure below where and how to show the thumbnails.</p>
-        </div>
-
-        <div class="form-group clearfix">
-          <div class="col-sm-4 control-label">
-            <label for="data-thumbnail-fields-select">Select a field to use as the thumbnail</label>
-          </div>
-          <div class="col-sm-8">
-            <label for="data-tags-fields-select" class="select-proxy-display">
-              <span class="icon fa fa-chevron-down"></span>
-              <span class="select-value-proxy"></span>
-              <span id="data-thumbnail-fields"></span>
-            </label>
-            <p class="help-block">Make sure the field is pointing at an image file name.</p>
-          </div>
-        </div>
-
-        <div class="thumbs-options">
-          <div class="form-group clearfix inline-radio">
-            <div class="col-sm-4 control-label">
-              <label for="swipe-to-save">Enable thumbnails on the Main list</label>
-            </div>
-            <div class="col-sm-8">
-              <div class="radio-buttons clearfix">
-                <div class="radio">
-                  <input type="radio" id="thumb-list-yes" name="enable_thumb_list" value="show" {{#if show_thumb_list}}checked{{/if}}>
-                  <label for="thumb-list-yes">
-                    Yes
-                  </label>
-                </div>
-                <div class="radio">
-                  <input type="radio" id="thumb-list-no" name="enable_thumb_list" value="no-show" {{#if show_thumb_list}}{{else}}checked{{/if}}>
-                  <label for="thumb-list-no">
-                    No
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-group clearfix inline-radio">
-            <div class="col-sm-4 control-label">
-              <label for="swipe-to-save">Enable thumbnails on the Details</label>
-            </div>
-            <div class="col-sm-8">
-              <div class="radio-buttons clearfix">
-                <div class="radio">
-                  <input type="radio" id="thumb-details-yes" name="enable_thumb_details" value="show" {{#if show_thumb_detail}}checked{{/if}}>
-                  <label for="thumb-details-yes">
-                    Yes
-                  </label>
-                </div>
-                <div class="radio">
-                  <input type="radio" id="thumb-details-no" name="enable_thumb_details" value="no-show" {{#if show_thumb_detail}}{{else}}checked{{/if}}>
-                  <label for="thumb-details-no">
-                    No
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="title-header">
-            <p>Select the thumbnails folder</p>
-            <p>Select the folder where your thumbnails are stored.</p>
-          </div>
-
-          <div class="gallery-tool clearfix">
-            <div class="breadcrumbs-select">
-              <div class="helper"><strong>Root</strong></div>
-            </div>
-            <div class="back-btn">
-                Up to <span class="up-to">Folder Name</span>
-            </div>
-          </div>
-          <div class="folder-selection">
-              <span>Select a folder below</span>
-          </div>
-          <div class="image-library"></div>
-
-        </div> -->
-
       </div>
 
+      <div class="options-no-columns">
+        <div class="alert alert-warning">
+          Data source appears to be empty or misconfigured. Please visit <a href="/data-sources" target="_blank">Manage app data</a> to make sure the data source has data entries.
+        </div>
+      </div>
     </div>
 
     <div role="tabpanel" class="tab-pane" id="main-list-tab">
