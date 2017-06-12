@@ -143,7 +143,10 @@ AdvancedDirectory.prototype.initialiseHandlebars = function(){
       : _this.config.alphabetical_field;
 
     var entryTitleTemplate = Handlebars.compile( '{{['+field+']}}' );
-    var firstCharacterOfTitle = entryTitleTemplate( this )[0].toString().toUpperCase();
+    if (!entryTitleTemplate(this).length) {
+      return '';
+    }
+    var firstCharacterOfTitle = entryTitleTemplate(this)[0].toString().toUpperCase();
     if ( '1234567890'.indexOf(firstCharacterOfTitle) > -1 ) firstCharacterOfTitle = '#';
     if ( firstCharacterOfTitle !== lastAlphabetIndex ) {
       lastAlphabetIndex = firstCharacterOfTitle;
