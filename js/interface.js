@@ -1,9 +1,8 @@
 var widgetId = Fliplet.Widget.getDefaultId();
 var data = Fliplet.Widget.getData(widgetId) || {};
 var dataDirectoryForm;
-var organizationId = Fliplet.Env.get('organizationId');
 
-Fliplet.DataSources.get({ organizationId: organizationId, type: null })
+Fliplet.DataSources.get({ type: null })
   .then(function (dataSources) {
     return Promise.all(dataSources.map(function (dataSource) {
       return Fliplet.DataSources.connect(dataSource.id)
