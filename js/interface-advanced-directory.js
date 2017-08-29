@@ -391,6 +391,7 @@ var DataDirectoryForm = (function() {
     attachObservers_: function(){
       $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         $(window).trigger('resize');
+        _this.toggleFullscreen(false);
         _this.refreshCodeEditors_();
       })
 
