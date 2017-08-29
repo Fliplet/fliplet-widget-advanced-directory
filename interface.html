@@ -13,7 +13,6 @@
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="data-source-tab">
       <div class="title-header">
-        <p>Select data source</p>
         <p>Select a data source for your directory.</p>
       </div>
 
@@ -23,43 +22,46 @@
         <p>Go ahead. We'll be right here waiting for you.</p>
       </div>
 
-      <div class="form-group clearfix">
-        <div class="col-sm-4 control-label">
-          <label for="data-sources">Which table do you want to use for your directory?</label>
-        </div>
-        <div class="col-sm-8">
-          <label for="data-sources" class="select-proxy-display">
-            <select id="data-sources" data-label="select" class="hidden-select form-control" disabled>
-              <option>&mdash; Please wait</option>
-            </select>
-            <span class="icon fa fa-chevron-down"></span>
-            <span class="select-value-proxy">&mdash; Please wait</span>
-          </label>
-        </div>
-      </div>
-
-      <div class="options">
+      <div class="form form-horizontal">
         <div class="form-group clearfix">
           <div class="col-sm-4 control-label">
-            <label for="enable_live_data">Do you want to retrieve data whenever new data is available?</label>
+            <label for="data-sources">Which table do you want to use for your directory?</label>
           </div>
           <div class="col-sm-8">
-            <div class="checkbox checkbox-icon">
-              <input type="checkbox" id="enable_live_data">
-              <label for="enable_live_data">
-                <span class="check"><i class="fa fa-check"></i></span> Yes, please
-              </label>
-              <p class="help-block">The data directory will retrieve automatically new data if the data source is updated.</p>
+            <label for="data-sources" class="select-proxy-display">
+              <select id="data-sources" data-label="select" class="hidden-select form-control" disabled>
+                <option>&mdash; Please wait</option>
+              </select>
+              <span class="icon fa fa-chevron-down"></span>
+              <span class="select-value-proxy">&mdash; Please wait</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="options">
+          <div class="form-group clearfix">
+            <div class="col-sm-4 control-label">
+              <label for="enable_live_data">Do you want to retrieve data whenever new data is available?</label>
+            </div>
+            <div class="col-sm-8">
+              <div class="checkbox checkbox-icon">
+                <input type="checkbox" id="enable_live_data">
+                <label for="enable_live_data">
+                  <span class="check"><i class="fa fa-check"></i></span> Yes, please
+                </label>
+                <p class="help-block">The data directory will retrieve automatically new data if the data source is updated.</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="options-no-columns">
-        <div class="alert alert-warning">
-          Data source appears to be empty or misconfigured. Please visit <a href="/data-sources" target="_blank">Manage app data</a> to make sure the data source has data entries.
+        <div class="options-no-columns">
+          <div class="alert alert-warning">
+            Data source appears to be empty or misconfigured. Please visit <a href="/data-sources" target="_blank">Manage app data</a> to make sure the data source has data entries.
+          </div>
         </div>
       </div>
+
     </div>
 
     <div role="tabpanel" class="tab-pane" id="main-list-tab">
@@ -69,88 +71,94 @@
           <p>Your data will be displayed in a list. You can set up how it's ordered and configure how users can search/filter your data.</p>
         </div>
 
-        <div class="form-group clearfix">
-          <div class="col-sm-4 control-label">
-            <label>In what order do you want do display your data?</label>
+        <div class="form form-horizontal">
+          <div class="form-group clearfix">
+            <div class="col-sm-4 control-label">
+              <label>In what order do you want do display your data?</label>
+            </div>
+            <div class="col-sm-8">
+              <div class="radio radio-icon">
+                <input type="radio" id="alphabetical" name="sort_order" value="alphabetical">
+                <label for="alphabetical">
+                  <span class="check"><i class="fa fa-circle"></i></span> Alphabetically by
+                </label>
+                <div class="select-holder" id="data-alphabetical-fields"></div>
+                <p class="select-holder help-block">Supports sort by multiple columns</p>
+              </div>
+              <div class="radio radio-icon">
+                <input type="radio" id="chronological" name="sort_order" value="chronological">
+                <label for="chronological">
+                  <span class="check"><i class="fa fa-circle"></i></span> Chronologically by
+                </label>
+                <div class="select-holder">
+                  <label for="data-tags-fields-select" class="select-proxy-display">
+                    <span id="data-chronological-fields"></span>
+                    <span class="icon fa fa-chevron-down"></span>
+                    <span class="select-value-proxy"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="radio radio-icon">
+                <input type="radio" id="reverse_chronological" name="sort_order" value="reverse_chronological">
+                <label for="reverse_chronological">
+                  <span class="check"><i class="fa fa-circle"></i></span> Reverse-chronologically by
+                </label>
+                <div class="select-holder">
+                  <label for="data-tags-fields-select" class="select-proxy-display">
+                    <span id="data-reverse-chronological-fields"></span>
+                    <span class="icon fa fa-chevron-down"></span>
+                    <span class="select-value-proxy"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="radio radio-icon">
+                <input type="radio" id="order" name="sort_order" value="original">
+                <label for="order">
+                  <span class="check"><i class="fa fa-circle"></i></span> In the order as loaded
+                </label>
+              </div>
+            </div>
           </div>
-          <div class="col-sm-8">
-            <div class="radio radio-icon">
-              <input type="radio" id="alphabetical" name="sort_order" value="alphabetical">
-              <label for="alphabetical">
-                <span class="check"><i class="fa fa-circle"></i></span> Alphabetically by
-              </label>
-              <div class="select-holder" id="data-alphabetical-fields"></div>
-              <p class="select-holder help-block">Supports sort by multiple columns</p>
+
+          <div class="form-group clearfix">
+            <div class="col-sm-4 control-label">
+              <label>How do you want to use the information in each field?</label>
             </div>
-            <div class="radio radio-icon">
-              <input type="radio" id="chronological" name="sort_order" value="chronological">
-              <label for="chronological">
-                <span class="check"><i class="fa fa-circle"></i></span> Chronologically by
-              </label>
-              <div class="select-holder">
-                <label for="data-tags-fields-select" class="select-proxy-display">
-                  <span id="data-chronological-fields"></span>
-                  <span class="icon fa fa-chevron-down"></span>
-                  <span class="select-value-proxy"></span>
-                </label>
-              </div>
-            </div>
-            <div class="radio radio-icon">
-              <input type="radio" id="reverse_chronological" name="sort_order" value="reverse_chronological">
-              <label for="reverse_chronological">
-                <span class="check"><i class="fa fa-circle"></i></span> Reverse-chronologically by
-              </label>
-              <div class="select-holder">
-                <label for="data-tags-fields-select" class="select-proxy-display">
-                  <span id="data-reverse-chronological-fields"></span>
-                  <span class="icon fa fa-chevron-down"></span>
-                  <span class="select-value-proxy"></span>
-                </label>
-              </div>
-            </div>
-            <div class="radio radio-icon">
-              <input type="radio" id="order" name="sort_order" value="original">
-              <label for="order">
-                <span class="check"><i class="fa fa-circle"></i></span> In the order as loaded
-              </label>
+            <div class="col-xs-12" id="data-browse-configurations">
+
             </div>
           </div>
         </div>
 
-        <div class="form-group clearfix">
-          <div class="col-sm-4 control-label">
-            <label>How do you want to use the information in each field?</label>
-          </div>
-          <div class="col-xs-12" id="data-browse-configurations">
-
-          </div>
-        </div>
       </div>
     </div>
 
     <div role="tabpanel" class="tab-pane" id="developer-tab">
-      <div class="form-group">
-        <div class="col-xs-12">
-          <label>Listview template</label>
-          <textarea class="form-control" name="listview_template" id="listview-template" rows="8"></textarea>
+      <div class="form form-horizontal">
+        <div class="form-group">
+          <div class="col-xs-12">
+            <p><label class="control-label">Listview template</label><span class="pull-right fullscreen-toggle"><i class="fa fa-arrows-alt" aria-hidden="true"></i> <span class="toggle-label">Full screen</span></span></p>
+
+            <textarea class="form-control" name="listview_template" id="listview-template" rows="8"></textarea>
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <div class="col-xs-12">
-          <label>Detailview template</label>
-          <textarea class="form-control" name="detailview_template" id="detailview-template" rows="8"></textarea>
+        <div class="form-group">
+          <div class="col-xs-12">
+            <p><label class="control-label">Detailview template</label><span class="pull-right fullscreen-toggle"><i class="fa fa-arrows-alt" aria-hidden="true"></i> <span class="toggle-label">Full screen</span></span></p>
+            <textarea class="form-control" name="detailview_template" id="detailview-template" rows="8"></textarea>
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <div class="col-xs-12">
-          <label>Custom CSS</label>
-          <textarea class="form-control" name="custom_css" id="custom-css" rows="8"></textarea>
+        <div class="form-group">
+          <div class="col-xs-12">
+            <p><label class="control-label">Custom CSS</label><span class="pull-right fullscreen-toggle"><i class="fa fa-arrows-alt" aria-hidden="true"></i> <span class="toggle-label">Full screen</span></span></p>
+            <textarea class="form-control" name="custom_css" id="custom-css" rows="8"></textarea>
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <div class="col-xs-12">
-          <label>Custom JavaScript</label>
-          <textarea class="form-control" name="custom_js" id="custom-js" rows="8"></textarea>
+        <div class="form-group">
+          <div class="col-xs-12">
+            <p><label class="control-label">Custom JavaScript</label><span class="pull-right fullscreen-toggle"><i class="fa fa-arrows-alt" aria-hidden="true"></i> <span class="toggle-label">Full screen</span></span></p>
+            <textarea class="form-control" name="custom_js" id="custom-js" rows="8"></textarea>
+          </div>
         </div>
       </div>
     </div>

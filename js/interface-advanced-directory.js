@@ -5,6 +5,12 @@
 var DataDirectoryForm = (function() {
 
   var $imagesContainer = $('.image-library');
+  var upTo = [{ back: openRoot, name: 'Root'}];
+  var folders;
+  var apps;
+  var organizations;
+  var _this;
+
 
   function addFolder(folder) {
     $imagesContainer.append(Fliplet.Widget.Templates['interface.files.folder'](folder));
@@ -22,11 +28,6 @@ var DataDirectoryForm = (function() {
     $imagesContainer.html(Fliplet.Widget.Templates['interface.files.noFiles']());
   }
 
-  var upTo = [{ back: openRoot, name: 'Root'}];
-  var folders,
-      apps,
-      organizations;
-
   function getApps() {
     return Fliplet.Apps
       .get()
@@ -35,6 +36,10 @@ var DataDirectoryForm = (function() {
           return !app.legacy;
         });
       });
+  }
+
+  function init() {
+    openRoot();
   }
 
   function openRoot() {
@@ -107,16 +112,10 @@ var DataDirectoryForm = (function() {
     $('.helper strong').html(upTo[upTo.length - 1].name);
   }
 
-  // init
-  openRoot();
-
   function updateSelectText($el) {
     var selectedText = $el.find('option:selected').text();
     $el.parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
   }
-
-  // this reference
-  var _this;
 
   // Constructor
   function DataDirectoryForm( configuration ) {
@@ -332,6 +331,21 @@ var DataDirectoryForm = (function() {
         : [];
     },
 
+    toggleFullscreen : function(fullscreen){
+      if (typeof fullscreen === 'undefined') {
+        fullscreen  = !$('body').hasClass('widget-mode-wide');
+      }
+      if (fullscreen) {
+        $('body').addClass('widget-mode-wide');
+        Fliplet.Studio.emit('widget-mode', 'wide');
+        $('.fullscreen-toggle .toggle-label').text('Exit full screen');
+        return;
+      }
+      $('body').removeClass('widget-mode-wide');
+      Fliplet.Studio.emit('widget-mode', 'normal');
+      $('.fullscreen-toggle .toggle-label').text('Full screen');
+    },
+
     loadConfigurations_ : function(){
       $('#data-sources option[value=""]').remove();
       $('a[href="#data-source"][data-toggle="tab"]').html('Change data source');
@@ -508,9 +522,15 @@ var DataDirectoryForm = (function() {
       $('.tab-content').on('change', '#data-tags-fields-select, #data-chronological-fields-select, #data-reverse-chronological-fields-select, #data-sources, #data-thumbnail-fields-select, #data-browse-configurations select', function () {
         updateSelectText($(this));
       });
+
+      $(document).on('click', '.fullscreen-toggle', function(){
+        _this.toggleFullscreen();
+      })
     },
 
     saveDataDirectoryForm_ : function(){
+      _this.toggleFullscreen(false);
+
       var data = {
         source: $("#data-sources").val(),
         filter_fields: [],
@@ -576,6 +596,9 @@ var DataDirectoryForm = (function() {
     }
 
   };
+
+  // Init
+  init();
 
   return DataDirectoryForm;
 })();
