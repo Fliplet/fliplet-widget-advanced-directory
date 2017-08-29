@@ -5,6 +5,12 @@
 var DataDirectoryForm = (function() {
 
   var $imagesContainer = $('.image-library');
+  var upTo = [{ back: openRoot, name: 'Root'}];
+  var folders;
+  var apps;
+  var organizations;
+  var _this;
+
 
   function addFolder(folder) {
     $imagesContainer.append(Fliplet.Widget.Templates['interface.files.folder'](folder));
@@ -22,11 +28,6 @@ var DataDirectoryForm = (function() {
     $imagesContainer.html(Fliplet.Widget.Templates['interface.files.noFiles']());
   }
 
-  var upTo = [{ back: openRoot, name: 'Root'}];
-  var folders,
-      apps,
-      organizations;
-
   function getApps() {
     return Fliplet.Apps
       .get()
@@ -35,6 +36,10 @@ var DataDirectoryForm = (function() {
           return !app.legacy;
         });
       });
+  }
+
+  function init() {
+    openRoot();
   }
 
   function openRoot() {
@@ -107,16 +112,10 @@ var DataDirectoryForm = (function() {
     $('.helper strong').html(upTo[upTo.length - 1].name);
   }
 
-  // init
-  openRoot();
-
   function updateSelectText($el) {
     var selectedText = $el.find('option:selected').text();
     $el.parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
   }
-
-  // this reference
-  var _this;
 
   // Constructor
   function DataDirectoryForm( configuration ) {
@@ -133,16 +132,16 @@ var DataDirectoryForm = (function() {
     delete configuration.dataSources;
 
     this.directoryConfig = $.extend( {
-      sort_order : 'alphabetical',
-      alphabetical_field : '',
-      alphabetical_fields : [],
-      chronological_field : '',
-      reverse_chronological_field : '',
-      filter_fields : [],
-      search_fields : [],
+      sort_order: 'alphabetical',
+      alphabetical_field: '',
+      alphabetical_fields: [],
+      chronological_field: '',
+      reverse_chronological_field: '',
+      filter_fields: [],
+      search_fields: [],
       source: '',
-      field_types : {},
-      folderConfig : {},
+      field_types: {},
+      folderConfig: {},
       listviewTemplate: '',
       detailviewTemplate: '',
       customCss: '',
@@ -199,9 +198,9 @@ var DataDirectoryForm = (function() {
 
   DataDirectoryForm.prototype = {
     // Public functions
-    constructor : DataDirectoryForm,
+    constructor: DataDirectoryForm,
 
-    initialiseHandlebars : function(){
+    initialiseHandlebars: function(){
       Handlebars.registerHelper("select", function(value, options){
         var $el = $('<select />').html( options.fn(this) );
         $el.find('[value="' + value + '"]').attr('selected', true);
@@ -243,7 +242,7 @@ var DataDirectoryForm = (function() {
       });
     },
 
-    parseSelectedTable : function(tableID, autoConfigure){
+    parseSelectedTable: function(tableID, autoConfigure){
       if (tableID !== '') {
         for (var i = 0, l = _this.tables.length; i < l; i++) {
           if ( _this.tables[i].hasOwnProperty('id') && _this.tables[i].id == tableID ) {
@@ -263,7 +262,7 @@ var DataDirectoryForm = (function() {
       }
     },
 
-    loadDataDirectoryForm : function(){
+    loadDataDirectoryForm: function(){
       var $dataSources = $('#data-sources');
       $dataSources.prop('disabled',false).html(Fliplet.Widget.Templates['interface.dataSourceOptions'](_this.tables));
       updateSelectText($dataSources);
@@ -314,25 +313,40 @@ var DataDirectoryForm = (function() {
       $('.nav-tabs li#main-list-control').removeClass('disabled');
     },
 
-    autoConfigureSearch : function(){
+    autoConfigureSearch: function(){
       _this.directoryConfig.search_fields = (_this.columns && _this.columns.length > 4)
         ? _this.columns.slice(0,4)
         : _this.columns;
     },
 
-    autoConfigureFilter : function(){
+    autoConfigureFilter: function(){
       _this.directoryConfig.filter_fields = (_this.columns && _this.columns.length > 3)
         ? _this.columns.slice(1,3)
         : _this.columns;
     },
 
-    autoConfigureBrowse : function(){
+    autoConfigureBrowse: function(){
       _this.directoryConfig.alphabetical_fields = (_this.columns && _this.columns.length)
         ? [_this.columns[0]]
         : [];
     },
 
-    loadConfigurations_ : function(){
+    toggleFullscreen: function(fullscreen){
+      if (typeof fullscreen === 'undefined') {
+        fullscreen  = !$('body').hasClass('widget-mode-wide');
+      }
+      if (fullscreen) {
+        $('body').addClass('widget-mode-wide');
+        Fliplet.Studio.emit('widget-mode', 'wide');
+        $('.fullscreen-toggle .toggle-label').text('Exit full screen');
+        return;
+      }
+      $('body').removeClass('widget-mode-wide');
+      Fliplet.Studio.emit('widget-mode', 'normal');
+      $('.fullscreen-toggle .toggle-label').text('Full screen');
+    },
+
+    loadConfigurations_: function(){
       $('#data-sources option[value=""]').remove();
       $('a[href="#data-source"][data-toggle="tab"]').html('Change data source');
       $('.nav.nav-stacked li.disabled').removeClass('disabled');
@@ -367,14 +381,14 @@ var DataDirectoryForm = (function() {
       setTimeout(_this.refreshCodeEditors_, 0);
     },
 
-    refreshCodeEditors_ : function(){
+    refreshCodeEditors_: function(){
       _this.listviewEditor.refresh();
       _this.detailviewEditor.refresh();
       _this.customCssEditor.refresh();
       _this.customJsEditor.refresh();
     },
 
-    attachObservers_ : function(){
+    attachObservers_: function(){
       $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         $(window).trigger('resize');
         _this.refreshCodeEditors_();
@@ -508,16 +522,22 @@ var DataDirectoryForm = (function() {
       $('.tab-content').on('change', '#data-tags-fields-select, #data-chronological-fields-select, #data-reverse-chronological-fields-select, #data-sources, #data-thumbnail-fields-select, #data-browse-configurations select', function () {
         updateSelectText($(this));
       });
+
+      $(document).on('click', '.fullscreen-toggle', function(){
+        _this.toggleFullscreen();
+      })
     },
 
-    saveDataDirectoryForm_ : function(){
+    saveDataDirectoryForm_: function(){
+      _this.toggleFullscreen(false);
+
       var data = {
         source: $("#data-sources").val(),
         filter_fields: [],
         search_fields: [],
         data_fields: this.columns,
         field_types: {},
-        folderConfig : _this.folderConfig,
+        folderConfig: _this.folderConfig,
         // show_subtitle: $("#show_subtitle").is(':checked'),
         // subtitle: $("#show_subtitle").is(':checked') ? $('#directory-browse-subtitle').val() : '',
         sort_order: $('[name=sort_order]:checked').val(),
@@ -556,7 +576,7 @@ var DataDirectoryForm = (function() {
       this.directoryConfig = data;
     },
 
-    dataSourceChanged_ : function(e){
+    dataSourceChanged_: function(e){
       if ( _this.source === "" || confirm("Are you sure you want to change the data source? This will reset your previous configuration for the directory.") ) {
         $('.options').show();
         $('.nav-tabs li.disabled').removeClass('disabled');
@@ -567,7 +587,7 @@ var DataDirectoryForm = (function() {
       }
     },
 
-    showThumbOptions_ : function(e){
+    showThumbOptions_: function(e){
       if ( $(this).val() !== '' ) {
         $('.thumbs-options').addClass('show');
       } else {
@@ -576,6 +596,9 @@ var DataDirectoryForm = (function() {
     }
 
   };
+
+  // Init
+  init();
 
   return DataDirectoryForm;
 })();
