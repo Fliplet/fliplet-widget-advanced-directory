@@ -209,7 +209,7 @@ AdvancedDirectory.prototype.alphaSortByAttr = function (data, attr) {
     return data;
   }
   return data.sort( function(a,b){
-    if (!a.hasOwnProperty(attr) || !b.hasOwnProperty(attr)) {
+    if (!a[attr] || !b[attr]) {
       return 0;
     }
 
