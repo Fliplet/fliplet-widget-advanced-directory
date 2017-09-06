@@ -134,13 +134,11 @@ AdvancedDirectory.prototype.initialiseHandlebars = function(){
       return '';
     }
 
-    if (_this.config.alphabetical_fields.length !== 1) {
+    if (!_this.config.alphabetical_fields.length) {
       return '';
     }
 
-    var field = (_this.config.alphabetical_fields.length)
-      ? _this.config.alphabetical_fields[0]
-      : _this.config.alphabetical_field;
+    var field = _this.config.alphabetical_fields[0];
 
     var entryTitleTemplate = Handlebars.compile( '{{['+field+']}}' );
     if (!entryTitleTemplate(this).length) {
@@ -293,8 +291,8 @@ AdvancedDirectory.prototype.sortEntries = function(){
       if (this.config.alphabetical_fields.length === 1) {
         this.$container.find('.directory-entries').addClass('list-index-enabled');
       }
-      while (this.config.alphabetical_fields.length) {
-        listData = this.alphaSortByAttr(listData, this.config.alphabetical_fields.pop());
+      for (var i = this.config.alphabetical_fields.length-1; i >= 0; i--) {
+        listData = this.alphaSortByAttr(listData, this.config.alphabetical_fields[i]);
       }
       break;
     case 'chronological':
