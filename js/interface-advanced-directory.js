@@ -116,6 +116,14 @@ var DataDirectoryForm = (function() {
     var selectedText = $el.find('option:selected').text();
     $el.parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
   }
+  
+  funtion codeMirrorConfig(mode) {
+    return {
+      mode: mode,
+      lineNumbers: true,
+      lineWrapping: true
+    }
+  }
 
   // Constructor
   function DataDirectoryForm( configuration ) {
@@ -169,26 +177,28 @@ var DataDirectoryForm = (function() {
       this.directoryConfig.alphabetical_fields = [this.directoryConfig.alphabetical_field];
     }
 
-    this.listviewEditor = CodeMirror.fromTextArea(document.getElementById("listview-template"), {
-      mode: {name: "handlebars", base: "text/html"},
-      lineNumbers: true,
-      lineWrapping: true
-    });
-    this.detailviewEditor = CodeMirror.fromTextArea(document.getElementById("detailview-template"), {
-      mode: {name: "handlebars", base: "text/html"},
-      lineNumbers: true,
-      lineWrapping: true
-    });
-    this.customCssEditor = CodeMirror.fromTextArea(document.getElementById("custom-css"), {
-      mode: "text/css",
-      lineNumbers: true,
-      lineWrapping: true
-    });
-    this.customJsEditor = CodeMirror.fromTextArea(document.getElementById("custom-js"), {
-      mode: "text/javascript",
-      lineNumbers: true,
-      lineWrapping: true
-    });
+    this.listviewEditor = CodeMirror.fromTextArea(
+      document.getElementById('listview-template'),
+      codeMirrorConfig({
+        name: 'handlebars',
+        base: 'text/html'
+      })
+    );
+    this.detailviewEditor = CodeMirror.fromTextArea(
+      document.getElementById('detailview-template'),
+      codeMirrorConfig({
+        name: 'handlebars',
+        base: 'text/html'
+      })
+    );
+    this.customCssEditor = CodeMirror.fromTextArea(
+      document.getElementById('custom-css'),
+      codeMirrorConfig('text/css')
+    );
+    this.customJsEditor = CodeMirror.fromTextArea(
+      document.getElementById('custom-js'),
+      codeMirrorConfig('text/javascript')
+    );
 
     this.initialiseHandlebars();
     this.parseSelectedTable(this.source);
