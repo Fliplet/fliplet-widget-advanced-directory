@@ -116,6 +116,17 @@ var DataDirectoryForm = (function() {
     var selectedText = $el.find('option:selected').text();
     $el.parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
   }
+  
+  function codeMirrorConfig(mode) {
+    return {
+      mode: mode,
+      lineNumbers: true,
+      lineWrapping: true,
+      autoRefresh: true,
+      tabSize: 2,
+      matchBrackets: true
+    }
+  }
 
   // Constructor
   function DataDirectoryForm( configuration ) {
@@ -131,7 +142,7 @@ var DataDirectoryForm = (function() {
     }
     delete configuration.dataSources;
 
-    this.directoryConfig = $.extend( {
+    this.directoryConfig = $.extend({
       sort_order: 'alphabetical',
       alphabetical_field: '',
       alphabetical_fields: [],
@@ -169,26 +180,28 @@ var DataDirectoryForm = (function() {
       this.directoryConfig.alphabetical_fields = [this.directoryConfig.alphabetical_field];
     }
 
-    this.listviewEditor = CodeMirror.fromTextArea(document.getElementById("listview-template"), {
-      mode: {name: "handlebars", base: "text/html"},
-      lineNumbers: true,
-      lineWrapping: true
-    });
-    this.detailviewEditor = CodeMirror.fromTextArea(document.getElementById("detailview-template"), {
-      mode: {name: "handlebars", base: "text/html"},
-      lineNumbers: true,
-      lineWrapping: true
-    });
-    this.customCssEditor = CodeMirror.fromTextArea(document.getElementById("custom-css"), {
-      mode: "text/css",
-      lineNumbers: true,
-      lineWrapping: true
-    });
-    this.customJsEditor = CodeMirror.fromTextArea(document.getElementById("custom-js"), {
-      mode: "text/javascript",
-      lineNumbers: true,
-      lineWrapping: true
-    });
+    this.listviewEditor = CodeMirror.fromTextArea(
+      document.getElementById('listview-template'),
+      codeMirrorConfig({
+        name: 'handlebars',
+        base: 'text/html'
+      })
+    );
+    this.detailviewEditor = CodeMirror.fromTextArea(
+      document.getElementById('detailview-template'),
+      codeMirrorConfig({
+        name: 'handlebars',
+        base: 'text/html'
+      })
+    );
+    this.customCssEditor = CodeMirror.fromTextArea(
+      document.getElementById('custom-css'),
+      codeMirrorConfig('text/css')
+    );
+    this.customJsEditor = CodeMirror.fromTextArea(
+      document.getElementById('custom-js'),
+      codeMirrorConfig('text/javascript')
+    );
 
     this.initialiseHandlebars();
     this.parseSelectedTable(this.source);
@@ -201,14 +214,23 @@ var DataDirectoryForm = (function() {
     constructor: DataDirectoryForm,
 
     initialiseHandlebars: function(){
-      Handlebars.registerHelper("select", function(value, options){
+      Handlebars.registerHelper('select', function(value, options){
         var $el = $('<select />').html( options.fn(this) );
         $el.find('[value="' + value + '"]').attr('selected', true);
         return $el.html();
       });
 
-      Handlebars.registerHelper("filterCheckbox", function(field){
-        var $input = $("<div class='checkbox checkbox-icon'><input data-field='"+field+"' data-type='filter' type='checkbox' id='filter_"+field+"'><label for='filter_"+field+"'><span class='check'><i class='fa fa-check'></i></span></label></div>");
+      Handlebars.registerHelper('filterCheckbox', function(field){
+        var $input = $([
+          '<div class="checkbox checkbox-icon"><input data-field="',
+          field,
+          '" data-type="filter" type="checkbox" id="filter_',
+          field,
+          '">',
+          '<label for="filter_',
+          field,
+          '"><span class="check"><i class="fa fa-check"></i></span></label></div>'
+        ].join(''));
 
         if ( _this.directoryConfig.filter_fields.indexOf(field) > -1 ) {
           $input.find('input').attr('checked',true);
@@ -218,7 +240,16 @@ var DataDirectoryForm = (function() {
       });
 
       Handlebars.registerHelper("searchCheckbox", function(field){
-        var $input = $("<div class='checkbox checkbox-icon'><input data-field='"+field+"' data-type='search' type='checkbox' id='search_"+field+"'><label for='search_"+field+"'><span class='check'><i class='fa fa-check'></i></span></label></div>");
+        var $input = $([
+          '<div class="checkbox checkbox-icon"><input data-field="',
+          field,
+          '" data-type="search" type="checkbox" id="search_',
+          field,
+          '">',
+          '<label for="search_',
+          field,
+          '"><span class="check"><i class="fa fa-check"></i></span></label></div>'
+        ].join(''));
 
         if ( _this.directoryConfig.search_fields.indexOf(field) > -1 ) {
           $input.find('input').attr('checked',true);
@@ -227,7 +258,7 @@ var DataDirectoryForm = (function() {
         return $input[0].outerHTML;
       });
 
-      Handlebars.registerHelper("typeSelector", function(field){
+      Handlebars.registerHelper('typeSelector', function(field){
         var typeSelectorTemplate = Fliplet.Widget.Templates['interface.dataTypeSelector']({ 'field': field });
 
         var fieldType = 'text';
@@ -533,7 +564,7 @@ var DataDirectoryForm = (function() {
       _this.toggleFullscreen(false);
 
       var data = {
-        source: $("#data-sources").val(),
+        source: $('#data-sources').val(),
         filter_fields: [],
         search_fields: [],
         data_fields: this.columns,
@@ -578,7 +609,7 @@ var DataDirectoryForm = (function() {
     },
 
     dataSourceChanged_: function(e){
-      if ( _this.source === "" || confirm("Are you sure you want to change the data source? This will reset your previous configuration for the directory.") ) {
+      if ( _this.source === '' || confirm('Are you sure you want to change the data source? This will reset your previous configuration for the directory.') ) {
         $('.options').show();
         $('.nav-tabs li.disabled').removeClass('disabled');
         _this.parseSelectedTable( $(e.target).val(), true );
