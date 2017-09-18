@@ -117,7 +117,7 @@ var DataDirectoryForm = (function() {
     $el.parents('.select-proxy-display').find('.select-value-proxy').html(selectedText);
   }
   
-  funtion codeMirrorConfig(mode) {
+  function codeMirrorConfig(mode) {
     return {
       mode: mode,
       lineNumbers: true,
