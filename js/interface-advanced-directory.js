@@ -121,7 +121,10 @@ var DataDirectoryForm = (function() {
     return {
       mode: mode,
       lineNumbers: true,
-      lineWrapping: true
+      lineWrapping: true,
+      autoRefresh: true,
+      tabSize: 2,
+      matchBrackets: true
     }
   }
 
