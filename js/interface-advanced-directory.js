@@ -279,7 +279,6 @@ var DataDirectoryForm = (function() {
           if ( _this.tables[i].hasOwnProperty('id') && _this.tables[i].id == tableID ) {
             _this.source = _this.tables[i].id;
             _this.columns = _this.tables[i].columns;
-            _this.rows = _this.tables[i].rows;
 
             if (!autoConfigure) {
               return;
@@ -603,7 +602,7 @@ var DataDirectoryForm = (function() {
       });
       data.field_types = JSON.stringify(data.field_types);
 
-      data.rows = this.rows;
+      data.rows = [];
 
       this.directoryConfig = data;
     },
