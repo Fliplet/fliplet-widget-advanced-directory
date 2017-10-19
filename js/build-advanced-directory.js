@@ -260,7 +260,7 @@ AdvancedDirectory.prototype.renderDirectory = function(){
 
 AdvancedDirectory.prototype.verifyFields = function(fieldConfig){
   if ( !this.config.hasOwnProperty(fieldConfig)
-    || this.config[fieldConfig].constructor.name !== 'Array' ) return;
+    || !Array.isArray(this.config[fieldConfig]) ) return;
 
   var arr = [];
   for ( var i = 0, l = this.config[fieldConfig].length; i < l; i++ ) {
