@@ -32,25 +32,18 @@ Fliplet().then(function () {
                 return source.find();
               })
               .then(function (rows) {
-                // Find out when the source was last updated
-                _.each(rows, function(row){
-                  sourceUpdatedAt = Math.max(sourceUpdatedAt, new Date(row.updatedAt).getTime());
+                dataDirectory[id].data = rows.map(function (row) {
+                  row.data.dataSourceEntryId = row.id;
+                  return row.data;
                 });
 
-                if (sourceUpdatedAt > cachedSource.updatedAt) {
-                  dataDirectory[id].data = rows.map(function (row) {
-                    row.data.dataSourceEntryId = row.id;
-                    return row.data;
-                  });
+                Fliplet.Storage.set(pvKey, {
+                  rows: dataDirectory[id].data,
+                  updatedAt: new Date().getTime()
+                });
 
-                  Fliplet.Storage.set(pvKey, {
-                    rows: dataDirectory[id].data,
-                    updatedAt: new Date().getTime()
-                  });
-
-                  dataDirectory[id].trigger('flDirectoryBeforeInit');
-                  dataDirectory[id].refreshDirectory();
-                }
+                dataDirectory[id].trigger('flDirectoryBeforeInit');
+                dataDirectory[id].refreshDirectory();
               });
           }
         });
