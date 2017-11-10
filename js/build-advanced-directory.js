@@ -353,7 +353,7 @@ AdvancedDirectory.prototype.renderIndexList = function(){
 AdvancedDirectory.prototype.scrollToLetter = function(letter){
   var scrollToEl = $('.divider[data-letter="' + letter + '"]');
   if (!scrollToEl.length) return;
-  var scrollTop = scrollToEl.offset().top + this.$container.find('.directory-entries').scrollTop() - this.searchBarHeight - this.navHeight;
+  var scrollTop = scrollToEl.offset().top + this.$container.find('.directory-entries ul').scrollTop() - this.searchBarHeight - this.navHeight;
   this.$container.find('.directory-entries ul')[0].scrollTop = scrollTop;
   this.flViewportRedraw();
 };
