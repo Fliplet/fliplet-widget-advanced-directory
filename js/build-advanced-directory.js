@@ -336,25 +336,25 @@ AdvancedDirectory.prototype.renderListView = function(){
 };
 
 AdvancedDirectory.prototype.renderIndexList = function(){
-  if ( this.config.sort_order !== 'alphabetical' ) return;
+  if (!this.config.sort_order) return;
 
   var $listIndex = this.$container.find('.directory-entries + .list-index');
   $listIndex.html('');
-  this.$container.find('.directory-entries .divider').each(function(){
+  this.$container.find('.directory-entries .divider').each(function() {
     var letter = $(this).text();
     $listIndex.append('<span data-letter="' + letter + '">' + letter + '</span>');
   });
 
-  $(document).on(  'touchstart mousedown', '.list-index span', $.proxy( this.listIndexTouchStart, this ) )
-    .on( 'touchmove  mousemove', '.list-index span', $.proxy( this.listIndexTouchMove , this ) )
-    .on( 'touchend   mouseup'  , '.list-index span', $.proxy( this.listIndexTouchEnd  , this ) );
+  $(document).on('touchstart mousedown', '.list-index span', $.proxy(this.listIndexTouchStart, this))
+    .on('touchmove  mousemove', '.list-index span', $.proxy(this.listIndexTouchMove, this))
+    .on('touchend   mouseup', '.list-index span', $.proxy(this.listIndexTouchEnd, this))
 };
 
 AdvancedDirectory.prototype.scrollToLetter = function(letter){
   var scrollToEl = $('.divider[data-letter="' + letter + '"]');
   if (!scrollToEl.length) return;
   var scrollTop = scrollToEl.offset().top + this.$container.find('.directory-entries').scrollTop() - this.searchBarHeight - this.navHeight;
-  this.$container.find('.directory-entries')[0].scrollTop = scrollTop;
+  this.$container.find('.directory-entries ul')[0].scrollTop = scrollTop;
   this.flViewportRedraw();
 };
 
