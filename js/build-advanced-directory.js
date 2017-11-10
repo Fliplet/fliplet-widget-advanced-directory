@@ -336,18 +336,18 @@ AdvancedDirectory.prototype.renderListView = function(){
 };
 
 AdvancedDirectory.prototype.renderIndexList = function(){
-  if ( this.config.sort_order !== 'alphabetical' ) return;
+  if (!this.config.sort_order) return;
 
   var $listIndex = this.$container.find('.directory-entries + .list-index');
   $listIndex.html('');
-  this.$container.find('.directory-entries .divider').each(function(){
+  this.$container.find('.directory-entries .divider').each(function() {
     var letter = $(this).text();
     $listIndex.append('<span data-letter="' + letter + '">' + letter + '</span>');
   });
 
-  $(document).on(  'touchstart mousedown', '.list-index span', $.proxy( this.listIndexTouchStart, this ) )
-    .on( 'touchmove  mousemove', '.list-index span', $.proxy( this.listIndexTouchMove , this ) )
-    .on( 'touchend   mouseup'  , '.list-index span', $.proxy( this.listIndexTouchEnd  , this ) );
+  $(document).on('touchstart mousedown', '.list-index span', $.proxy(this.listIndexTouchStart, this))
+    .on('touchmove  mousemove', '.list-index span', $.proxy(this.listIndexTouchMove, this))
+    .on('touchend   mouseup', '.list-index span', $.proxy(this.listIndexTouchEnd, this))
 };
 
 AdvancedDirectory.prototype.scrollToLetter = function(letter){
