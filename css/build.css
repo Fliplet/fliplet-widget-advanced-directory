@@ -69,8 +69,9 @@
 
 .directory-details ul,
 .overlay-directory ul {
-  padding: 0 0 0 15px;
+  padding: 0;
   margin: 0;
+  list-style: none;
 }
 @media screen and (min-width: 640px) {
   .fl-with-top-menu .directory-wrapper {
@@ -94,7 +95,7 @@
 
 .directory-details li,
 .overlay-directory .overlayPanel li {
-  list-style: initial;
+  list-style: none;
 }
 
 .directory-list li.linked,
@@ -253,6 +254,11 @@
 .directory-list li:first-child {
   border-top: none;
 }
+
+.directory-list .search-result li.divider + li {
+  border-top: 1px solid rgba(51,51,51,0.2);
+}
+
 @media screen and (min-width:640px) {
   .directory-entries li.active,
   .search-result li.active {
