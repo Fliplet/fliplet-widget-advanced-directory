@@ -7,7 +7,12 @@ Fliplet.DataSources.get({ type: null })
     return Promise.all(dataSources.map(function (dataSource) {
       return Fliplet.DataSources.connect(dataSource.id)
         .then(function (source) {
-          return source.find();
+          return source.find()
+            .catch(function() {
+              // Quick fix while we don't remove rows from the advanced directory
+              // Data Sources with security enabled will fail to get the rows
+              return Promise.resolve([]);
+            });;
         })
         .then(function (rows) {
           dataSource.rows = rows.map(function (row) {
