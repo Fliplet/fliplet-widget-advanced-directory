@@ -366,8 +366,8 @@ var DataDirectoryForm = (function() {
 
     manageAppData: function() {
       console.log('TODO');
+      var dataSourceId = $dataSources.val();
       // @TODO:
-      // Get data source ID
       // Open overlay to data sources provider with ID
     },
 
