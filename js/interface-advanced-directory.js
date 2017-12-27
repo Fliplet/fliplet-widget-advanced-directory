@@ -10,6 +10,7 @@ var DataDirectoryForm = (function() {
   var apps;
   var organizations;
   var _this;
+  var $dataSources = $('#data-sources');
 
 
   function addFolder(folder) {
@@ -294,7 +295,6 @@ var DataDirectoryForm = (function() {
     },
 
     loadDataDirectoryForm: function(){
-      var $dataSources = $('#data-sources');
       $dataSources.prop('disabled',false).html(Fliplet.Widget.Templates['interface.dataSourceOptions'](_this.tables));
       updateSelectText($dataSources);
       $('#data-alphabetical-fields').html(Fliplet.Widget.Templates['interface.dataFieldTokenField']({
@@ -342,6 +342,29 @@ var DataDirectoryForm = (function() {
       $('.options').show();
       $('.options-no-columns').hide();
       $('.nav-tabs li#main-list-control').removeClass('disabled');
+    },
+
+    createDataSource: function() {
+      event.preventDefault();
+      var name = prompt('Please type a name for your data source:');
+
+      if (!name) {
+        return;
+      }
+
+      Fliplet.DataSources.create({
+        name: name,
+        organizationId: Fliplet.Env.get('organizationId')
+      }).then(function(ds) {
+        _this.tables.push(ds);
+        $dataSources.append('<option value="' + ds.id + '">' + ds.name + '</option>');
+        $dataSources.val(ds.id).trigger('change');
+      });
+    },
+
+    manageAppData: function() {
+      console.log('TODO');
+      // @TODO: Open overlay to data sources provider
     },
 
     autoConfigureSearch: function(){
@@ -547,6 +570,8 @@ var DataDirectoryForm = (function() {
       $(document).on( "click", "#save-link", _this.saveDataDirectoryForm_ );
       $('#data-sources').on( 'change', $.proxy(_this.dataSourceChanged_,this) );
       // $('#data-source-tab').on( 'change', '#data-thumbnail-fields-select', _this.showThumbOptions_);
+      $('.create-data-source').on('click', _this.createDataSource);
+      $('#manage-data').on('click', _this.manageAppData);
       $('.nav.nav-stacked').on( 'click', 'li.disabled', function(){
         return false;
       } );
