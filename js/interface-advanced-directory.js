@@ -10,6 +10,7 @@ var DataDirectoryForm = (function() {
   var apps;
   var organizations;
   var _this;
+  var $dataSources = $('#data-sources');
 
 
   function addFolder(folder) {
@@ -293,8 +294,15 @@ var DataDirectoryForm = (function() {
       }
     },
 
+    reloadTables: function() {
+      return Fliplet.DataSources.get({
+          type: null
+        }, {
+          cache: false
+        });
+    },
+
     loadDataDirectoryForm: function(){
-      var $dataSources = $('#data-sources');
       $dataSources.prop('disabled',false).html(Fliplet.Widget.Templates['interface.dataSourceOptions'](_this.tables));
       updateSelectText($dataSources);
       $('#data-alphabetical-fields').html(Fliplet.Widget.Templates['interface.dataFieldTokenField']({
@@ -333,6 +341,7 @@ var DataDirectoryForm = (function() {
 
       if (!_this.columns || !_this.columns.length) {
         $('.options').hide();
+        $('#manage-data').addClass('hidden');
         if (_this.source) {
           $('.options-no-columns').show();
         }
@@ -340,8 +349,40 @@ var DataDirectoryForm = (function() {
         return;
       }
       $('.options').show();
+      $('#manage-data').removeClass('hidden');
       $('.options-no-columns').hide();
       $('.nav-tabs li#main-list-control').removeClass('disabled');
+    },
+
+    createDataSource: function() {
+      event.preventDefault();
+      var name = prompt('Please type a name for your data source:');
+
+      if (!name) {
+        return;
+      }
+
+      Fliplet.DataSources.create({
+        name: name,
+        organizationId: Fliplet.Env.get('organizationId')
+      }).then(function(ds) {
+        _this.tables.push(ds);
+        $dataSources.append('<option value="' + ds.id + '">' + ds.name + '</option>');
+        $dataSources.val(ds.id).trigger('change');
+      });
+    },
+
+    manageAppData: function() {
+      var dataSourceId = $dataSources.val();
+      Fliplet.Studio.emit('overlay', {
+        name: 'widget',
+        options: {
+          size: 'large',
+          package: 'com.fliplet.data-sources',
+          title: 'Edit Data Sources',
+          data: { dataSourceId: dataSourceId }
+        }
+      });
     },
 
     autoConfigureSearch: function(){
@@ -547,6 +588,8 @@ var DataDirectoryForm = (function() {
       $(document).on( "click", "#save-link", _this.saveDataDirectoryForm_ );
       $('#data-sources').on( 'change', $.proxy(_this.dataSourceChanged_,this) );
       // $('#data-source-tab').on( 'change', '#data-thumbnail-fields-select', _this.showThumbOptions_);
+      $('.create-data-source').on('click', _this.createDataSource);
+      $('#manage-data').on('click', _this.manageAppData);
       $('.nav.nav-stacked').on( 'click', 'li.disabled', function(){
         return false;
       } );
@@ -558,6 +601,15 @@ var DataDirectoryForm = (function() {
       $(document).on('click', '.fullscreen-toggle', function(){
         _this.toggleFullscreen();
       })
+
+      Fliplet.Studio.onMessage(function(event) {
+        if (event.data && event.data.event === 'overlay-close') {
+          _this.reloadTables().then(function(dataSources) {
+            _this.tables = dataSources;
+            _this.dataSourceChanged_(event);
+          });
+        }
+      });
     },
 
     saveDataDirectoryForm_: function(){
@@ -609,6 +661,13 @@ var DataDirectoryForm = (function() {
     },
 
     dataSourceChanged_: function(e){
+      if (e.data && e.data.event === 'overlay-close') {
+        _this.parseSelectedTable(e.data.data.dataSourceId, true);
+        _this.loadDataDirectoryForm();
+
+        return;
+      }
+
       if ( _this.source === '' || confirm('Are you sure you want to change the data source? This will reset your previous configuration for the directory.') ) {
         $('.options').show();
         $('.nav-tabs li.disabled').removeClass('disabled');

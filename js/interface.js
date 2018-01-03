@@ -2,7 +2,11 @@ var widgetId = Fliplet.Widget.getDefaultId();
 var data = Fliplet.Widget.getData(widgetId) || {};
 var dataDirectoryForm;
 
-Fliplet.DataSources.get({ type: null })
+Fliplet.DataSources.get({
+    type: null
+  }, {
+    cache: false
+  })
   .then(function (dataSources) {
     return Promise.all(dataSources.map(function (dataSource) {
       return Fliplet.DataSources.connect(dataSource.id)

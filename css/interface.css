@@ -10,6 +10,11 @@
   cursor: pointer;
 }
 
+#manage-data {
+  width: 100%;
+  margin-top: 10px;
+}
+
 textarea.form-control {
   line-height: 1;
 }
