@@ -355,10 +355,16 @@ var DataDirectoryForm = (function() {
     },
 
     createDataSource: function() {
-      event.preventDefault();
       var name = prompt('Please type a name for your data source:');
 
-      if (!name) {
+      if (name === null) {
+        $dataSources.val(_this.source);
+        return;
+      }
+
+      if (name === '') {
+        $dataSources.val(_this.source);
+        alert('You must enter a data source name');
         return;
       }
 
@@ -380,7 +386,11 @@ var DataDirectoryForm = (function() {
           size: 'large',
           package: 'com.fliplet.data-sources',
           title: 'Edit Data Sources',
-          data: { dataSourceId: dataSourceId }
+          dclasses: 'data-source-overlay',
+          data: {
+            context: 'overlay',
+            dataSourceId: dataSourceId
+          }
         }
       });
     },
@@ -588,8 +598,7 @@ var DataDirectoryForm = (function() {
       $(document).on( "click", "#save-link", _this.saveDataDirectoryForm_ );
       $('#data-sources').on( 'change', $.proxy(_this.dataSourceChanged_,this) );
       // $('#data-source-tab').on( 'change', '#data-thumbnail-fields-select', _this.showThumbOptions_);
-      $('.create-data-source').on('click', _this.createDataSource);
-      $('#manage-data').on('click', _this.manageAppData);
+      $('#manage-data a').on('click', _this.manageAppData);
       $('.nav.nav-stacked').on( 'click', 'li.disabled', function(){
         return false;
       } );
@@ -668,13 +677,18 @@ var DataDirectoryForm = (function() {
         return;
       }
 
+      if (e.target.value === 'new') {
+        _this.createDataSource();
+        return;
+      }
+
       if ( _this.source === '' || confirm('Are you sure you want to change the data source? This will reset your previous configuration for the directory.') ) {
         $('.options').show();
         $('.nav-tabs li.disabled').removeClass('disabled');
         _this.parseSelectedTable( $(e.target).val(), true );
         _this.loadDataDirectoryForm();
       } else {
-        _this.source;
+        $dataSources.val(_this.source);
       }
     },
 
