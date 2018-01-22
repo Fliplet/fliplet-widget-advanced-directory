@@ -228,12 +228,6 @@
   width: 66.667%;
 }
 
-@media screen and (min-width: 640px) {
-  body.fl-minimal-padding .directory-details {
-    padding-bottom: 70px;
-  }
-}
-
 @media screen and (max-width:639px) {
   .directory-details {
     display: none;
@@ -428,10 +422,8 @@ body.fl-minimal-padding .directory-filters {
   padding-top: 44px;
 }
 
-@media screen and (max-width: 639px) {
-  body.fl-minimal-padding .directory-entries {
-    padding-bottom: 44px;
-  }
+body.fl-minimal-padding .directory-entries {
+  padding-bottom: 44px;
 }
 
 [data-directory][data-mode="search-result"] .directory-entries,
