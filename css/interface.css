@@ -32,6 +32,10 @@ table .select-proxy-display .icon {
   font-size: 14px;
 }
 
+table .select-proxy-display>.hidden-select {
+  padding-right: 20px;
+}
+
 .checkbox .select-holder,
 .radio .select-holder {
   padding-left: 25px;
