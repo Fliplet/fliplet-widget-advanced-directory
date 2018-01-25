@@ -303,6 +303,16 @@ var DataDirectoryForm = (function() {
     },
 
     loadDataDirectoryForm: function(){
+      var chronologicalFieldsTemplate = Fliplet.Widget.Templates['interface.dataFieldSelect']({
+        fields: _this.columns,
+        name: 'chronological_field',
+        id: 'data-chronological-fields-select'
+      });
+      var reverseChronologicalFieldsTemplate = Fliplet.Widget.Templates['interface.dataFieldSelect']({
+        fields: _this.columns,
+        name: 'reverse_chronological_field',
+        id: 'data-reverse-chronological-fields-select'
+      });
       $dataSources.prop('disabled',false).html(Fliplet.Widget.Templates['interface.dataSourceOptions'](_this.tables));
       updateSelectText($dataSources);
       $('#data-alphabetical-fields').html(Fliplet.Widget.Templates['interface.dataFieldTokenField']({
@@ -316,16 +326,10 @@ var DataDirectoryForm = (function() {
         },
         showAutocompleteOnFocus: true
       });
-      $('#data-chronological-fields').replaceWith(Fliplet.Widget.Templates['interface.dataFieldSelect']({
-        fields: _this.columns,
-        name: 'chronological_field',
-        id: 'data-chronological-fields-select'
-      }));
-      $('#data-reverse-chronological-fields').replaceWith(Fliplet.Widget.Templates['interface.dataFieldSelect']({
-        fields: _this.columns,
-        name: 'reverse_chronological_field',
-        id: 'data-reverse-chronological-fields-select'
-      }));
+      $('[name="chronological_field"]').remove();
+      $('#data-chronological-fields').prepend(chronologicalFieldsTemplate);
+      $('[name="reverse_chronological_field"]').remove();
+      $('#data-reverse-chronological-fields').prepend(reverseChronologicalFieldsTemplate);
       // $('#data-tags-fields').html(Fliplet.Widget.Templates['interface.dataTagsField'](_this.columns));
       // $('#data-thumbnail-fields').html(Fliplet.Widget.Templates['interface.dataThumbnailField'](_this.columns));
 
