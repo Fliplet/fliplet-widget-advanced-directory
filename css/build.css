@@ -6,7 +6,8 @@
 .directory-details,
 .directory-list,
 [data-directory],
-[data-directory] > .row {
+[data-directory] > .row,
+.mode-interact [data-fl-edit] {
   height: 100%;
 }
 
