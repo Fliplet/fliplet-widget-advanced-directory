@@ -34,7 +34,8 @@ table .select-proxy-display .icon {
 
 .checkbox .select-holder,
 .radio .select-holder {
-  padding-left: 30px;
+  padding-left: 25px;
+  margin-top: 8px;
   display: none;
 }
 
