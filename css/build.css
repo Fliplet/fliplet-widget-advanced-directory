@@ -30,6 +30,8 @@
 
 .fl-bar-padding .directory-wrapper {
   bottom: 44px;
+  bottom: calc(constant(safe-area-inset-bottom) + 44px);
+  bottom: calc(env(safe-area-inset-bottom) + 44px);
 }
 
 .fl-with-top-menu .directory-wrapper {
@@ -430,17 +432,23 @@ body.fl-minimal-padding .directory-filters {
   color: #2177D4;
 }
 
-.directory-filters + .directory-entries {
+.directory-filters+.directory-entries {
   padding-top: 44px;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .fl-minimal-padding .directory-entries {
   padding-bottom: 44px;
+  padding-bottom: calc(constant(safe-area-inset-bottom) + 44px);
+  padding-bottom: calc(env(safe-area-inset-bottom) + 44px);
 }
 
 .fl-minimal-padding.fl-menu-circle-left .directory-entries,
 .fl-minimal-padding.fl-menu-circle-right .directory-entries {
   padding-bottom: 80px;
+  padding-bottom: calc(constant(safe-area-inset-bottom) + 80px);
+  padding-bottom: calc(env(safe-area-inset-bottom) + 80px);
 }
 
 @media screen and (min-width: 640px) {
