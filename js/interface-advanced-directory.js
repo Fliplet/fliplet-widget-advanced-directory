@@ -155,9 +155,7 @@ var DataDirectoryForm = (function() {
       field_types: {},
       folderConfig: {},
       listviewTemplate: '',
-      detailviewTemplate: '',
-      customCss: '',
-      customJs: ''
+      detailviewTemplate: ''
     }, configuration);
     if ( typeof this.directoryConfig.field_types === 'string' && this.directoryConfig.field_types.length ) {
       this.directoryConfig.field_types = JSON.parse(this.directoryConfig.field_types);
@@ -194,14 +192,6 @@ var DataDirectoryForm = (function() {
         name: 'handlebars',
         base: 'text/html'
       })
-    );
-    this.customCssEditor = CodeMirror.fromTextArea(
-      document.getElementById('custom-css'),
-      codeMirrorConfig('text/css')
-    );
-    this.customJsEditor = CodeMirror.fromTextArea(
-      document.getElementById('custom-js'),
-      codeMirrorConfig('text/javascript')
     );
 
     this.initialiseHandlebars();
@@ -461,8 +451,6 @@ var DataDirectoryForm = (function() {
 
       _this.listviewEditor.getDoc().setValue(_this.directoryConfig.listviewTemplate);
       _this.detailviewEditor.getDoc().setValue(_this.directoryConfig.detailviewTemplate);
-      _this.customCssEditor.getDoc().setValue(_this.directoryConfig.customCss);
-      _this.customJsEditor.getDoc().setValue(_this.directoryConfig.customJs);
 
       setTimeout(_this.refreshCodeEditors_, 0);
     },
@@ -470,8 +458,6 @@ var DataDirectoryForm = (function() {
     refreshCodeEditors_: function(){
       _this.listviewEditor.refresh();
       _this.detailviewEditor.refresh();
-      _this.customCssEditor.refresh();
-      _this.customJsEditor.refresh();
     },
 
     attachObservers_: function(){
@@ -650,9 +636,7 @@ var DataDirectoryForm = (function() {
         // show_thumb_detail: ($('[name=enable_thumb_details]:checked').val() === "show" ? true : false),
         enable_live_data: ($('#enable_live_data:checked').val() === "on" ? true : false),
         listviewTemplate: _this.listviewEditor.getValue(),
-        detailviewTemplate: _this.detailviewEditor.getValue(),
-        customCss: _this.customCssEditor.getValue(),
-        customJs: _this.customJsEditor.getValue()
+        detailviewTemplate: _this.detailviewEditor.getValue()
       };
 
       $('[data-type="filter"]:checked').each(function(){
