@@ -711,9 +711,12 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
     $container = this.$searchResultsContainer;
   }
   var $listEntry = this.$container.find('[data-type="' + type + '"][data-index="' + entryIndex + '"]');
+  var $entrytitle = this.$container.find('li[data-type="' + type + '"][data-index=' + entryIndex + '] .list-title');
+  var title = $entrytitle.text().trim();
 
   var dataArr = (type === 'search-result-entry') ? _this.searchResultData : _this.data;
   var detailData = {
+    title: title,
     has_thumbnail : this.config.show_thumb_detail ? this.config.show_thumb_detail : false,
     data: dataArr[entryIndex]['dataSourceEntryId'] || '',
     fields: dataArr[entryIndex]
@@ -745,14 +748,14 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
     $('.directory-detail-value a').not('.data-linked').on('click', function(e){
       if ($(e.target).attr('href').indexOf('mailto') === 0) {
         // Analytics - Track Event
-        Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_email', title: '' });
+        Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_email', title: title });
 
       } else if ($(e.target).attr('href').indexOf('tel') === 0) {
         // Analytics - Track Event
-        Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_phone', title: '' });
+        Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_phone', title: title });
       } else {
         // Analytics - Track Event
-        Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_email', title: '' });
+        Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_email', title: title });
       }
     });
     $('.directory-detail-value a.data-linked').on('click', function(e){
@@ -796,7 +799,7 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
 
   // Analytics - Track Event
   if (trackEvent) {
-    Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_open', title: '' });
+    Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_open', title: title });
   }
 };
 
