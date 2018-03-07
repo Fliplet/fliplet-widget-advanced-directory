@@ -275,8 +275,7 @@
 }
 
 @media screen and (min-width:640px) {
-  .directory-entries li.active,
-  .search-result li.active {
+  .directory-list li.active {
     margin-left: 0;
     padding-left: 10px;
     border-top: none;
@@ -284,13 +283,11 @@
     color: #FFF;
   }
 
-  .directory-entries li.active + li,
-  .search-result li.active + li {
+  .directory-list li.active + li {
     border-top: none;
   }
 
-  .directory-list .list-default ul > li.active .icon,
-  .search-result .list-default ul > li.active .icon {
+  .directory-list .list-default ul > li.active .icon {
     color: #FFF;
   }
 }
@@ -303,6 +300,7 @@
 .directory-screen {
   display: none;
 }
+
 @media screen and (min-width:640px) {
   .directory-screen {
     display: block;
