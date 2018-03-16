@@ -212,7 +212,7 @@ AdvancedDirectory.prototype.alphaSortByAttr = function (data, attr) {
   attr = attr || '';
   return _.sortBy(data, function (obj) {
     obj[attr] = obj[attr] || '';
-    return obj[attr].toString.toUpperCase();
+    return obj[attr].toString().toUpperCase();
   });
 }
 
