@@ -149,7 +149,7 @@ AdvancedDirectory.prototype.initialiseHandlebars = function(){
     } else {
       firstCharacterOfTitle = entryTitleTemplate(this)[0].toString().toUpperCase();
 
-      if (!firstCharacterOfTitle.match(/[A-z]/)) {
+      if (!firstCharacterOfTitle.match(/[A-Za-z]/)) {
         firstCharacterOfTitle = '#';
       }
     }
@@ -222,7 +222,7 @@ AdvancedDirectory.prototype.alphaSortByAttr = function (data, attr) {
       var value = obj[attr].toString().toUpperCase();
       // Push all non-alphabetical values to after the 'z' character
       // based on Unicode values
-      return value.match(/[A-z]/)
+      return value.match(/[A-Za-z]/)
         ? value
         : '{' + value;
   });
