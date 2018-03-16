@@ -142,7 +142,7 @@ AdvancedDirectory.prototype.initialiseHandlebars = function(){
 
     var entryTitleTemplate = Handlebars.compile( '{{['+field+']}}' );
     if (!entryTitleTemplate(this).length) {
-      return '';
+      return '#';
     }
     var firstCharacterOfTitle = entryTitleTemplate(this)[0].toString().toUpperCase();
     if ( '1234567890'.indexOf(firstCharacterOfTitle) > -1 ) firstCharacterOfTitle = '#';
@@ -208,17 +208,12 @@ AdvancedDirectory.prototype.alphaSortByAttr = function (data, attr) {
   if (!Array.isArray(data)) {
     return data;
   }
-  return data.sort( function(a,b){
-    if (!a[attr] || !b[attr]) {
-      return 0;
-    }
 
-    if (a[attr].toString().toUpperCase() < b[attr].toString().toUpperCase())
-      return -1;
-    if (a[attr].toString().toUpperCase() > b[attr].toString().toUpperCase())
-      return 1;
-    return 0;
-  } );
+  attr = attr || '';
+  return _.sortBy(data, function (obj) {
+    obj[attr] = obj[attr] || '';
+    return obj[attr].toString.toUpperCase();
+  });
 }
 
 AdvancedDirectory.prototype.init = function() {
