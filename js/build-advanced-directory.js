@@ -141,11 +141,19 @@ AdvancedDirectory.prototype.initialiseHandlebars = function(){
     var field = _this.config.alphabetical_fields[0];
 
     var entryTitleTemplate = Handlebars.compile( '{{['+field+']}}' );
+    var firstCharacterOfTitle;
+
     if (!entryTitleTemplate(this).length) {
-      return '';
+      // Empty values are sorted with all other non-alphbetical values
+      firstCharacterOfTitle = '#';
+    } else {
+      firstCharacterOfTitle = entryTitleTemplate(this)[0].toString().toUpperCase();
+
+      if (!firstCharacterOfTitle.match(/[A-Za-z]/)) {
+        firstCharacterOfTitle = '#';
+      }
     }
-    var firstCharacterOfTitle = entryTitleTemplate(this)[0].toString().toUpperCase();
-    if ( '1234567890'.indexOf(firstCharacterOfTitle) > -1 ) firstCharacterOfTitle = '#';
+
     if ( firstCharacterOfTitle !== lastAlphabetIndex ) {
       lastAlphabetIndex = firstCharacterOfTitle;
       return Fliplet.Widget.Templates['build.listViewDivider'](firstCharacterOfTitle);
@@ -208,17 +216,16 @@ AdvancedDirectory.prototype.alphaSortByAttr = function (data, attr) {
   if (!Array.isArray(data)) {
     return data;
   }
-  return data.sort( function(a,b){
-    if (!a[attr] || !b[attr]) {
-      return 0;
-    }
-
-    if (a[attr].toString().toUpperCase() < b[attr].toString().toUpperCase())
-      return -1;
-    if (a[attr].toString().toUpperCase() > b[attr].toString().toUpperCase())
-      return 1;
-    return 0;
-  } );
+  attr = attr || '';
+  return _.sortBy(data, function (obj) {
+      obj[attr] = obj[attr] || '';
+      var value = obj[attr].toString().toUpperCase();
+      // Push all non-alphabetical values to after the 'z' character
+      // based on Unicode values
+      return value.match(/[A-Za-z]/)
+        ? value
+        : '{' + value;
+  });
 }
 
 AdvancedDirectory.prototype.init = function() {
@@ -335,6 +342,11 @@ AdvancedDirectory.prototype.renderListView = function(){
   }
 };
 
+AdvancedDirectory.prototype.placeIndexList = function () {
+  var $listIndex = this.$container.find('.directory-entries + .list-index');
+  $listIndex.css('left', Math.round($('.directory-entries ul').width()));
+};
+
 AdvancedDirectory.prototype.renderIndexList = function(){
   if (!this.config.sort_order) return;
 
@@ -347,14 +359,16 @@ AdvancedDirectory.prototype.renderIndexList = function(){
 
   $(document).on('touchstart mousedown', '.list-index span', $.proxy(this.listIndexTouchStart, this))
     .on('touchmove  mousemove', '.list-index span', $.proxy(this.listIndexTouchMove, this))
-    .on('touchend   mouseup', '.list-index span', $.proxy(this.listIndexTouchEnd, this))
+    .on('touchend   mouseup', '.list-index span', $.proxy(this.listIndexTouchEnd, this));
+
+  this.placeIndexList();
 };
 
 AdvancedDirectory.prototype.scrollToLetter = function(letter){
   var scrollToEl = $('.divider[data-letter="' + letter + '"]');
   if (!scrollToEl.length) return;
-  var scrollTop = scrollToEl.offset().top + this.$container.find('.directory-entries ul').scrollTop() - this.searchBarHeight - this.navHeight;
-  this.$container.find('.directory-entries ul')[0].scrollTop = scrollTop;
+  var scrollTop = scrollToEl.offset().top + this.$container.find('.directory-entries').scrollTop() - this.searchBarHeight - this.navHeight;
+  this.$container.find('.directory-entries')[0].scrollTop = scrollTop;
   this.flViewportRedraw();
 };
 
@@ -522,6 +536,7 @@ AdvancedDirectory.prototype.attachObservers = function(){
     _this.resizeSearch();
     _this.navHeight = $('.fl-viewport-header').height() || 0;
     _this.searchBarHeight = _this.$container.find('.directory-search').outerHeight();
+    _this.placeIndexList();
   } );
   this.$container.find('.directory-search').on( 'click', function(){
     // Analytics - Track Event
@@ -1121,9 +1136,15 @@ AdvancedDirectory.prototype.directoryNotConfigured = function(){
 };
 
 AdvancedDirectory.prototype.flViewportRedraw = function(){
-  $(document.body).css('-webkit-transform', 'scale(1)');
+  $(document.body).css({
+    transform: 'scale(1)',
+    position: ''
+  });
   setTimeout(function(){
-    $(document.body).css('-webkit-transform', '');
+    $(document.body).css({
+      transform: '',
+      position: ''
+    });
   }, 0);
 };
 
