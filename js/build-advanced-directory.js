@@ -343,6 +343,11 @@ AdvancedDirectory.prototype.renderListView = function(){
   }
 };
 
+AdvancedDirectory.prototype.placeIndexList = function () {
+  var $listIndex = this.$container.find('.directory-entries + .list-index');
+  $listIndex.css('left', Math.round($('.directory-entries ul').width()));
+};
+
 AdvancedDirectory.prototype.renderIndexList = function(){
   if (!this.config.sort_order) return;
 
@@ -356,13 +361,15 @@ AdvancedDirectory.prototype.renderIndexList = function(){
   $(document).on('touchstart mousedown', '.list-index span', $.proxy(this.listIndexTouchStart, this))
     .on('touchmove  mousemove', '.list-index span', $.proxy(this.listIndexTouchMove, this))
     .on('touchend   mouseup', '.list-index span', $.proxy(this.listIndexTouchEnd, this))
+
+  this.placeIndexList();
 };
 
 AdvancedDirectory.prototype.scrollToLetter = function(letter){
   var scrollToEl = $('.divider[data-letter="' + letter + '"]');
   if (!scrollToEl.length) return;
   var scrollTop = scrollToEl.offset().top + this.$container.find('.directory-entries ul').scrollTop() - this.searchBarHeight - this.navHeight;
-  this.$container.find('.directory-entries ul')[0].scrollTop = scrollTop;
+  this.$container.find('.directory-entries')[0].scrollTop = scrollTop;
   this.flViewportRedraw();
 };
 
@@ -530,6 +537,7 @@ AdvancedDirectory.prototype.attachObservers = function(){
     _this.resizeSearch();
     _this.navHeight = $('.fl-viewport-header').height() || 0;
     _this.searchBarHeight = _this.$container.find('.directory-search').outerHeight();
+    _this.placeIndexList();
   } );
   this.$container.find('.directory-search').on( 'click', function(){
     // Analytics - Track Event
@@ -1129,9 +1137,15 @@ AdvancedDirectory.prototype.directoryNotConfigured = function(){
 };
 
 AdvancedDirectory.prototype.flViewportRedraw = function(){
-  $(document.body).css('-webkit-transform', 'scale(1)');
+  $(document.body).css({
+    transform: 'scale(1)',
+    position: 'absolute'
+  });
   setTimeout(function(){
-    $(document.body).css('-webkit-transform', '');
+    $(document.body).css({
+      transform: '',
+      position: ''
+    });
   }, 0);
 };
 
