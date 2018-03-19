@@ -360,7 +360,7 @@ AdvancedDirectory.prototype.renderIndexList = function(){
 
   $(document).on('touchstart mousedown', '.list-index span', $.proxy(this.listIndexTouchStart, this))
     .on('touchmove  mousemove', '.list-index span', $.proxy(this.listIndexTouchMove, this))
-    .on('touchend   mouseup', '.list-index span', $.proxy(this.listIndexTouchEnd, this))
+    .on('touchend   mouseup', '.list-index span', $.proxy(this.listIndexTouchEnd, this));
 
   this.placeIndexList();
 };
