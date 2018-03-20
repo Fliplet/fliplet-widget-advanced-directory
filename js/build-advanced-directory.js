@@ -1137,17 +1137,19 @@ AdvancedDirectory.prototype.directoryNotConfigured = function(){
 };
 
 AdvancedDirectory.prototype.flViewportRedraw = function(){
-  $(document.body).css({
-    transform: 'scale(1)',
-    position: 'absolute'
+  return new Promise(function (resolve, reject) {
+    $(document.body).css({
+      transform: 'scale(1)',
+      position: ''
+    });
+    $(document.body).css({
+      transform: '',
+      position: ''
+    });
+    setTimeout(function(){
+      resolve();
+    }, 0);
   });
-  $(document.body).css({
-    transform: '',
-    position: ''
-  });
-  setTimeout(function () {
-    resolve();
-  }, 0);  
 };
 
 /***************  END: AdvancedDirectory  ***************/
