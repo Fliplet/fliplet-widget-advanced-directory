@@ -1141,12 +1141,13 @@ AdvancedDirectory.prototype.flViewportRedraw = function(){
     transform: 'scale(1)',
     position: 'absolute'
   });
-  setTimeout(function(){
-    $(document.body).css({
-      transform: '',
-      position: ''
-    });
-  }, 0);
+  $(document.body).css({
+    transform: '',
+    position: ''
+  });
+  setTimeout(function () {
+    resolve();
+  }, 0);  
 };
 
 /***************  END: AdvancedDirectory  ***************/
