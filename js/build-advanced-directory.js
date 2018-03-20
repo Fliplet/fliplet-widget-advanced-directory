@@ -1140,7 +1140,7 @@ AdvancedDirectory.prototype.flViewportRedraw = function(){
   return new Promise(function (resolve, reject) {
     $(document.body).css({
       transform: 'scale(1)',
-      position: ''
+      position: 'absolute'
     });
     $(document.body).css({
       transform: '',
