@@ -14,6 +14,16 @@ function html_entity_decode(html) {
   return txt.value;
 }
 
+function splitByCommas(str) {
+  if (typeof str !== 'string') {
+    return [];
+  }
+
+  // Split a string by commas but ignore commas within double-quotes using Javascript
+  // https://stackoverflow.com/questions/11456850/split-a-string-by-commas-but-ignore-commas-within-double-quotes-using-javascript
+  return str.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+}
+
 var AdvancedDirectory = function (config, container) {
   var _this = this;
 
@@ -196,7 +206,7 @@ AdvancedDirectory.prototype.initialiseHandlebars = function(){
       return '';
     }
 
-    var splitTags = tags.split(',');
+    var splitTags = splitByCommas(tags);
     return new Handlebars.SafeString(
       splitTags.map(function (tag) {
         tag = tag.trim();
@@ -425,7 +435,7 @@ AdvancedDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
   if (tags_field === filter) {
     this.data.forEach(function (record) {
       if (record[tags_field]) {
-        var entryTags = record[tags_field].split(',');
+        var entryTags = splitByCommas(record[tags_field]);
         entryTags.forEach(function(tag) {
           tag = tag.trim();
           if (tag !== '' && values.indexOf(tag) === -1) {
@@ -896,7 +906,7 @@ AdvancedDirectory.prototype.getEntryField = function( entryIndex, fieldIndex, ty
   var valueHTML;
   if ( (typeof value === 'object' && value && value.value && value.value.length) || (typeof value === 'string' && value.length) ) {
     if (this.config.show_tags && this.config.tags_field === label && fieldType === 'filter') {
-      valueHTML = value.value.split(',').map(function (tag) {
+      valueHTML = splitByCommas(value.value).map(function (tag) {
         tag = tag.trim();
         if (tag !== '') {
           return '<a class="data-linked" data-type="filter-value-tag" data-value="'+tag+'" data-filter="'+value.filter+'" href="#">'+tag+'</a>';
@@ -980,7 +990,7 @@ AdvancedDirectory.prototype.renderSearchResult = function( options, callback ){
     case 'filter-value-tag':
       var filterByTag = function(value) {
         if (value[options.field]) {
-          var splitTags = value[options.field].split(',');
+          var splitTags = splitByCommas(value[options.field]);
           for (var i = 0; i < splitTags.length; i++) {
             if (splitTags[i].trim() === options.value.trim()) {
               return true;
