@@ -15,8 +15,12 @@ function html_entity_decode(html) {
 }
 
 function splitByCommas(str) {
+  if (Array.isArray(str)) {
+    return str;
+  }
+
   if (typeof str !== 'string') {
-    return [];
+    return [str];
   }
 
   // Split a string by commas but ignore commas within double-quotes using Javascript
