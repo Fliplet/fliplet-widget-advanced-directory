@@ -14,6 +14,26 @@ function html_entity_decode(html) {
   return txt.value;
 }
 
+function splitByCommas(str) {
+  if (Array.isArray(str)) {
+    return str;
+  }
+
+  if (typeof str !== 'string') {
+    return [str];
+  }
+
+  // Split a string by commas but ignore commas within double-quotes using Javascript
+  // https://stackoverflow.com/questions/11456850/split-a-string-by-commas-but-ignore-commas-within-double-quotes-using-javascript
+  var regexp = /(".*?"|[^",]+)(?=\s*,|\s*$)/g;
+  var arr = [];
+  var res;
+  while ((res = regexp.exec(str)) !== null) {
+    arr.push(res[0].replace(/(?:^")|(?:"$)/g, '').trim());
+  }
+  return arr;
+}
+
 var AdvancedDirectory = function (config, container) {
   var _this = this;
 
@@ -196,7 +216,7 @@ AdvancedDirectory.prototype.initialiseHandlebars = function(){
       return '';
     }
 
-    var splitTags = tags.split(',');
+    var splitTags = splitByCommas(tags);
     return new Handlebars.SafeString(
       splitTags.map(function (tag) {
         tag = tag.trim();
@@ -426,7 +446,7 @@ AdvancedDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
   if (tags_field === filter) {
     this.data.forEach(function (record) {
       if (record[tags_field]) {
-        var entryTags = record[tags_field].split(',');
+        var entryTags = splitByCommas(record[tags_field]);
         entryTags.forEach(function(tag) {
           tag = tag.trim();
           if (tag !== '' && values.indexOf(tag) === -1) {
@@ -563,6 +583,10 @@ AdvancedDirectory.prototype.attachObservers = function(){
     return false;
   } );
   this.$container.on( 'click', '.search-result-clear', function(){
+    if (_this.liveSearchTimeout) {
+      clearTimeout(_this.liveSearchTimeout);
+      _this.liveSearchTimeout = null;
+    }
     _this.$container.find('.search').val('');
     _this.switchMode('search');
     return false;
@@ -893,7 +917,7 @@ AdvancedDirectory.prototype.getEntryField = function( entryIndex, fieldIndex, ty
   var valueHTML;
   if ( (typeof value === 'object' && value && value.value && value.value.length) || (typeof value === 'string' && value.length) ) {
     if (this.config.show_tags && this.config.tags_field === label && fieldType === 'filter') {
-      valueHTML = value.value.split(',').map(function (tag) {
+      valueHTML = splitByCommas(value.value).map(function (tag) {
         tag = tag.trim();
         if (tag !== '') {
           return '<a class="data-linked" data-type="filter-value-tag" data-value="'+tag+'" data-filter="'+value.filter+'" href="#">'+tag+'</a>';
@@ -922,6 +946,7 @@ AdvancedDirectory.prototype.renderLiveSearch = function( value ) {
   var _this = this;
   if (this.liveSearchTimeout) {
     clearTimeout(this.liveSearchTimeout);
+    this.liveSearchTimeout = null;
   }
   this.liveSearchTimeout = setTimeout(function(){
     _this.renderSearchResult( {
@@ -976,7 +1001,7 @@ AdvancedDirectory.prototype.renderSearchResult = function( options, callback ){
     case 'filter-value-tag':
       var filterByTag = function(value) {
         if (value[options.field]) {
-          var splitTags = value[options.field].split(',');
+          var splitTags = splitByCommas(value[options.field]);
           for (var i = 0; i < splitTags.length; i++) {
             if (splitTags[i].trim() === options.value.trim()) {
               return true;
@@ -1098,6 +1123,14 @@ AdvancedDirectory.prototype.parseQueryVars = function(){
         }
         break;
       case 'open':
+        if (query.entryId) {
+          var $entry = this.$container.find('[data-type="entry"][data-source-entry-id="' + query.entryId + '"]');
+          if (!$entry.length) {
+            break;
+          }
+
+          this.openDataEntry(parseInt($entry.attr('data-index'), 10), 'entry', false);
+        }
         break;
     }
   } else if ( !this.config.mobile_mode && this.deviceIsTablet && !this.config.search_only ) {
