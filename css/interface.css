@@ -19,23 +19,6 @@ textarea.form-control {
   line-height: 1;
 }
 
-table .select-proxy-display {
-  font-size: 12px;
-}
-
-table .select-proxy-display span.select-value-proxy {
-    width: calc(100% - 38px);
-}
-
-table .select-proxy-display .icon {
-  width: 20px;
-  font-size: 14px;
-}
-
-table .select-proxy-display>.hidden-select {
-  padding-right: 20px;
-}
-
 .checkbox .select-holder,
 .radio .select-holder {
   padding-left: 25px;
@@ -70,6 +53,7 @@ table .select-proxy-display>.hidden-select {
 
 .table > tbody > tr > td {
   vertical-align: middle;
+  line-height: 1;
 }
 
 .table td.text-center .checkbox-icon {
@@ -257,7 +241,7 @@ table .select-proxy-display>.hidden-select {
 }
 
 .folder-selection span.active {
-  color: #00abd2;
+  color: #00abd1;
   font-weight: 600;
 }
 
@@ -268,12 +252,12 @@ table .select-proxy-display>.hidden-select {
 }
 
 .folder.selected .image-overlay .fa {
-  color: #00abd2;
+  color: #00abd1;
 }
 
 .folder.selected .image-holder,
 .image.selected .image-holder {
-  border-color: #00abd2;
+  border-color: #00abd1;
 }
 
 .image-library .folder,
