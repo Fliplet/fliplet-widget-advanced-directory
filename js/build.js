@@ -6,7 +6,6 @@ Fliplet().then(function () {
     var uuid = $(this).data('directory-uuid');
     var config = Fliplet.Widget.getData(id);
     var pvKey = 'data-directory-source-' + uuid;
-    var getData;
 
     Fliplet.Hooks.run('flDirectoryBeforeGetData', {
       config: config,
