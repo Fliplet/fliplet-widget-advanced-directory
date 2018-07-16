@@ -88,7 +88,9 @@ var AdvancedDirectory = function (config, container) {
         // Returns placeholder if no match
         _this.data.forEach(function(entry) {
           if (file.name.indexOf( entry[_this.config.thumbnail_field]) !== -1 && entry[_this.config.thumbnail_field].trim() !== '') {
-            entry[_this.config.thumbnail_field] = file.url;
+            entry[_this.config.thumbnail_field] = Fliplet.Media.authenticate
+              ? Fliplet.Media.authenticate(file.url)
+              : file.url;
           }
         });
       }
