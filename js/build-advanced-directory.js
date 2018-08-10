@@ -1047,7 +1047,6 @@ AdvancedDirectory.prototype.renderSearchResult = function( options, callback ){
           action: 'search',
           label: options.value
         });
-        console.log('search', options.value);
       }, this.searchLogLimit);
 
       break;
