@@ -63,8 +63,11 @@ var AdvancedDirectory = function (config, container) {
   this.filterOverlay = null;
   this.entryOverlay = null;
   this.searchResultData = [];
+  this.liveSearchTimeout = null;
   this.liveSearchInterval = 200;
-  this.currentEntry;
+  this.searchLogTimeout = null;
+  this.searchLogLimit = 1000;
+  this.currentEntry = null;
 
   this.checkMobileMode();
 
@@ -950,6 +953,7 @@ AdvancedDirectory.prototype.renderLiveSearch = function( value ) {
     this.liveSearchTimeout = null;
   }
   this.liveSearchTimeout = setTimeout(function(){
+    _this.liveSearchTimeout = null;
     _this.renderSearchResult( {
       type: 'search',
       value: value
@@ -959,6 +963,7 @@ AdvancedDirectory.prototype.renderLiveSearch = function( value ) {
 };
 
 AdvancedDirectory.prototype.renderSearchResult = function( options, callback ){
+  var _this = this;
   options = options || {};
 
   if (!options.hasOwnProperty('userTriggered')) {
@@ -1026,10 +1031,22 @@ AdvancedDirectory.prototype.renderSearchResult = function( options, callback ){
     default:
       data.type = 'search';
       data.value = options.value;
-      data.result = this.search( options.value );
+      data.result = this.search(options.value);
 
-      // Analytics - Track Event
-      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'search', label: options.type + ': ' + options.value });
+      if (this.searchLogTimeout) {
+        clearTimeout(this.searchLogTimeout);
+        this.searchLogTimeout = null;
+      }
+
+      this.searchLogTimeout = setTimeout(function () {
+        _this.searchLogTimeout = null;
+        // Analytics - Track Event
+        Fliplet.Analytics.trackEvent({
+          category: 'directory',
+          action: 'search',
+          label: options.value
+        });
+      }, this.searchLogLimit);
 
       break;
   }
