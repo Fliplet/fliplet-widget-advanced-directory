@@ -566,7 +566,7 @@ AdvancedDirectory.prototype.attachObservers = function(){
   } );
   this.$container.find('.directory-search').on( 'click', function(){
     // Analytics - Track Event
-    Fliplet.Analytics.trackEvent({category: 'directory', action: 'search'});
+    Fliplet.Analytics.trackEvent({category: 'directory', action: 'search_activate'});
 
     _this.$container.find('.search').trigger( 'focus' );
   } ).on( 'submit', function(e){
@@ -793,14 +793,14 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
     $('.directory-detail-value a').not('.data-linked').on('click', function(e){
       if ($(e.target).attr('href').indexOf('mailto') === 0) {
         // Analytics - Track Event
-        Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_email', title: title });
+        Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_email', label: title });
 
       } else if ($(e.target).attr('href').indexOf('tel') === 0) {
         // Analytics - Track Event
-        Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_phone', title: title });
+        Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_phone', label: title });
       } else {
         // Analytics - Track Event
-        Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_email', title: title });
+        Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_url', label: title });
       }
     });
     $('.directory-detail-value a.data-linked').on('click', function(e){
@@ -808,7 +808,7 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
       var filterValue = (typeof $(e.target).data('value') !== 'undefined') ? $(e.target).data('value') : '';
 
       // Analytics - Track Event
-      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_email', title: filterType + ': ' + filterValue });
+      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_filter', label: filterType + ': ' + filterValue });
     });
 
     // Custom event to fire after an entry is rendered in the detailed view.
@@ -844,7 +844,7 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
 
   // Analytics - Track Event
   if (trackEvent) {
-    Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_open', title: title });
+    Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_open', label: title });
   }
 };
 
@@ -1003,7 +1003,7 @@ AdvancedDirectory.prototype.renderSearchResult = function( options, callback ){
         data.value = startDate.format("DD MMM ‘YY") + '&mdash;' + endDate.format("DD MMM ‘YY");
       }
       // Analytics - Track Event
-      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'filter', title: options.type + ': ' + options.value });
+      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'filter', label: options.type + ': ' + options.value });
       break;
     case 'filter-value-tag':
       var filterByTag = function(value) {
@@ -1025,7 +1025,7 @@ AdvancedDirectory.prototype.renderSearchResult = function( options, callback ){
       data.result = this.data.filter(filterByTag);
 
       // Analytics - Track Event
-      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'list_tag_filter', title: options.type + ': ' + options.value });
+      Fliplet.Analytics.trackEvent({ category: 'directory', action: 'list_tag_filter', label: options.type + ': ' + options.value });
 
       break;
     case 'search':
