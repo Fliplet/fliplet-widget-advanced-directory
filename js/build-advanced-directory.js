@@ -890,7 +890,7 @@ AdvancedDirectory.prototype.getEntryField = function( entryIndex, fieldIndex, ty
   var fieldType = 'text';
   var valueHTML = '';
 
-  if (typeof value === 'undefined') {
+  if (typeof value === 'undefined' || value === null) {
     return {
       'label' : label,
       'value' : ''
