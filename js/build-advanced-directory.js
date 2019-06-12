@@ -810,6 +810,13 @@ AdvancedDirectory.prototype.openDataEntry = function(entryIndex, type, trackEven
       Fliplet.Analytics.trackEvent({ category: 'directory', action: 'entry_filter', label: filterType + ': ' + filterValue });
     });
 
+    if (_this.entryOverlay && _this.entryOverlay.overlayPanelContent) {
+      _this.entryOverlay.overlayPanelContent.scrollBy(0, 1);
+      setTimeout(function () {
+        _this.entryOverlay.overlayPanelContent.scrollBy(0, -1);
+      }, 0);
+    }
+
     // Custom event to fire after an entry is rendered in the detailed view.
     _this.trigger('flDirectoryEntryAfterRender', {detailData: detailData});
   };
