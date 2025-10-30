@@ -17,8 +17,7 @@
       "jquery-ui",
       "handlebars",
       "bootstrap",
-      "codemirror",
-      "lodash"
+      "codemirror"
     ],
     "assets": [
       "vendor/jquery-ui.min.css",
@@ -42,8 +41,7 @@
       "bootstrap",
       "font-awesome",
       "animate-css",
-      "moment",
-      "lodash"
+      "moment"
     ],
     "assets": [
       "vendor/jsonselect.js",
