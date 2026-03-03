@@ -90,7 +90,7 @@ var DataDirectoryForm = (function() {
     folders = values.folders;
 
     // Render folders and files
-    _.sortBy(values.folders, ['name']).forEach(addFolder);
+    Fliplet.Utils.sortBy(values.folders, function(f) { return f.name; }).forEach(addFolder);
   }
 
   function updatePaths() {
@@ -474,7 +474,7 @@ var DataDirectoryForm = (function() {
           var backItem;
 
           // Store to nav stack
-          backItem = _.find(folders, ['id', id]);
+          backItem = Fliplet.Utils.find(folders, function(f) { return f.id === id; });
           backItem.back = function () {
             openFolder(id);
           };
@@ -492,7 +492,7 @@ var DataDirectoryForm = (function() {
           var backItem;
 
           // Store to nav stack
-          backItem = _.find(apps, ['id', id]);
+          backItem = Fliplet.Utils.find(apps, function(a) { return a.id === id; });
           backItem.back = function () {
             openApp(id);
           };
@@ -510,7 +510,7 @@ var DataDirectoryForm = (function() {
           var backItem;
 
           // Store to nav stack
-          backItem = _.find(organizations, ['id', id]);
+          backItem = Fliplet.Utils.find(organizations, function(o) { return o.id === id; });
           backItem.back = function () {
             openOrganization(id);
           };

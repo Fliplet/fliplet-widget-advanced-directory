@@ -242,7 +242,7 @@ AdvancedDirectory.prototype.alphaSortByAttr = function (data, attr) {
     return data;
   }
   attr = attr || '';
-  return _.sortBy(data, function (obj) {
+  return Fliplet.Utils.sortBy(data, function (obj) {
       obj[attr] = obj[attr] || '';
       var value = obj[attr].toString().toUpperCase();
       // Push all non-alphabetical values to after the 'z' character
@@ -460,7 +460,7 @@ AdvancedDirectory.prototype.renderFilterValues = function( filter, inOverlay ){
       }
     });
 
-    values = _.sortBy(values);
+    values = Fliplet.Utils.sortBy(values);
   } else if (this.config.field_types[filter] === 'date') {
     var isMobile = Modernizr.mobile || Modernizr.tablet;
     var start_date;
@@ -1106,15 +1106,15 @@ AdvancedDirectory.prototype.filter = function( field, value ) {
   if (this.config.field_types[field] === 'date') {
     var startDate = value[0];
     var endDate = value[1];
-    var output = _.filter(this.data, function(o){
+    var output = FLiplet.Utils.filter(this.data, function(o){
       if (!o.hasOwnProperty(field) || !o[field]) {
         return false;
       }
       return moment(o[field]).isBetween(startDate, endDate, 'day', '[]');
     });
-    return _.sortBy(output, [function(o){
+    return Fliplet.Utils.sortBy(output, function(o){
       return parseInt(moment(o[field]).format('x'));
-    }]);
+    });
   }
 
   var path = ':root > :has(."' + field + '":val("' + value + '"))';
